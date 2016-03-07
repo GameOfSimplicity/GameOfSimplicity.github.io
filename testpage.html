@@ -16,8 +16,8 @@
 
     <script type="text/javascript">
 
-        d3.select(self.frameElement).style("height", "1800px");
-        d3.select(self.frameElement).style("width", "1200px");
+        d3.select(self.frameElement).style("height", window.innerHeight);
+        d3.select(self.frameElement).style("width", window.innerWidth);
 
         // This example draws a Radial Hub and Spoke Graph on a page with
         // multiple HTML layout constructs.
@@ -30,177 +30,79 @@
         var nodeSet = [
             {
                 id: "N1",
-                name: "Smith, John",
+                name: "Belgie",
                 fixed: true,
+                type: "NB",
                 x: 10,
                 y: 0,
-                type: "Resource",
-                hlink: "http://nounz.if4it.com/Nouns/Resources/Smith_John.NodeCluster.html"
+                hlink: ""
             },
             {
                 id: "N2",
-                name: "Product 2",
-                type: "Product",
-                hlink: "http://nounz.if4it.com/Nouns/Products/Product_2.NodeCluster.html"
+                name: "Nederland",
+                type: "NB",
+                hlink: ""
             },
             {
                 id: "N3",
-                name: "Cee, Washing D",
-                type: "Resource",
-                hlink: "http://nounz.if4it.com/Nouns/Resources/Cee_Washington_D.NodeCluster.html"
+                name: "Duitsland",
+                type: "NB",
+                hlink: ""
             },
             {
                 id: "N4",
-                name: "Product 4",
-                type: "Product",
-                hlink: "http://nounz.if4it.com/Nouns/Products/Product_4.NodeCluster.html"
+                name: "Denemarken",
+                type: "No NB",
+                hlink: ""
             },
             {
                 id: "N5",
-                name: "Contract 3",
-                type: "Contract",
-                hlink: "http://nounz.if4it.com/Nouns/Contracts/Contract_3.NodeCluster.html"
+                name: "Oostenrijk",
+                type: "No NB",
+                hlink: ""
             },
             {
                 id: "N6",
-                name: "Product 6",
-                type: "Product",
-                hlink: "http://nounz.if4it.com/Nouns/Products/Product_6.NodeCluster.html"
+                name: "Zwitserland",
+                type: "No NB",
+                hlink: ""
             },
             {
                 id: "N7",
-                name: "Product 7",
-                type: "Product",
-                hlink: "http://nounz.if4it.com/Nouns/Products/Product_7.NodeCluster.html"
+                name: "Luxemburg",
+                type: "No NB",
+                hlink: ""
             },
             {
                 id: "N8",
-                name: "Contract 5",
-                type: "Contract",
-                hlink: "http://nounz.if4it.com/Nouns/Contracts/Contract_5.NodeCluster.html"
+                name: "Italie",
+                type: "No NB",
+                hlink: ""
             },
             {
                 id: "N9",
-                name: "Contract 9",
-                type: "Contract",
-                hlink: "http://nounz.if4it.com/Nouns/Contracts/Contract_9.NodeCluster.html"
+                name: "Frankrijk",
+                type: "NB",
+                hlink: ""
             },
             {
                 id: "N10",
-                name: "Product 10",
-                type: "Product",
-                hlink: "http://nounz.if4it.com/Nouns/Products/Product_10.NodeCluster.html"
+                name: "GB",
+                type: "NB",
+                hlink: ""
             },
-            {
-                id: "N11",
-                name: "Contract 11",
-                type: "Contract",
-                hlink: "http://nounz.if4it.com/Nouns/Contracts/Contract_11.NodeCluster.html"
-            },
-            {
-                id: "N12",
-                name: "Super, Susan",
-                type: "Resource",
-                hlink: "http://nounz.if4it.com/Nouns/Resources/Super_Susan.NodeCluster.html"
-            },
-            {
-                id: "N13",
-                name: "Product 13",
-                type: "Product",
-                hlink: "http://nounz.if4it.com/Nouns/Products/Product_13.NodeCluster.html"
-            },
-            {
-                id: "N14",
-                name: "Contract 14",
-                type: "Contract",
-                hlink: "http://nounz.if4it.com/Nouns/Contracts/Contract_14.NodeCluster.html"
-            },
-            {
-                id: "N15",
-                name: "Product 15",
-                type: "Product",
-                hlink: "http://nounz.if4it.com/Nouns/Products/Product_15.NodeCluster.html"
-            },
-            {
-                id: "N16",
-                name: "United States",
-                type: "Country",
-                hlink: "http://nounz.if4it.com/Nouns/Countries/United_States.NodeCluster.html"
-            },
-            {
-                id: "N17",
-                name: "Product 17",
-                type: "Product",
-                hlink: "http://nounz.if4it.com/Nouns/Products/Product_17.NodeCluster.html"
-            },
-            {
-                id: "N18",
-                name: "Contract 18",
-                type: "Contract",
-                hlink: "http://nounz.if4it.com/Nouns/Contracts/Contract_18.NodeCluster.html"
-            },
-            {
-                id: "N19",
-                name: "Contract 19",
-                type: "Contract",
-                hlink: "http://nounz.if4it.com/Nouns/Contracts/Contract_19.NodeCluster.html"
-            },
-            {
-                id: "N20",
-                name: "United Kingdom",
-                type: "Country",
-                hlink: "http://nounz.if4it.com/Nouns/Countries/United_Kingdom.NodeCluster.html"
-            },
-            {
-                id: "N21",
-                name: "Product 21",
-                type: "Product",
-                hlink: "http://nounz.if4it.com/Nouns/Products/Product_21.NodeCluster.html"
-            },
-            {
-                id: "N22",
-                name: "Product 22",
-                type: "Product",
-                hlink: "http://nounz.if4it.com/Nouns/Products/Product_22.NodeCluster.html"
-            },
-            {
-                id: "N23",
-                name: "Executive, Emily",
-                type: "Resource",
-                hlink: "http://nounz.if4it.com/Nouns/Resources/Executive_Emily_A.NodeCluster.html"
-            },
-            {
-                id: "N24",
-                name: "Product 24",
-                type: "Product",
-                hlink: "http://nounz.if4it.com/Nouns/Products/Product_24.NodeCluster.html"
-            }
         ];
 
         var linkSet = [
-            {sourceId: "N1", linkName: "Relationship 1", targetId: "N2"},
-            {sourceId: "N3", linkName: "Relationship 2", targetId: "N1"},
-            {sourceId: "N4", linkName: "Relationship 3", targetId: "N1"},
-            {sourceId: "N1", linkName: "Relationship 4", targetId: "N5"},
-            {sourceId: "N6", linkName: "Relationship 5", targetId: "N1"},
-            {sourceId: "N1", linkName: "Relationship 6", targetId: "N7"},
-            {sourceId: "N1", linkName: "Relationship 7", targetId: "N8"},
-            {sourceId: "N9", linkName: "Relationship 8", targetId: "N1"},
-            {sourceId: "N1", linkName: "Relationship 9", targetId: "N10"},
-            {sourceId: "N11", linkName: "Relationship 10", targetId: "N1"},
-            {sourceId: "N1", linkName: "Relationship 11", targetId: "N12"},
-            {sourceId: "N13", linkName: "Relationship 12", targetId: "N1"},
-            {sourceId: "N1", linkName: "Relationship 13", targetId: "N14"},
-            {sourceId: "N1", linkName: "Relationship 14", targetId: "N15"},
-            {sourceId: "N16", linkName: "Relationship 15", targetId: "N1"},
-            {sourceId: "N17", linkName: "Relationship 16", targetId: "N1"},
-            {sourceId: "N18", linkName: "Relationship 17", targetId: "N1"},
-            {sourceId: "N19", linkName: "Relationship 18", targetId: "N1"},
-            {sourceId: "N20", linkName: "Relationship 19", targetId: "N1"},
-            {sourceId: "N21", linkName: "Relationship 20", targetId: "N1"},
-            {sourceId: "N22", linkName: "Relationship 21", targetId: "N1"},
-            {sourceId: "N1", linkName: "Relationship 22", targetId: "N23"},
-            {sourceId: "N1", linkName: "Relationship 23", targetId: "N24"}
+            {sourceId: "N1", linkName: "5", targetId: "N2"},
+            {sourceId: "N1", linkName: "1", targetId: "N3"},
+            {sourceId: "N1", linkName: "0", targetId: "N4"},
+            {sourceId: "N1", linkName: "0", targetId: "N5"},
+            {sourceId: "N1", linkName: "0", targetId: "N6"},
+            {sourceId: "N1", linkName: "0", targetId: "N7"},
+            {sourceId: "N1", linkName: "1", targetId: "N8"},
+            {sourceId: "N1", linkName: "2", targetId: "N9"},
+            {sourceId: "N1", linkName: "1", targetId: "N10"}
         ];
 
 
@@ -244,8 +146,8 @@
             }
             ;
 
-            var width = 2000;
-            var height = 600;
+            var width = window.innerWidth;
+            var height = window.innerHeight;
             var centerNodeSize = 50;
             var nodeSize = 10;
             var color_hash = [];
@@ -487,8 +389,8 @@
             var force = d3.layout.force()
                     .nodes(nodeSet)
                     .links(linkSet)
-                    .charge(-1000)
-                    .gravity(.01)
+                    .charge(-100000)
+                    .gravity(.2)
                     .friction(.2)
                     .linkStrength(9)
                     //.size([width/8, height/10])
@@ -537,7 +439,7 @@
                     //.attr("fixed", function(d) { if (d.id==focalNodeID) { return true; } else { return false; } } )
                     .on("mouseover", nodeMouseOver)
                     .on("mouseout", nodeMouseOut)
-                    .call(force.drag)
+                    //.call(force.drag)
                     .append("a")
                     .attr("xlink:href", function (d) {
                         return d.hlink;
@@ -578,8 +480,8 @@
                     .style("stroke-width", 5) // Give the node strokes some thickness
                     .style("stroke", function (d, i) {
                         return color_hash[d.type];
-                    }) // Node stroke colors
-                    .call(force.drag);
+                    }); // Node stroke colors
+                    //.call(force.drag);
 
             // Append text to Nodes
             node.append("text")
@@ -840,7 +742,6 @@
             font: normal 14px Arial;
             font-family: Arial, Helvetica, sans-serif;
             color: Black;
-            padding: 0px 1em;
             text-align: left;
         }
     </STYLE>
