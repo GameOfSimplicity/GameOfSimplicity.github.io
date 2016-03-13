@@ -94,15 +94,15 @@
         ];
 
         var linkSet = [
-            {sourceId: "N1", linkName: "5", targetId: "N2"},
-            {sourceId: "N1", linkName: "1", targetId: "N3"},
-            {sourceId: "N1", linkName: "0", targetId: "N4"},
-            {sourceId: "N1", linkName: "0", targetId: "N5"},
-            {sourceId: "N1", linkName: "0", targetId: "N6"},
-            {sourceId: "N1", linkName: "0", targetId: "N7"},
-            {sourceId: "N1", linkName: "1", targetId: "N8"},
-            {sourceId: "N1", linkName: "2", targetId: "N9"},
-            {sourceId: "N1", linkName: "1", targetId: "N10"}
+            {sourceId: "N1", linkName: "5", targetId: "N2", buur: true},
+            {sourceId: "N1", linkName: "1", targetId: "N3", buur: true},
+            {sourceId: "N1", linkName: "0", targetId: "N4", buur: false},
+            {sourceId: "N1", linkName: "0", targetId: "N5", buur: false},
+            {sourceId: "N1", linkName: "0", targetId: "N6", buur: false},
+            {sourceId: "N1", linkName: "0", targetId: "N7", buur: true},
+            {sourceId: "N1", linkName: "1", targetId: "N8", buur: false},
+            {sourceId: "N1", linkName: "2", targetId: "N9", buur: true},
+            {sourceId: "N1", linkName: "1", targetId: "N10", buur: false}
         ];
 
 
@@ -395,11 +395,11 @@
                     .linkStrength(9)
                     //.size([width/8, height/10])
                     .linkDistance(function (d) {
-                        if (width < height) {
-                            return width * 1 / 3;
-                        } else {
-                            return height * 1 / 3
-                        }
+                            if(d.buur){
+                                return 100;
+                            }else{
+                                return 200;
+                            }
                     }) // Controls edge length
                     .on("tick", tick)
                     .start();
@@ -481,7 +481,7 @@
                     .style("stroke", function (d, i) {
                         return color_hash[d.type];
                     }); // Node stroke colors
-                    //.call(force.drag);
+            //.call(force.drag);
 
             // Append text to Nodes
             node.append("text")
