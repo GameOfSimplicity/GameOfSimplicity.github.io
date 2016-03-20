@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en-US"
+      lang="en-US">
+<head profile="http://www.w3.org/2005/10/profile">
+    <title>My Force Directed Graph</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <meta name="Description" content="This page tries to mix charts with html formatting and layout constructs."/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="cache-control" content="no-cache"/>
+    <meta http-equiv="expires" content="-l"/>
+
+    <STYLE type="text/css">
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart {
+            width: 500px;
+            height: 500px;
+            background-color: gray;
+        }
+
+        svg {
+            font: 10px sans-serif;
+            display: block;
+        }
+
+        circle {
+            border: 10px solid black;
+        }
+    </STYLE>
+
+    <script type="text/javascript" src="javascripts/d3.v3.min.js"></script>
+
+    <script type="text/javascript">
+        function drawCluster() {
+
+            var width = 500;
+            var height = 500;
+
+            var middlePoint = {X: width / 2, Y: height / 2};
+            var points = 8; //# of NB
+            var radiusCenter = 50;
+            var radiusOuter = 20;
+            var radius = 100; //TODO change radius dynamically depending on # NB
+
+            var dataPoints = [];
+
+            {
+                var slice = 2 * Math.PI / points;
+
+                for (i = 0; i < points; i++) {
+                    angle = slice * i;
+                    X = middlePoint.X + radius * Math.cos(angle);
+                    Y = middlePoint.Y + radius * Math.sin(angle);
+                    dataPoints.push({"X": X, "Y": Y});
+                }
+            }
+
+            var svgContainer = d3.select(".chart").append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
+
+            var jsonCircles = function () {
+                var circles = [];
+
+                dataPoints.forEach(function (p) {
+                    circles.push({"x_axis": p.X, "y_axis": p.Y, "radius": radiusOuter, "color": "darkgreen"});
+                });
+
+                //center circle
+                circles.push({"x_axis": width / 2, "y_axis": height / 2, "radius": radiusCenter, "color": "blue"});
+
+                return circles;
+            };
+
+            //Lines between center and datapoint
+            var jsonLines = function () {
+                var lines = [];
+
+                dataPoints.forEach(function (p) {
+                    lines.push({"x1": middlePoint.X, "x2": p.X, "y1": middlePoint.Y, "y2": p.Y});
+                });
+
+                return lines;
+            };
+
+
+            var lines = svgContainer.selectAll("line")
+                    .data(jsonLines)
+                    .enter()
+                    .append("line");
+
+            var lineAttributes = lines
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 1)
+                    .attr("x1", function (d) {
+                        return d.x1;
+                    })
+                    .attr("x2", function (d) {
+                        return d.x2;
+                    })
+                    .attr("y1", function (d) {
+                        return d.y1;
+                    })
+                    .attr("y2", function (d) {
+                        return d.y2;
+                    });
+
+            var circles = svgContainer.selectAll("circle")
+                    .data(jsonCircles)
+                    .enter()
+                    .append("circle")
+                    .style("stroke", "ffffff")
+                    .style("fill", "none");
+
+
+            var circleAttributes = circles
+                    .attr("cx", function (d) {
+                        return d.x_axis;
+                    })
+                    .attr("cy", function (d) {
+                        return d.y_axis;
+                    })
+                    .attr("r", function (d) {
+                        return d.radius;
+                    })
+                    .style("fill", function (d) {
+                        return d.color;
+                    });
+        }
+    </script>
+</head>
+<body>
+
+<div class="container" id="container">
+    <div class="chart"></div>
+</div>
+
+<script type="text/javascript">
+    drawCluster();
+</script>
+
+</body>
+
+</html>
