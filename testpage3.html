@@ -30,20 +30,88 @@
         }
 
         circle {
-            border: 10px solid black;
+            stroke: 10px solid black;
         }
     </STYLE>
 
     <script type="text/javascript" src="javascripts/d3.v3.min.js"></script>
 
     <script type="text/javascript">
+
+
+        var nodeSet = [
+            {
+                id: "N1",
+                name: "Belgie",
+                fixed: true,
+                neighbour: false
+            },
+            {
+                id: "N2",
+                name: "Nederland",
+                fixed: false,
+                neighbour: true
+            },
+            {
+                id: "N3",
+                name: "Duitsland",
+                fixed: false,
+                neighbour: true
+            },
+            {
+                id: "N4",
+                name: "Denemarken",
+                fixed: false,
+                neighbour: false
+            },
+            {
+                id: "N5",
+                name: "Oostenrijk",
+                fixed: false,
+                neighbour: false
+            },
+            {
+                id: "N6",
+                name: "Zwitserland",
+                fixed: false,
+                neighbour: false
+            },
+            {
+                id: "N7",
+                name: "Luxemburg",
+                fixed: false,
+                neighbour: true
+            },
+            {
+                id: "N8",
+                name: "Italie",
+                fixed: false,
+                neighbour: false
+            },
+            {
+                id: "N9",
+                name: "Frankrijk",
+                fixed: false,
+                neighbour: true
+            },
+            {
+                id: "N10",
+                name: "GB",
+                fixed: false,
+                neighbour: false
+            }
+        ];
+
+
         function drawCluster() {
 
             var width = 850;
             var height = 850;
 
             var middlePoint = {X: width / 2, Y: height / 2};
-            var points = 15; //# of NB
+            var points = nodeSet.filter(function (dp) {
+                return !dp.fixed
+            }).length; //# of NB
             var radiusCenter = 50;
             var radiusOuter = 20;
             var buffer1 = 5; // buffer between outer nodes
@@ -57,21 +125,39 @@
 
                 //dynamically changes the radius
                 var temp = points * (buffer1 + radiusOuter * 2);
-                while (radius * Math.PI * 2 < temp){
+                while (radius * Math.PI * 2 < temp) {
                     radius += 20;
                 }
 
-                for (i = 0; i < points; i++) {
-                    angle = slice * i;
-                    X = middlePoint.X + radius * Math.cos(angle);
-                    Y = middlePoint.Y + radius * Math.sin(angle);
-                    dataPoints.push({"X": X, "Y": Y});
-                }
+                var i = 0;
+                nodeSet.forEach(function (node) {
+                    if (!node.fixed) {
+                        angle = slice * i;
+                        X = middlePoint.X + (node.neighbour ? radius : radius * 2) * Math.cos(angle);
+                        Y = middlePoint.Y + (node.neighbour ? radius : radius * 2) * Math.sin(angle);
+                        dataPoints.push({"X": X, "Y": Y, "fixed": node.fixed});
+                        i++;
+                    }
+                });
             }
 
             var svgContainer = d3.select(".chart").append("svg")
                     .attr("width", width)
                     .attr("height", height);
+
+            var defs = svgContainer.append('svg:defs');
+
+            defs.append("svg:pattern")
+                    .attr("id", "grump_avatar")
+                    .attr("width", 1)
+                    .attr("height", 1)
+                    .attr('patternContentUnits', 'objectBoundingBox')
+                    .append("svg:image")
+                        .attr("xlink:href", "./images/flags/France.png")
+                        .attr("width", 1)
+                        .attr("height", 1)
+                        .attr("preserveAspectRatio", "xMinYMin slice");
+
 
             var jsonCircles = function () {
                 var circles = [];
@@ -81,7 +167,12 @@
                 });
 
                 //center circle
-                circles.push({"x_axis": width / 2, "y_axis": height / 2, "radius": radiusCenter, "color": "blue"});
+                circles.push({
+                    "x_axis": middlePoint.X,
+                    "y_axis": middlePoint.Y,
+                    "radius": radiusCenter,
+                    "color": "blue"
+                });
 
                 return circles;
             };
@@ -119,13 +210,36 @@
                         return d.y2;
                     });
 
-            var circles = svgContainer.selectAll("circle")
+            var helpCircles = [{"x_axis": middlePoint.X, "y_axis": middlePoint.Y, "radius": radius, "color": "blue"},
+                {"x_axis": width / 2, "y_axis": height / 2, "radius": radius * 2, "color": "blue"}
+            ];
+
+            var hcircles = svgContainer.selectAll(".helpcircle")
+                    .data(helpCircles)
+                    .enter()
+                    .append("circle")
+                    .style("stroke", "black")
+                    .style("stroke-dasharray", "10 5")
+                    .style("fill", "none");
+
+            var hcircleAttributes = hcircles
+                    .attr("cx", function (d) {
+                        return d.x_axis;
+                    })
+                    .attr("cy", function (d) {
+                        return d.y_axis;
+                    })
+                    .attr("r", function (d) {
+                        return d.radius;
+                    })
+                    ;
+
+            var circles = svgContainer.selectAll(".circle")
                     .data(jsonCircles)
                     .enter()
                     .append("circle")
-                    .style("stroke", "ffffff")
-                    .style("fill", "none");
-
+                    //.style("stroke", "black")
+                    .style("fill", "url(#grump_avatar)");
 
             var circleAttributes = circles
                     .attr("cx", function (d) {
@@ -136,9 +250,6 @@
                     })
                     .attr("r", function (d) {
                         return d.radius;
-                    })
-                    .style("fill", function (d) {
-                        return d.color;
                     });
         }
     </script>
