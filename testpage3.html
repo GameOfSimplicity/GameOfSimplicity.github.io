@@ -19,8 +19,8 @@
         }
 
         .chart {
-            width: 500px;
-            height: 500px;
+            width: 850px;
+            height: 850px;
             background-color: gray;
         }
 
@@ -39,19 +39,27 @@
     <script type="text/javascript">
         function drawCluster() {
 
-            var width = 500;
-            var height = 500;
+            var width = 850;
+            var height = 850;
 
             var middlePoint = {X: width / 2, Y: height / 2};
-            var points = 8; //# of NB
+            var points = 15; //# of NB
             var radiusCenter = 50;
             var radiusOuter = 20;
-            var radius = 100; //TODO change radius dynamically depending on # NB
+            var buffer1 = 5; // buffer between outer nodes
+            var buffer2 = 25; // buffer between mid circle and outer circles
+            var radius = radiusOuter + radiusCenter + buffer2; // radius of circle on which outer nodes should be drawn
 
             var dataPoints = [];
 
             {
                 var slice = 2 * Math.PI / points;
+
+                //dynamically changes the radius
+                var temp = points * (buffer1 + radiusOuter * 2);
+                while (radius * Math.PI * 2 < temp){
+                    radius += 20;
+                }
 
                 for (i = 0; i < points; i++) {
                     angle = slice * i;
