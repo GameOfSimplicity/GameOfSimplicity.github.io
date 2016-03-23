@@ -1,0 +1,77 @@
+{
+  "countries": [
+      {
+        "countryCode": "AD",
+        "name": "Andorra",
+        "neighbours": ["FR", "ES"],
+        "image": "Andorra.png"
+      },
+      {
+        "countryCode": "AL",
+        "name": "Albanië",
+        "neighbours": ["GR", "XK", "MK", "ME", "RS"],
+        "image": "Albania.png"
+      },
+      {
+        "countryCode": "BE",
+        "name": "België",
+        "neighbours": ["FR", "DE", "LU", "NL"],
+        "image": "Belgium.png"
+      },
+      {
+        "countryCode": "NL",
+        "name": "Nederland",
+        "neighbours": ["BE", "DE"],
+        "image": "Netherlands.png"
+      },
+      {
+        "countryCode": "DE",
+        "name": "Duitsland",
+        "neighbours": ["AT", "BE", "CZ", "DK", "FR", "LU", "NL", "PL", "CH"],
+        "image": "Germany.png"
+      },
+      {
+        "countryCode": "DK",
+        "name": "Denemarken",
+        "neighbours": ["DE"],
+        "image": "Denmark.png"
+      },
+      {
+        "countryCode": "AT",
+        "name": "Oostenrijk",
+        "neighbours": ["CZ", "DE", "HU", "IT", "LI", "SK", "SI",  "CH"],
+        "image": "Austria.png"
+      },
+      {
+        "countryCode": "CH",
+        "name": "Zwitserland",
+        "neighbours": ["AT", "FR", "DE", "IT", "LI"],
+        "image": "Switzerland.png"
+      },
+      {
+        "countryCode": "LU",
+        "name": "Luxemburg",
+        "neighbours": ["BE", "FR", "DE"],
+        "image": "Luxembourg.png"
+      },
+      {
+        "countryCode": "IT",
+        "name": "Italië",
+        "neighbours": ["AT", "FR", "SM", "SI", "CH", "VA"],
+        "image": "Italy.png"
+      },
+      {
+        "countryCode": "FR",
+        "name": "Frankrijk",
+        "neighbours": ["AD", "BE", "DE", "IT", "LU", "MC", "ES", "CH"],
+        "image": "France.png"
+      },
+      {
+        "countryCode": "UK",
+        "name": "Verenigd Koninkrijk",
+        "neighbours": ["IE"],
+        "image": "United Kingdom.png"
+      }
+
+  ]
+}
