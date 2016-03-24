@@ -1,6 +1,12 @@
 {
   "countries": [
       {
+        "countryCode": "BE",
+        "name": "België",
+        "neighbours": ["FR", "DE", "LU", "NL"],
+        "image": "Belgium.png"
+      },
+      {
         "countryCode": "AD",
         "name": "Andorra",
         "neighbours": ["FR", "ES"],

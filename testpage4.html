@@ -30,7 +30,7 @@
         }
 
         circle {
-            stroke: 10px solid black;
+            /**stroke: 10px solid black;*/
         }
     </STYLE>
 
@@ -39,94 +39,35 @@
 
     <script type="text/javascript">
 
-        var countries = {};
-
-        $.getJSON('data/countries.json', function(data) {
-            console.log(data);
-        });
-
-
-        var nodeSet = [
-            {
-                id: "N1",
-                name: "Belgie",
-                fixed: true,
-                neighbour: false
-            },
-            {
-                id: "N2",
-                name: "Nederland",
-                fixed: false,
-                neighbour: true
-            },
-            {
-                id: "N3",
-                name: "Duitsland",
-                fixed: false,
-                neighbour: true
-            },
-            {
-                id: "N4",
-                name: "Denemarken",
-                fixed: false,
-                neighbour: false
-            },
-            {
-                id: "N5",
-                name: "Oostenrijk",
-                fixed: false,
-                neighbour: false
-            },
-            {
-                id: "N6",
-                name: "Zwitserland",
-                fixed: false,
-                neighbour: false
-            },
-            {
-                id: "N7",
-                name: "Luxemburg",
-                fixed: false,
-                neighbour: true
-            },
-            {
-                id: "N8",
-                name: "Italie",
-                fixed: false,
-                neighbour: false
-            },
-            {
-                id: "N9",
-                name: "Frankrijk",
-                fixed: false,
-                neighbour: true
-            },
-            {
-                id: "N10",
-                name: "GB",
-                fixed: false,
-                neighbour: false
-            }
-        ];
-
         function drawCluster() {
-
             var width = 850;
             var height = 850;
-
             var middlePoint = {X: width / 2, Y: height / 2};
-            var points = nodeSet.filter(function (dp) {
-                return !dp.fixed
-            }).length; //# of NB
+
+            var countries = [];
+            var nodesData = [];
+            var linksData = [];
+            var selectedCountry;
+
             var radiusCenter = 50;
             var radiusOuter = 20;
             var buffer1 = 5; // buffer between outer nodes
             var buffer2 = 25; // buffer between mid circle and outer circles
             var radius = radiusOuter + radiusCenter + buffer2; // radius of circle on which outer nodes should be drawn
 
-            var dataPoints = [];
+            var svg = d3.select(".chart")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
 
-            {
+
+            d3.json("data/countries.json", function (error, data) {
+                if (error) throw error;
+
+                countries = data.countries;
+
+                var points = countries.length - 1;
+
                 var slice = 2 * Math.PI / points;
 
                 //dynamically changes the radius
@@ -135,128 +76,83 @@
                     radius += 20;
                 }
 
+                selectedCountry = {country: countries[0], X: middlePoint.X, Y: middlePoint.Y, R: radiusCenter};
+
+                nodesData.push(selectedCountry); // selected country
+
                 var i = 0;
-                nodeSet.forEach(function (node) {
-                    if (!node.fixed) {
-                        angle = slice * i;
-                        X = middlePoint.X + (node.neighbour ? radius : radius * 2) * Math.cos(angle);
-                        Y = middlePoint.Y + (node.neighbour ? radius : radius * 2) * Math.sin(angle);
-                        dataPoints.push({"X": X, "Y": Y, "fixed": node.fixed});
-                        i++;
-                    }
-                });
-            }
-
-            var svgContainer = d3.select(".chart").append("svg")
-                    .attr("width", width)
-                    .attr("height", height);
-
-            var defs = svgContainer.append('svg:defs');
-
-            defs.append("svg:pattern")
-                    .attr("id", "grump_avatar")
-                    .attr("width", 1)
-                    .attr("height", 1)
-                    .attr('patternContentUnits', 'objectBoundingBox')
-                    .append("svg:image")
-                    .attr("xlink:href", "./images/flags/France.png")
-                    .attr("width", 1)
-                    .attr("height", 1)
-                    .attr("preserveAspectRatio", "xMinYMin slice");
-
-
-            var jsonCircles = function () {
-                var circles = [];
-
-                dataPoints.forEach(function (p) {
-                    circles.push({"x_axis": p.X, "y_axis": p.Y, "radius": radiusOuter, "color": "darkgreen"});
+                countries.slice(1, countries.length).forEach(function (c) {
+                    angle = slice * i;
+                    X = middlePoint.X + (selectedCountry.country.neighbours.indexOf(c) != -1 ? radius : radius * 2) * Math.cos(angle);
+                    Y = middlePoint.Y + (selectedCountry.country.neighbours.indexOf(c) != -1 ? radius : radius * 2) * Math.sin(angle);
+                    nodesData.push({country: countries[i + 1], X: X, Y: Y, R: radiusOuter});
+                    linksData.push({source: 0, target: i + 1, score: 50});
+                    linksData.push({source: i + 1, target: 0, score: 25});
+                    i++;
                 });
 
-                //center circle
-                circles.push({
-                    "x_axis": middlePoint.X,
-                    "y_axis": middlePoint.Y,
-                    "radius": radiusCenter,
-                    "color": "blue"
-                });
+                var links = svg.selectAll("link")
+                        .data(linksData);
 
-                return circles;
-            };
+                links.enter()
+                        .append("line")
+                        .attr("class", "link")
+                        .attr("x1", function (l) {
+                            var sourceNode = nodesData.filter(function (d, i) {
+                                return i == l.source
+                            })[0];
+                            d3.select(this).attr("y1", sourceNode.Y);
+                            return sourceNode.X
+                        })
+                        .attr("x2", function (l) {
+                            var targetNode = nodesData.filter(function (d, i) {
+                                return i == l.target
+                            })[0];
+                            d3.select(this).attr("y2", targetNode.Y);
+                            return targetNode.X
+                        })
+                        .attr("fill", "none")
+                        .attr("stroke", "black");
 
-            //Lines between center and datapoint
-            var jsonLines = function () {
-                var lines = [];
+                var nodes = svg.selectAll("node")
+                        .data(nodesData);
 
-                dataPoints.forEach(function (p) {
-                    lines.push({"x1": middlePoint.X, "x2": p.X, "y1": middlePoint.Y, "y2": p.Y});
-                });
+                nodes.enter().append('defs')
+                        .append('pattern')
+                        .attr('id', function (d) {
+                            return (d.country.countryCode + "-icon");
+                        })
+                        .attr('width', 1)
+                        .attr('height', 1)
+                        .attr('patternContentUnits', 'objectBoundingBox')
+                        .append("image")
+                        .attr("xlink:xlink:href", function (d) {
+                            return ("./images/flags/" + d.country.image);
+                        })
+                        .attr("x", 0)
+                        .attr("y", 0)
+                        .attr("height", 1)
+                        .attr("width", 1)
+                        .attr("preserveAspectRatio", "xMinYMin slice");
 
-                return lines;
-            };
+                nodes.enter().append("circle")
+                        .attr("class", "node")
+                        .attr("cx", function (d) {
+                            return d.X
+                        })
+                        .attr("cy", function (d) {
+                            return d.Y
+                        })
+                        .attr("r", function (d) {
+                            return d.R
+                        })
+                        .style("fill", function (d) {
+                            return ("url(#" + d.country.countryCode + "-icon)");
+                        });
+
+            });
 
 
-            var lines = svgContainer.selectAll("line")
-                    .data(jsonLines)
-                    .enter()
-                    .append("line");
-
-            var lineAttributes = lines
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 1)
-                    .attr("x1", function (d) {
-                        return d.x1;
-                    })
-                    .attr("x2", function (d) {
-                        return d.x2;
-                    })
-                    .attr("y1", function (d) {
-                        return d.y1;
-                    })
-                    .attr("y2", function (d) {
-                        return d.y2;
-                    });
-
-            var helpCircles = [{"x_axis": middlePoint.X, "y_axis": middlePoint.Y, "radius": radius, "color": "blue"},
-                {"x_axis": width / 2, "y_axis": height / 2, "radius": radius * 2, "color": "blue"}
-            ];
-
-            var hcircles = svgContainer.selectAll(".helpcircle")
-                    .data(helpCircles)
-                    .enter()
-                    .append("circle")
-                    .style("stroke", "black")
-                    .style("stroke-dasharray", "10 5")
-                    .style("fill", "none");
-
-            var hcircleAttributes = hcircles
-                    .attr("cx", function (d) {
-                        return d.x_axis;
-                    })
-                    .attr("cy", function (d) {
-                        return d.y_axis;
-                    })
-                    .attr("r", function (d) {
-                        return d.radius;
-                    })
-                    ;
-
-            var circles = svgContainer.selectAll(".circle")
-                    .data(jsonCircles)
-                    .enter()
-                    .append("circle")
-                    //.style("stroke", "black")
-                    .style("fill", "url(#grump_avatar)");
-
-            var circleAttributes = circles
-                    .attr("cx", function (d) {
-                        return d.x_axis;
-                    })
-                    .attr("cy", function (d) {
-                        return d.y_axis;
-                    })
-                    .attr("r", function (d) {
-                        return d.radius;
-                    });
         }
     </script>
 </head>
@@ -266,10 +162,7 @@
 <div class="container" id="container">
     <div class="chart"></div>
 </div>
-
-<script type="text/javascript">
-    drawCluster();
-</script>
+<script type="text/javascript">drawCluster()</script>
 
 </body>
 
