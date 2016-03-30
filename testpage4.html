@@ -19,9 +19,8 @@
             background-color: lightslategrey;
         }
 
-        svg {
-            font: 10px sans-serif;
-            display: block;
+        line {
+            stroke: black;
         }
 
         circle {
@@ -99,13 +98,16 @@
                                 .data(linksData);
 
 
-                        var lineFunction = d3.svg.line()
-                                .x(function (d) {
-                                    return d.x;
-                                })
-                                .y(function (d) {
-                                    return d.y;
-                                });
+                        //is nodig om naar path the gaan peisnk
+                        /*
+                         var lineFunction = d3.svg.line()
+                         .x(function (d) {
+                         return d.x;
+                         })
+                         .y(function (d) {
+                         return d.y;
+                         });
+                         */
 
 
                         links.enter()
@@ -124,8 +126,7 @@
                                     })[0];
                                     d3.select(this).attr("y2", targetNode.Y);
                                     return targetNode.X
-                                })
-                                .attr("stroke", "black");
+                                });
 
                         /*
                          .attr("d", function (d) {
@@ -186,7 +187,5 @@
     <div class="chart"></div>
 </div>
 <script type="text/javascript">drawCluster()</script>
-
 </body>
-
 </html>
