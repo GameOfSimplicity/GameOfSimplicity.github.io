@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xml:lang="en-US"
@@ -8,20 +7,16 @@
     <title>My Force Directed Graph</title>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
     <meta name="Description" content="This page tries to mix charts with html formatting and layout constructs."/>
-    <meta http-equiv="pragma" content="no-cache"/>
-    <meta http-equiv="cache-control" content="no-cache"/>
-    <meta http-equiv="expires" content="-l"/>
 
     <STYLE type="text/css">
-        body {
-            width: 100%;
-            height: 100%;
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden
         }
 
         .chart {
-            width: 850px;
-            height: 850px;
-            background-color: gray;
+            background-color: lightslategrey;
         }
 
         svg {
@@ -40,8 +35,8 @@
     <script type="text/javascript">
 
         function drawCluster() {
-            var width = 850;
-            var height = 850;
+            var width = $(document).width();
+            var height = $(document).height();
             var middlePoint = {X: width / 2, Y: height / 2};
 
             var countries = [];
@@ -62,103 +57,131 @@
 
 
             d3.json("data/countries.json", function (error, data) {
-                if (error) throw error;
+                        if (error) throw error;
 
-                countries = data.countries;
+                        countries = data.countries;
 
-                var points = countries.length - 1;
+                        //aantal gegeven punten
+                        var pointsCount = countries.length - 1;
 
-                var slice = 2 * Math.PI / points;
+                        // hoek tussen landen
+                        var slice = 2 * Math.PI / pointsCount;
 
-                //dynamically changes the radius
-                var temp = points * (buffer1 + radiusOuter * 2);
-                while (radius * Math.PI * 2 < temp) {
-                    radius += 20;
-                }
+                        //dynamically changes the radius
+                        var temp = pointsCount * (buffer1 + radiusOuter * 2);
+                        while (radius * Math.PI * 2 < temp) {
+                            radius += 20;
+                        }
 
-                selectedCountry = {country: countries[0], X: middlePoint.X, Y: middlePoint.Y, R: radiusCenter};
+                        //België
+                        selectedCountry = {country: countries[0], X: middlePoint.X, Y: middlePoint.Y, R: radiusCenter};
 
-                nodesData.push(selectedCountry); // selected country
+                        // selected country
+                        nodesData.push(selectedCountry);
 
-                var i = 0;
-                countries.slice(1, countries.length).forEach(function (c) {
-                    angle = slice * i;
-                    X = middlePoint.X + (selectedCountry.country.neighbours.indexOf(c) != -1 ? radius : radius * 2) * Math.cos(angle);
-                    Y = middlePoint.Y + (selectedCountry.country.neighbours.indexOf(c) != -1 ? radius : radius * 2) * Math.sin(angle);
-                    nodesData.push({country: countries[i + 1], X: X, Y: Y, R: radiusOuter});
-                    linksData.push({source: 0, target: i + 1, score: 50});
-                    linksData.push({source: i + 1, target: 0, score: 25});
-                    i++;
-                });
+                        var i = 1;
+                        countries.slice(1, countries.length).forEach(
+                                function (c) {
+                                    angle = slice * (i - 1);
+                                    X = middlePoint.X + (selectedCountry.country.neighbours.indexOf(c) != -1 ? radius : radius * 2) * Math.cos(angle);
+                                    Y = middlePoint.Y + (selectedCountry.country.neighbours.indexOf(c) != -1 ? radius : radius * 2) * Math.sin(angle);
 
-                var links = svg.selectAll("link")
-                        .data(linksData);
+                                    nodesData.push({country: countries[i], X: X, Y: Y, R: radiusOuter});
+                                    //Heen
+                                    linksData.push({source: 0, target: i, score: 50});
 
-                links.enter()
-                        .append("line")
-                        .attr("class", "link")
-                        .attr("x1", function (l) {
-                            var sourceNode = nodesData.filter(function (d, i) {
-                                return i == l.source
-                            })[0];
-                            d3.select(this).attr("y1", sourceNode.Y);
-                            return sourceNode.X
-                        })
-                        .attr("x2", function (l) {
-                            var targetNode = nodesData.filter(function (d, i) {
-                                return i == l.target
-                            })[0];
-                            d3.select(this).attr("y2", targetNode.Y);
-                            return targetNode.X
-                        })
-                        .attr("fill", "none")
-                        .attr("stroke", "black");
+                                    //Terug
+                                    linksData.push({source: i, target: 0, score: 25});
+                                    i++;
+                                });
 
-                var nodes = svg.selectAll("node")
-                        .data(nodesData);
-
-                nodes.enter().append('defs')
-                        .append('pattern')
-                        .attr('id', function (d) {
-                            return (d.country.countryCode + "-icon");
-                        })
-                        .attr('width', 1)
-                        .attr('height', 1)
-                        .attr('patternContentUnits', 'objectBoundingBox')
-                        .append("image")
-                        .attr("xlink:xlink:href", function (d) {
-                            return ("./images/flags/" + d.country.image);
-                        })
-                        .attr("x", 0)
-                        .attr("y", 0)
-                        .attr("height", 1)
-                        .attr("width", 1)
-                        .attr("preserveAspectRatio", "xMinYMin slice");
-
-                nodes.enter().append("circle")
-                        .attr("class", "node")
-                        .attr("cx", function (d) {
-                            return d.X
-                        })
-                        .attr("cy", function (d) {
-                            return d.Y
-                        })
-                        .attr("r", function (d) {
-                            return d.R
-                        })
-                        .style("fill", function (d) {
-                            return ("url(#" + d.country.countryCode + "-icon)");
-                        });
-
-            });
+                        var links = svg.selectAll("link")
+                                .data(linksData);
 
 
+                        var lineFunction = d3.svg.line()
+                                .x(function (d) {
+                                    return d.x;
+                                })
+                                .y(function (d) {
+                                    return d.y;
+                                });
+
+
+                        links.enter()
+                                .append("line")
+                                .attr("class", "link")
+                                .attr("x1", function (l) {
+                                    var sourceNode = nodesData.filter(function (d, i) {
+                                        return i == l.source
+                                    })[0];
+                                    d3.select(this).attr("y1", sourceNode.Y);
+                                    return sourceNode.X
+                                })
+                                .attr("x2", function (l) {
+                                    var targetNode = nodesData.filter(function (d, i) {
+                                        return i == l.target
+                                    })[0];
+                                    d3.select(this).attr("y2", targetNode.Y);
+                                    return targetNode.X
+                                })
+                                .attr("stroke", "black");
+
+                        /*
+                         .attr("d", function (d) {
+                         var dx = d.target.x - d.source.x,
+                         dy = d.target.y - d.source.y,
+                         dr = Math.sqrt(dx * dx + dy * dy);
+                         return "M" +
+                         d.source.x + "," +
+                         d.source.y + "A" +
+                         dr + "," + dr + " 0 0,1 " +
+                         d.target.x + "," +
+                         d.target.y;
+                         });
+                         */
+
+
+                        var nodes = svg.selectAll("node")
+                                .data(nodesData);
+
+                        nodes.enter().append('defs')
+                                .append('pattern')
+                                .attr('id', function (d) {
+                                    return (d.country.countryCode + "-icon");
+                                })
+                                .attr('width', 1)
+                                .attr('height', 1)
+                                .attr('patternContentUnits', 'objectBoundingBox')
+                                .append("image")
+                                .attr("xlink:xlink:href", function (d) {
+                                    return ("./images/flags/" + d.country.image);
+                                })
+                                .attr("height", 1)
+                                .attr("width", 1)
+                                .attr("preserveAspectRatio", "xMinYMin slice");
+
+                        nodes.enter().append("circle")
+                                .attr("class", "node")
+                                .attr("cx", function (d) {
+                                    return d.X
+                                })
+                                .attr("cy", function (d) {
+                                    return d.Y
+                                })
+                                .attr("r", function (d) {
+                                    return d.R
+                                })
+                                .style("fill", function (d) {
+                                    return ("url(#" + d.country.countryCode + "-icon)");
+                                });
+                    }
+            );
         }
+
     </script>
 </head>
 <body>
-<div id="placeholder"></div>
-
 <div class="container" id="container">
     <div class="chart"></div>
 </div>
