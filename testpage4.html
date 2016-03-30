@@ -49,7 +49,7 @@
             var buffer2 = 25; // buffer between mid circle and outer circles
             var radius = radiusOuter + radiusCenter + buffer2; // radius of circle on which outer nodes should be drawn
 
-            var svg = d3.select(".chart")
+            var svgContainer = d3.select(".chart")
                     .append("svg")
                     .attr("width", width)
                     .attr("height", height);
@@ -89,44 +89,73 @@
                                     //Heen
                                     linksData.push({source: 0, target: i, score: 50});
 
-                                    //Terug
-                                    linksData.push({source: i, target: 0, score: 25});
+                                    //Terug, ff weggelate
+                                    //linksData.push({source: i, target: 0, score: 25});
                                     i++;
+
                                 });
 
-                        var links = svg.selectAll("link")
+                        var links = svgContainer.selectAll("link")
                                 .data(linksData);
 
 
+                        //Path maken
+                        var pathData = [];
+
+                        linksData.forEach(function (item, index) {
+                            var targetNode = nodesData[item.target]
+                            pathData.push([
+                                {
+                                    "x": selectedCountry.X,
+                                    "y": selectedCountry.Y
+                                }, {
+                                    "x": targetNode.X,
+                                    "y": targetNode.Y
+                                }])
+                        })
+
+                        alert(pathData);
+
+
                         //is nodig om naar path the gaan peisnk
+                        var lineFunction = d3.svg.line()
+                                .x(function (d) {
+                                    return d.x;
+                                })
+                                .y(function (d) {
+                                    return d.y;
+                                });
+
+
+                        pathData.forEach(function (item, index) {
+                            svgContainer.append("path")
+                                    .attr("d", lineFunction(item))
+                                    .attr("stroke", "black")
+                                    .attr("stroke-width", 2)
+                                    .attr("fill", "none");
+                        });
+
+
+
                         /*
-                         var lineFunction = d3.svg.line()
-                         .x(function (d) {
-                         return d.x;
+                         links.enter()
+                         .append("line")
+                         .attr("class", "link")
+                         .attr("x1", function (l) {
+                         var sourceNode = nodesData.filter(function (d, i) {
+                         return i == l.source
+                         })[0];
+                         d3.select(this).attr("y1", sourceNode.Y);
+                         return sourceNode.X
                          })
-                         .y(function (d) {
-                         return d.y;
+                         .attr("x2", function (l) {
+                         var targetNode = nodesData.filter(function (d, i) {
+                         return i == l.target
+                         })[0];
+                         d3.select(this).attr("y2", targetNode.Y);
+                         return targetNode.X
                          });
                          */
-
-
-                        links.enter()
-                                .append("line")
-                                .attr("class", "link")
-                                .attr("x1", function (l) {
-                                    var sourceNode = nodesData.filter(function (d, i) {
-                                        return i == l.source
-                                    })[0];
-                                    d3.select(this).attr("y1", sourceNode.Y);
-                                    return sourceNode.X
-                                })
-                                .attr("x2", function (l) {
-                                    var targetNode = nodesData.filter(function (d, i) {
-                                        return i == l.target
-                                    })[0];
-                                    d3.select(this).attr("y2", targetNode.Y);
-                                    return targetNode.X
-                                });
 
                         /*
                          .attr("d", function (d) {
@@ -143,7 +172,7 @@
                          */
 
 
-                        var nodes = svg.selectAll("node")
+                        var nodes = svgContainer.selectAll("node")
                                 .data(nodesData);
 
                         nodes.enter().append('defs')
