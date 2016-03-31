@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xml:lang="en-US"
-      lang="en-US">
+<html lang="en">
 <head profile="http://www.w3.org/2005/10/profile">
     <title>Eurovision Song Contest visualisation</title>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Description" content="Demo page for Eurovision Song Contest visualisation"/>
 
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.css">
@@ -17,11 +15,17 @@
         html, body {
             margin: 0;
             padding: 0;
-            overflow: hidden
+            overflow: auto;
+        }
+
+        .yearline {
+            height: 500px;
+            background-color: lightslategray;
+            box-shadow: inset 2px 2px 0px #000;
         }
 
         .chart {
-            background-color: lightslategrey;
+            height: inherit;
         }
 
         line {
@@ -40,8 +44,16 @@
 </head>
 <body>
 <div class="container" id="container">
-    <div class="chart"></div>
+    <div class="yearline">
+        <div class="chart" id="draw-1957"></div>
+    </div>
+    <div class="yearline">
+        <div class="chart" id="draw-1960"></div>
+    </div>
 </div>
-<script type="text/javascript">drawCluster()</script>
+<script type="text/javascript">
+    drawCluster("#draw-1957");
+    drawCluster("#draw-1960")
+</script>
 </body>
 </html>

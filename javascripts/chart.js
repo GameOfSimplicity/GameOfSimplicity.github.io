@@ -1,8 +1,9 @@
-function drawCluster() {
+function drawCluster(chartID) {
     //var width = $(document).width();
-    var width = 500;
+    var width = d3.select(chartID).node().getBoundingClientRect().width;
     //var height = $(document).height();
-    var height = 500;
+    var height = d3.select(chartID).node().getBoundingClientRect().height - 4;
+    console.log("Row - Width: " + width + " height: " + height);
     var middlePoint = {X: width / 2, Y: height / 2};
 
     var countries = [];
@@ -16,7 +17,7 @@ function drawCluster() {
     var buffer2 = 25; // buffer between mid circle and outer circles
     var radius = radiusOuter + radiusCenter + buffer2; // radius of circle on which outer nodes should be drawn
 
-    var svgContainer = d3.select(".chart")
+    var svgContainer = d3.select(chartID)
         .append("svg")
         .attr("width", width)
         .attr("height", height);
@@ -81,8 +82,6 @@ function drawCluster() {
                     }])
             })
             console.log(pathData);
-            //alert(pathData);
-
 
             //is nodig om naar path the gaan peisnk
             var lineFunction = d3.svg.line()
@@ -101,7 +100,6 @@ function drawCluster() {
                     .attr("stroke-width", 2)
                     .attr("fill", "none");
             });
-
 
 
             /*
