@@ -33,17 +33,6 @@
       "image": "Albania.png"
     },
     {
-      "countryCode": "BE",
-      "name": "België",
-      "neighbours": [
-        "FR",
-        "DE",
-        "LU",
-        "NL"
-      ],
-      "image": "Belgium.png"
-    },
-    {
       "countryCode": "NL",
       "name": "Nederland",
       "neighbours": [
