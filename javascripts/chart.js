@@ -8,7 +8,8 @@ function drawCluster(chartID) {
 
     var countries = [];
     var nodesData = [];
-    var linksData = [];
+    var giveLinksData = [];
+    var receiveLinksData = [];
     var selectedCountry;
 
     var radiusCenter = 50;
@@ -42,19 +43,12 @@ function drawCluster(chartID) {
             radius += 20;
         }
 
-        var neighbours = new Array();
-        /*neighbours.push(countries[4].countryCode);
-        neighbours.push(countries[5].countryCode);
-        neighbours.push(countries[9].countryCode);
-        neighbours.push(countries[11].countryCode);*/
-
         //België
         selectedCountry = {
             country: countries[0],
             X: middlePoint.X,
             Y: middlePoint.Y,
-            R: radiusCenter,
-            neighbours : neighbours
+            R: radiusCenter
         };
 
         // selected country
@@ -70,32 +64,52 @@ function drawCluster(chartID) {
 
                 nodesData.push({country: countries[i], X: X, Y: Y, R: radiusOuter});
                 //Heen
-                linksData.push({source: 0, target: i, score: 50});
+                giveLinksData.push({source: 0, target: i, score: 50});
+                receiveLinksData.push({source: 0, target: i, score: 50});
 
                 //Terug, ff weggelate
-                //linksData.push({source: i, target: 0, score: 25});
+                //giveLinksData.push({source: i, target: 0, score: 25});
                 i++;
 
             });
 
-        var links = svgContainer.selectAll("link")
-            .data(linksData);
+        var links = svgContainer.selectAll("giveLinks").data(giveLinksData);
+        var links = svgContainer.selectAll("receiveLinks").data(receiveLinksData);
 
 
         //Path maken
-        var pathData = [];
+        // TODO: onderscheiden tussen : enkel receive / enkel give / beide / geen relatie
+        var givePathData = [];
+        var receivePathData = [];
+        // middelpunt; x = ( x1+x2)/2, y = (y1+y2)/2
+        // TODO: rekening houden met radius van cirkels
+        giveLinksData.forEach(function (item, index) {
+            var targetNode = nodesData[item.target];
+            var xMid = (selectedCountry.X + targetNode.X) / 2;
+            var yMid = (selectedCountry.Y + targetNode.Y) / 2;
+            givePathData.push([
+                {
+                    "x": targetNode.X,
+                    "y": targetNode.Y
+                }, {
+                    "x": xMid,
+                    "y": yMid
+                }])
+        });
 
-        linksData.forEach(function (item, index) {
-            var targetNode = nodesData[item.target]
-            pathData.push([
+        receiveLinksData.forEach(function (item, index) {
+            var targetNode = nodesData[item.target];
+            var xMid = (selectedCountry.X + targetNode.X) / 2;
+            var yMid = (selectedCountry.Y + targetNode.Y) / 2;
+            receivePathData.push([
                 {
                     "x": selectedCountry.X,
                     "y": selectedCountry.Y
                 }, {
-                    "x": targetNode.X,
-                    "y": targetNode.Y
+                    "x": xMid,
+                    "y": yMid
                 }])
-        })
+        });
 
         //is nodig om naar path the gaan peisnk
         var lineFunction = d3.svg.line()
@@ -106,15 +120,21 @@ function drawCluster(chartID) {
                 return d.y;
             });
 
-
-        pathData.forEach(function (item, index) {
+        givePathData.forEach(function (item, index) {
             svgContainer.append("path")
                 .attr("d", lineFunction(item))
-                .attr("stroke", "black")
+                .attr("stroke", "red")
                 .attr("stroke-width", 2)
                 .attr("fill", "none");
         });
 
+        receivePathData.forEach(function (item, index) {
+            svgContainer.append("path")
+                .attr("d", lineFunction(item))
+                .attr("stroke", "blue")
+                .attr("stroke-width", 2)
+                .attr("fill", "none");
+        });
 
         /*
          links.enter()
@@ -168,7 +188,20 @@ function drawCluster(chartID) {
             })
             .attr("height", 1)
             .attr("width", 1)
-            .attr("preserveAspectRatio", "xMinYMin slice");
+            .attr("preserveAspectRatio", "xMinYMin slice")
+            .append("marker")
+            .attr({
+                "id":"arrow",
+                "viewBox":"0 -5 10 10",
+                "refX":5,
+                "refY":0,
+                "markerWidth":4,
+                "markerHeight":4,
+                "orient":"auto"
+            })
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("class","arrowHead");
 
         nodes.enter().append("circle")
             .attr("class", "node")
