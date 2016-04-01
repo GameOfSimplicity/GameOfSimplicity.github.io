@@ -24,6 +24,16 @@
             background-color: lightslategray;
         }
 
+        .yearline-odd {
+            height: 500px;
+            background-color: slategray;
+        }
+
+        .yeartext {
+            position: absolute;
+            margin: 0 0 0 50px;
+        }
+
         .chart {
             height: inherit;
         }
@@ -45,15 +55,17 @@
 <body>
 <div class="container" id="container">
     <div class="yearline">
+        <div class="caption yeartext"><h1>1957</h1></div>
         <div class="chart" id="draw-1957"></div>
     </div>
-    <!--<div class="yearline">
+    <div class="yearline-odd">
+        <div class="caption yeartext"><h1>1960</h1></div>
         <div class="chart" id="draw-1960"></div>
-    </div>-->
+    </div>
 </div>
 <script type="text/javascript">
     drawCluster("#draw-1957");
-    //drawCluster("#draw-1960")
+    drawCluster("#draw-1960");
 </script>
 </body>
 </html>
