@@ -12,10 +12,12 @@ function drawCluster(chartID) {
     var receiveLinksData = [];
     var selectedCountry;
 
-    var radiusCenter = 50;
-    var radiusOuter = 20;
-    var buffer1 = 80; // buffer between outer nodes
-    var buffer2 = 25; // buffer between mid circle and outer circles
+    const giveColour = "red";
+    const receiveColour = "blue";
+    const radiusCenter = 50;
+    const radiusOuter = 20;
+    const buffer1 = 80; // buffer between outer nodes
+    const buffer2 = 25; // buffer between mid circle and outer circles
     var radius = radiusOuter + radiusCenter + buffer2; // radius of circle on which outer nodes should be drawn
 
     var svgContainer = d3.select(chartID)
@@ -28,8 +30,6 @@ function drawCluster(chartID) {
         if (error) throw error;
 
         countries = data.countries;
-
-        console.log(countries);
 
         //aantal gegeven punten
         var pointsCount = countries.length - 1;
@@ -73,9 +73,11 @@ function drawCluster(chartID) {
 
             });
 
-        var links = svgContainer.selectAll("giveLinks").data(giveLinksData);
-        var links = svgContainer.selectAll("receiveLinks").data(receiveLinksData);
+        var giveLinks = svgContainer.selectAll("giveLinks").data(giveLinksData);
+        var receiveLinks = svgContainer.selectAll("receiveLinks").data(receiveLinksData);
 
+        var diagonal = d3.svg.diagonal()
+            .projection(function(d) { return [d.y, d.x]; });
 
         //Path maken
         // TODO: onderscheiden tussen : enkel receive / enkel give / beide / geen relatie
@@ -123,17 +125,20 @@ function drawCluster(chartID) {
         givePathData.forEach(function (item, index) {
             svgContainer.append("path")
                 .attr("d", lineFunction(item))
-                .attr("stroke", "red")
+                .attr("stroke", giveColour)
                 .attr("stroke-width", 2)
-                .attr("fill", "none");
+                .attr("fill", "none")
+                .attr("marker-end", "url(#giveArrowHead)");
         });
 
         receivePathData.forEach(function (item, index) {
             svgContainer.append("path")
                 .attr("d", lineFunction(item))
-                .attr("stroke", "blue")
+                .attr("stroke", receiveColour)
                 .attr("stroke-width", 2)
-                .attr("fill", "none");
+                .attr("fill", "none")
+                .attr("fill", "none")
+                .attr("marker-end", "url(#receiveArrowHead)");
         });
 
         /*
@@ -174,8 +179,9 @@ function drawCluster(chartID) {
         var nodes = svgContainer.selectAll("node")
             .data(nodesData);
 
-        nodes.enter().append('defs')
-            .append('pattern')
+        var defs = nodes.enter().append('defs');
+
+        defs.append('pattern')
             .attr('id', function (d) {
                 return (d.country.countryCode + "-icon");
             })
@@ -188,20 +194,32 @@ function drawCluster(chartID) {
             })
             .attr("height", 1)
             .attr("width", 1)
-            .attr("preserveAspectRatio", "xMinYMin slice")
-            .append("marker")
-            .attr({
-                "id":"arrow",
-                "viewBox":"0 -5 10 10",
-                "refX":5,
-                "refY":0,
-                "markerWidth":4,
-                "markerHeight":4,
-                "orient":"auto"
-            })
+            .attr("preserveAspectRatio", "xMinYMin slice");
+
+
+        defs.append("marker")
+            .attr("id", "giveArrowHead")
+            .attr("refX", 6 + 3) // must be smarter way to calculate shift
+            .attr("refY", 2)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 4)
+            .attr("orient", "auto")
             .append("path")
-            .attr("d", "M0,-5L10,0L0,5")
-            .attr("class","arrowHead");
+            .attr("d", "M 0,0 V 4 L6,2 Z")
+            .attr("fill", giveColour);
+
+        defs.append("marker")
+            .attr("id", "receiveArrowHead")
+            .attr("refX", 6 + 3) // must be smarter way to calculate shift
+            .attr("refY", 2)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 4)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M 0,0 V 4 L6,2 Z")
+            .attr("fill", receiveColour);
+
+
 
         nodes.enter().append("circle")
             .attr("class", "node")
