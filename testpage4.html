@@ -21,12 +21,12 @@
 
         .yearline {
             height: 500px;
-            background-color: lightslategray;
+            background-color: #cccccc;
         }
 
         .yearline-odd {
             height: 500px;
-            background-color: slategray;
+            background-color: #aaaaaa;
         }
 
         .yeartext {
@@ -51,21 +51,31 @@
     <script type="text/javascript" src="javascripts/jquery-1.12.2.js"></script>
     <script type="text/javascript" src="javascripts/chart.js"></script>
 
+
+
 </head>
 <body>
 <div class="container" id="container">
     <div class="yearline">
         <div class="caption yeartext"><h1>1957</h1></div>
+        <button type="button" id="giveButton-1957">Show give lines</button>
+        <button type="button" id="receiveButton-1957">Show give lines</button>
+        <button type="button" id="bothButton-1957">Show both</button>
         <div class="chart" id="draw-1957"></div>
     </div>
     <div class="yearline-odd">
         <div class="caption yeartext"><h1>1960</h1></div>
+        <button type="button" id="giveButton-1960">Show give lines</button>
+        <button type="button" id="receiveButton-1960">Show give lines</button>
+        <button type="button" id="bothButton-1960">Show both</button>
         <div class="chart" id="draw-1960"></div>
     </div>
 </div>
+
 <script type="text/javascript">
-    drawCluster("#draw-1957");
-    drawCluster("#draw-1960");
+    drawCluster("1957");
+    drawCluster("1960");
 </script>
+
 </body>
 </html>

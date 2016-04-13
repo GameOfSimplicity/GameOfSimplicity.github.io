@@ -1,8 +1,12 @@
-function drawCluster(chartID) {
+var graphs;
+
+
+function drawCluster(chartYear) {
+    var chartId = "#draw-" + chartYear;
     //var width = $(document).width();
-    var width = d3.select(chartID).node().getBoundingClientRect().width;
+    var width = d3.select(chartId).node().getBoundingClientRect().width;
     //var height = $(document).height();
-    var height = d3.select(chartID).node().getBoundingClientRect().height - 4;
+    var height = d3.select(chartId).node().getBoundingClientRect().height - 4;
     console.log("Row - Width: " + width + " height: " + height);
     var middlePoint = {X: width / 2, Y: height / 2};
 
@@ -12,15 +16,15 @@ function drawCluster(chartID) {
     var receiveLinksData = [];
     var selectedCountry;
 
-    const giveColour = "red";
-    const receiveColour = "blue";
+    const giveColour = "#082f6d";
+    const receiveColour = "#cd0027";
     const radiusCenter = 50;
     const radiusOuter = 20;
     const buffer1 = 80; // buffer between outer nodes
     const buffer2 = 25; // buffer between mid circle and outer circles
     var radius = radiusOuter + radiusCenter + buffer2; // radius of circle on which outer nodes should be drawn
 
-    var svgContainer = d3.select(chartID)
+    var svgContainer = d3.select(chartId)
         .append("svg")
         .attr("width", width)
         .attr("height", height);
@@ -55,55 +59,74 @@ function drawCluster(chartID) {
         nodesData.push(selectedCountry);
 
         var i = 1;
-        countries.slice(1, countries.length).forEach(
+        countries.slice(1, countries.length).sort(function (c) {
+            //first sort from neighbor to not-neighbor
+            var isNeighour = selectedCountry.country.neighbours.indexOf(c.countryCode) > -1;
+            if (isNeighour) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }).forEach(
+            //calc absolute pixels
             function (c) {
-                angle = slice * (i - 1);
-                isNeighour = selectedCountry.country.neighbours.indexOf(c.countryCode) > -1;
-                X = middlePoint.X + (isNeighour ? radius * .6 : radius) * Math.cos(angle);
-                Y = middlePoint.Y + (isNeighour ? radius * .6 : radius) * Math.sin(angle);
+                var angle = slice * (i - 1);
+                var isNeighour = selectedCountry.country.neighbours.indexOf(c.countryCode) > -1;
+                var X = middlePoint.X + (isNeighour ? radius * .6 : radius) * Math.cos(angle);
+                var Y = middlePoint.Y + (isNeighour ? radius * .6 : radius) * Math.sin(angle);
 
                 nodesData.push({country: countries[i], X: X, Y: Y, R: radiusOuter});
-                //Heen
+
                 giveLinksData.push({source: 0, target: i, score: 50});
                 receiveLinksData.push({source: 0, target: i, score: 50});
-
-                //Terug, ff weggelate
-                //giveLinksData.push({source: i, target: 0, score: 25});
                 i++;
-
             });
 
         var giveLinks = svgContainer.selectAll("giveLinks").data(giveLinksData);
         var receiveLinks = svgContainer.selectAll("receiveLinks").data(receiveLinksData);
 
-        var diagonal = d3.svg.diagonal()
-            .projection(function(d) { return [d.y, d.x]; });
 
         //Path maken
         // TODO: onderscheiden tussen : enkel receive / enkel give / beide / geen relatie
         var givePathData = [];
+        var givePathDataMid = [];
         var receivePathData = [];
-        // middelpunt; x = ( x1+x2)/2, y = (y1+y2)/2
+        var receivePathDataMid = [];
+        // middelpunt; x = (x1+x2)/2, y = (y1+y2)/2
         // TODO: rekening houden met radius van cirkels
-        giveLinksData.forEach(function (item, index) {
+        receiveLinksData.forEach(function (item, index) {
             var targetNode = nodesData[item.target];
             var xMid = (selectedCountry.X + targetNode.X) / 2;
             var yMid = (selectedCountry.Y + targetNode.Y) / 2;
-            givePathData.push([
+            receivePathDataMid.push([
                 {
                     "x": targetNode.X,
                     "y": targetNode.Y
                 }, {
                     "x": xMid,
                     "y": yMid
-                }])
+                }
+            ])
         });
 
         receiveLinksData.forEach(function (item, index) {
             var targetNode = nodesData[item.target];
+            receivePathData.push([
+                {
+                    "x": targetNode.X,
+                    "y": targetNode.Y
+                }, {
+                    "x": selectedCountry.X,
+                    "y": selectedCountry.Y
+                }
+            ])
+        });
+
+        giveLinksData.forEach(function (item, index) {
+            var targetNode = nodesData[item.target];
             var xMid = (selectedCountry.X + targetNode.X) / 2;
             var yMid = (selectedCountry.Y + targetNode.Y) / 2;
-            receivePathData.push([
+            givePathDataMid.push([
                 {
                     "x": selectedCountry.X,
                     "y": selectedCountry.Y
@@ -113,7 +136,21 @@ function drawCluster(chartID) {
                 }])
         });
 
-        //is nodig om naar path the gaan peisnk
+        giveLinksData.forEach(function (item, index) {
+            var targetNode = nodesData[item.target];
+            var xMid = (selectedCountry.X + targetNode.X) / 2;
+            var yMid = (selectedCountry.Y + targetNode.Y) / 2;
+            givePathData.push([
+                {
+                    "x": selectedCountry.X,
+                    "y": selectedCountry.Y
+                }, {
+                    "x": targetNode.X,
+                    "y": targetNode.Y
+                }])
+        });
+
+
         var lineFunction = d3.svg.line()
             .x(function (d) {
                 return d.x;
@@ -122,24 +159,62 @@ function drawCluster(chartID) {
                 return d.y;
             });
 
-        givePathData.forEach(function (item, index) {
-            svgContainer.append("path")
-                .attr("d", lineFunction(item))
-                .attr("stroke", giveColour)
-                .attr("stroke-width", 2)
-                .attr("fill", "none")
-                .attr("marker-end", "url(#giveArrowHead)");
-        });
 
-        receivePathData.forEach(function (item, index) {
-            svgContainer.append("path")
-                .attr("d", lineFunction(item))
-                .attr("stroke", receiveColour)
-                .attr("stroke-width", 2)
-                .attr("fill", "none")
-                .attr("fill", "none")
-                .attr("marker-end", "url(#receiveArrowHead)");
-        });
+        var showGiveMid = function () {
+            givePathDataMid.forEach(function (item, index) {
+                svgContainer.append("path")
+                    .attr("id","giveMid-" + chartYear)
+                    .attr("d", lineFunction(item))
+                    .attr("stroke", giveColour)
+                    .attr("stroke-width", 2)
+                    .attr("fill", "none")
+                    .attr("marker-end", "url(#giveArrowHead)");
+            });
+        };
+
+        var showGive = function () {
+            givePathData.forEach(function (item, index) {
+                svgContainer.append("path")
+                    .attr("id","give-" + chartYear)
+                    .attr("d", lineFunction(item))
+                    .attr("stroke", giveColour)
+                    .attr("stroke-width", 2)
+                    .attr("fill", "none")
+                    .attr("marker-end", "url(#giveArrowHead)");
+            });
+        };
+
+
+        var showReceiveMid = function () {
+            receivePathDataMid.forEach(function (item, index) {
+                svgContainer.append("path")
+                    .attr("id","receiveMid-" + chartYear)
+                    .attr("d", lineFunction(item))
+                    .attr("stroke", receiveColour)
+                    .attr("stroke-width", 2)
+                    .attr("fill", "none")
+                    .attr("fill", "none")
+                    .attr("marker-end", "url(#receiveArrowHead)");
+            });
+        };
+
+        var showReceive = function () {
+            receivePathData.forEach(function (item, index) {
+                svgContainer.append("path")
+                    .attr("id","receive-" + chartYear)
+                    .attr("d", lineFunction(item))
+                    .attr("stroke", receiveColour)
+                    .attr("stroke-width", 2)
+                    .attr("fill", "none")
+                    .attr("fill", "none")
+                    .attr("marker-end", "url(#receiveArrowHead)");
+            });
+        };
+
+
+        showGiveMid();
+        showReceiveMid();
+
 
         /*
          links.enter()
@@ -210,15 +285,14 @@ function drawCluster(chartID) {
 
         defs.append("marker")
             .attr("id", "receiveArrowHead")
-            .attr("refX", 6 + 3) // must be smarter way to calculate shift
+            //  .attr("refX", 6 + 3) // must be smarter way to calculate shift
             .attr("refY", 2)
             .attr("markerWidth", 6)
             .attr("markerHeight", 4)
             .attr("orient", "auto")
             .append("path")
-            .attr("d", "M 0,0 V 4 L6,2 Z")
+            .attr("d", "M 0 0 V 4 L 6 2 Z")
             .attr("fill", receiveColour);
-
 
 
         nodes.enter().append("circle")
@@ -235,5 +309,30 @@ function drawCluster(chartID) {
             .style("fill", function (d) {
                 return ("url(#" + d.country.countryCode + "-icon)");
             });
+
+
+        var removeLinesFromYear = function (year) {
+            d3.selectAll("#receiveMid-" + year).remove();
+            d3.selectAll("#receive-" + year).remove();
+            d3.selectAll("#giveMid-" + year).remove();
+            d3.selectAll("#give-" + year).remove();
+        }
+
+        document.getElementById("giveButton-" + chartYear).onclick = function(){
+            removeLinesFromYear(chartYear);
+            showGive();
+        }
+
+        
+        document.getElementById("receiveButton-" + chartYear).onclick = function(){
+            removeLinesFromYear(chartYear);
+            showReceive();
+        }
+
+        document.getElementById("bothButton-" + chartYear).onclick = function(){
+            removeLinesFromYear(chartYear);
+            showGiveMid();
+            showReceiveMid();
+        }
     });
 }
