@@ -160,9 +160,12 @@ function drawCluster(chartYear) {
             });
 
 
+        var layer1 = svgContainer.append('g');
+        var layer2 = svgContainer.append('g');
+
         var showGiveMid = function () {
             givePathDataMid.forEach(function (item, index) {
-                svgContainer.append("path")
+                layer1.append("path")
                     .attr("id","giveMid-" + chartYear)
                     .attr("d", lineFunction(item))
                     .attr("stroke", giveColour)
@@ -174,7 +177,7 @@ function drawCluster(chartYear) {
 
         var showGive = function () {
             givePathData.forEach(function (item, index) {
-                svgContainer.append("path")
+                layer1.append("path")
                     .attr("id","give-" + chartYear)
                     .attr("d", lineFunction(item))
                     .attr("stroke", giveColour)
@@ -187,7 +190,7 @@ function drawCluster(chartYear) {
 
         var showReceiveMid = function () {
             receivePathDataMid.forEach(function (item, index) {
-                svgContainer.append("path")
+                layer1.append("path")
                     .attr("id","receiveMid-" + chartYear)
                     .attr("d", lineFunction(item))
                     .attr("stroke", receiveColour)
@@ -200,7 +203,7 @@ function drawCluster(chartYear) {
 
         var showReceive = function () {
             receivePathData.forEach(function (item, index) {
-                svgContainer.append("path")
+                layer1.append("path")
                     .attr("id","receive-" + chartYear)
                     .attr("d", lineFunction(item))
                     .attr("stroke", receiveColour)
