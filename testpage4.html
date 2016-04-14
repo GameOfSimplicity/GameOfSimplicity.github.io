@@ -30,12 +30,15 @@
         }
 
         .yeartext {
-            position: absolute;
+            /*position: absolute;*/
             margin: 0 0 0 50px;
         }
 
         .chart {
-            height: inherit;
+            /*height: inherit;*/
+            height: 80%;
+            width: 80%;
+            overflow: hidden;
         }
 
         line {
@@ -52,30 +55,40 @@
     <script type="text/javascript" src="javascripts/chart.js"></script>
 
 
-
 </head>
 <body>
 <div class="container" id="container">
-    <div class="yearline">
-        <div class="caption yeartext"><h1>1957</h1></div>
-        <button type="button" id="giveButton-1957">Show give lines</button>
-        <button type="button" id="receiveButton-1957">Show receive lines</button>
-        <button type="button" id="bothButton-1957">Show both</button>
-        <div class="chart" id="draw-1957"></div>
-    </div>
-    <div class="yearline-odd">
-        <div class="caption yeartext"><h1>1960</h1></div>
-        <button type="button" id="giveButton-1960">Show give lines</button>
-        <button type="button" id="receiveButton-1960">Show receive lines</button>
-        <button type="button" id="bothButton-1960">Show both</button>
-        <div class="chart" id="draw-1960"></div>
-    </div>
+
 </div>
 
-<script type="text/javascript">
-    drawCluster("1957");
-    drawCluster("1960");
+<script>
+    function addGraphPlaceholders(years) {
+        for (var i = 0; i < years.length; i++) {
+            var year = years[i];
+            document.getElementById('container').innerHTML += '<div class="yearline' + (i % 2 == 0 ? '"' : '-odd"') + ' id="graph-' + year + '"></div>';
+            document.getElementById('graph-' + year).innerHTML += '<div class="caption yeartext"><h1>' + year + '</h1></div>';
+            document.getElementById('graph-' + year).innerHTML += '<button type="button" id="giveButton-' + year + '">Show points given</button>';
+            document.getElementById('graph-' + year).innerHTML += '<button type="button" id="receiveButton-' + year + '">Show points received</button>';
+            document.getElementById('graph-' + year).innerHTML += '<button type="button" id="bothButton-' + year + '">Show both</button>';
+            document.getElementById('graph-' + year).innerHTML += '<div class="chart" id="draw-' + year + '"></div>';
+
+        }
+    }
+
+    var years = [1957, 1960];
+
+    addGraphPlaceholders(years);
+
+    years.forEach(function (d) {
+        drawCluster(d);
+    });
+
 </script>
+
+<!--<script type="text/javascript">-->
+<!--drawCluster("1957");-->
+<!--drawCluster("1960");-->
+<!--</script>-->
 
 </body>
 </html>
