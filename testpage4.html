@@ -13,19 +13,18 @@
 
     <style type="text/css">
         html, body {
-            margin: 0;
-            padding: 0;
             overflow: auto;
             background-color: darkslategray;
         }
 
         .yearline {
-            height: 500px;
+            height: 600px;
             background-color: #cccccc;
         }
 
+
         .yearline-odd {
-            height: 500px;
+            height: 600px;
             background-color: #aaaaaa;
         }
 
@@ -70,7 +69,6 @@
             document.getElementById('graph-' + year).innerHTML += '<button type="button" id="receiveButton-' + year + '">Show points received</button>';
             document.getElementById('graph-' + year).innerHTML += '<button type="button" id="bothButton-' + year + '">Show both</button>';
             document.getElementById('graph-' + year).innerHTML += '<div class="chart" id="draw-' + year + '"></div>';
-
         }
     }
 
