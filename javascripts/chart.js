@@ -16,6 +16,7 @@ function addGraphPlaceholders(years) {
         document.getElementById('graph-' + year).innerHTML += '<button type="button" id="giveButton-' + year + '">Show points given</button>';
         document.getElementById('graph-' + year).innerHTML += '<button type="button" id="receiveButton-' + year + '">Show points received</button>';
         document.getElementById('graph-' + year).innerHTML += '<button type="button" id="bothButton-' + year + '">Show both</button>';
+        document.getElementById('graph-' + year).innerHTML += '<p class="score">Score: <span id="scoreText-' + year + '"></span> </p> ';
         document.getElementById('graph-' + year).innerHTML += '<div class="chart" id="draw-' + year + '"></div>';
     }
 }
@@ -90,9 +91,9 @@ function drawCluster(chartYear) {
         scoresData.scores.forEach(function (generalScoreInfo) {
             generalScoreInfo.scores.forEach(function (arrayWithScores) {
                 arrayWithScores.forEach(function (score) {
-                   // if (score != 0) {
-                        total += parseInt(score);
-                        amount += 1;
+                    // if (score != 0) {
+                    total += parseInt(score);
+                    amount += 1;
                     //}
                 })
             })
@@ -244,7 +245,10 @@ function drawCluster(chartYear) {
                             })
                             .attr("stroke-width", 3)
                             .attr("fill", "none")
-                            .attr("marker-end", "url(#giveArrowHead)");
+                            .attr("marker-end", "url(#giveArrowHead)")
+                            .on("mouseover", function () {
+                                document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreGiven;
+                            })
                     });
                     break;
                 //receive
@@ -256,10 +260,20 @@ function drawCluster(chartYear) {
                                 {X: item.outerLinkX, Y: item.outerLinkY},
                                 {X: item.innerLinkX, Y: item.innerLinkY}
                             ]))
-                            .attr("stroke", receiveColour)
+                            .attr("stroke", function () {
+                                var avg = averages[chartYear];
+                                if (parseFloat(item.scoreGiven) < averages[chartYear]) {
+                                    return "#C05746";
+                                } else {
+                                    return "#69995D";
+                                }
+                            })
                             .attr("stroke-width", 3)
                             .attr("fill", "none")
-                            .attr("marker-end", "url(#receiveArrowHead)");
+                            .attr("marker-end", "url(#receiveArrowHead)")
+                            .on("mouseover", function () {
+                                document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreGiven;
+                            });
                     });
                     break;
                 //both
