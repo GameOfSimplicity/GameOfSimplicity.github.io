@@ -170,7 +170,14 @@ function drawCluster(chartYear) {
 
         var temp = countries.slice();
         temp.splice(selectedCountryIndex, 1);
-        temp.forEach(
+
+        temp.sort(function (c) {
+            //sorteren op neighbors
+            if (selectedCountry.country.neighbours.indexOf(c.countryCode) > -1) {
+                return -1;
+            }
+            return 1;
+        }).forEach(
             function (c) {
                 if (i == selectedCountryIndex)
                     i++;
@@ -201,12 +208,14 @@ function drawCluster(chartYear) {
                     centerLinkX: centerLinkX,
                     centerLinkY: centerLinkY,
                     scoreGiven: scores[j][selectedCountryIndex],
-                    scoreReceived: scores[selectedCountryIndex][j]
+                    scoreReceived: scores[selectedCountryIndex][j],
+                    isNeighbor: isNeighour
                 });
 
                 j++;
                 i++;
             });
+
 
         var lineFunction = d3.svg.line()
             .x(function (d) {
