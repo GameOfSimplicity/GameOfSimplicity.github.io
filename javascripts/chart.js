@@ -4,6 +4,38 @@
 var graphs;
 
 
+function addGraphPlaceholders(years) {
+    for (var i = 0; i < years.length; i++) {
+        var year = years[i];
+        document.getElementById('container').innerHTML += '<div class="yearline' + (i % 2 == 0 ? '"' : '-odd"') + ' id="graph-' + year + '"></div>';
+        document.getElementById('graph-' + year).innerHTML += '<div class="caption yeartext"><h1>' + year + '</h1></div>';
+        document.getElementById('graph-' + year).innerHTML += '<button type="button" id="giveButton-' + year + '">Show points given</button>';
+        document.getElementById('graph-' + year).innerHTML += '<button type="button" id="receiveButton-' + year + '">Show points received</button>';
+        document.getElementById('graph-' + year).innerHTML += '<button type="button" id="bothButton-' + year + '">Show both</button>';
+        document.getElementById('graph-' + year).innerHTML += '<div class="chart" id="draw-' + year + '"></div>';
+    }
+}
+
+var years = [1957, 1960];
+var selectedCountryIndex = 0;
+
+addGraphPlaceholders(years);
+
+years.forEach(function (d) {
+    drawCluster(d);
+});
+
+function removeEverything() {
+    years.forEach(function (year) {
+        d3.selectAll("#receiveMid-" + year).remove();
+        d3.selectAll("#receive-" + year).remove();
+        d3.selectAll("#giveMid-" + year).remove();
+        d3.selectAll("#give-" + year).remove();
+
+    });
+    d3.selectAll(".node").remove();
+}
+
 function drawCluster(chartYear) {
     var chartId = "#draw-" + chartYear;
     //var width = $(document).width();
@@ -15,7 +47,6 @@ function drawCluster(chartYear) {
 
     var countries = [];
     var nodesData = [];
-    var selectedCountryIndex = 0;
     var selectedCountry;
     var scores = [[]];
 
@@ -27,6 +58,9 @@ function drawCluster(chartYear) {
     const buffer1 = 80; // buffer between outer nodes
     const buffer2 = 25; // buffer between mid circle and outer circles
     var radius = radiusOuter + radiusCenter + buffer2; // radius of circle on which outer nodes should be drawn
+
+    var countriesData;
+    var scoresData;
 
     var svgContainer = d3.select(chartId)
         .append("svg")
@@ -40,6 +74,7 @@ function drawCluster(chartYear) {
         .defer(d3.json, 'data/countries.json')
         .defer(d3.json, 'data/scores.json')
         .await(makeGraph);
+
 
     function makeGraph(error, countriesData, scoresData) {
         if (error) throw error;
@@ -230,6 +265,7 @@ function drawCluster(chartYear) {
             .attr('id', function (d) {
                 return (d.country.countryCode + "-icon");
             })
+            .attr('class', "countryNodes")
             .attr('width', 1)
             .attr('height', 1)
             .attr('patternContentUnits', 'objectBoundingBox')
@@ -272,6 +308,7 @@ function drawCluster(chartYear) {
             .attr("cx", function (d) {
                 return d.X
             })
+            .on("click", switchSelectedOnClick)
             .attr("cy", function (d) {
                 return d.Y
             })
@@ -282,6 +319,29 @@ function drawCluster(chartYear) {
                 return ("url(#" + d.country.countryCode + "-icon)");
             })
             .style("stroke", "10px solid black");
+
+
+        //calcAndDraw(selectedCountryIndex);
+
+        function switchSelectedOnClick(flag) {
+            var country = flag.country;
+            /* VB:
+             country = Object {countryCode: "IT", name: "Italië", neighbours: Array[6], image: "Italy.png"}
+             */
+            selectedCountryIndex = getCountryIndex(flag.country.countryCode);
+            removeEverything();
+            years.forEach(function (d) {
+                drawCluster(d);
+            });
+        }
+
+        var getCountryIndex = function (countryCode) {
+            for (var intIndex = 0; intIndex < countries.length; intIndex++) {
+                if (countries[intIndex].countryCode == countryCode) {
+                    return intIndex;
+                }
+            }
+        }
 
         //adds the buttons to choose the visible lines
         document.getElementById("giveButton-" + chartYear).onclick = function () {
@@ -294,4 +354,5 @@ function drawCluster(chartYear) {
             drawLinks(2);
         };
     }
+
 }
