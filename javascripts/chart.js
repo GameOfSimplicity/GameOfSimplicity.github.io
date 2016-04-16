@@ -247,6 +247,7 @@ function drawCluster(chartYear) {
                             .attr("stroke", function () {
                                 var avg = averages[chartYear];
                                 if (parseFloat(item.scoreGiven) < averages[chartYear]) {
+                                    //rood
                                     return "#C05746";
                                 } else {
                                     return "#69995D";
@@ -271,7 +272,8 @@ function drawCluster(chartYear) {
                             ]))
                             .attr("stroke", function () {
                                 var avg = averages[chartYear];
-                                if (parseFloat(item.scoreGiven) < averages[chartYear]) {
+                                if (parseFloat(item.scoreReceived) < averages[chartYear]) {
+                                    //rood
                                     return "#C05746";
                                 } else {
                                     return "#69995D";
