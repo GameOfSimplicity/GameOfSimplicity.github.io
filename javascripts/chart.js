@@ -120,6 +120,7 @@ function drawCluster(chartYear) {
                     i++;
                 });
 
+
             var lineFunction = d3.svg.line()
                 .x(function (d) {
                     return d.X;
@@ -253,6 +254,7 @@ function drawCluster(chartYear) {
                 .attr("cx", function (d) {
                     return d.X
                 })
+                .on("click", switchSelectedOnClick)
                 .attr("cy", function (d) {
                     return d.Y
                 })
@@ -263,6 +265,25 @@ function drawCluster(chartYear) {
                     return ("url(#" + d.country.countryCode + "-icon)");
                 })
                 .style("stroke", "10px solid black");
+
+
+            function switchSelectedOnClick(flag) {
+                var country = flag.country;
+                /* VB:
+                 country = Object {countryCode: "IT", name: "Italië", neighbours: Array[6], image: "Italy.png"}
+                 */
+
+                alert(getCountryIndex(flag.country.countryCode));
+            }
+
+            var getCountryIndex = function (countryCode) {
+                for (var intIndex = 0; intIndex < countries.length; intIndex++) {
+                    if (countries[intIndex].countryCode == countryCode) {
+                        return intIndex;
+                    }
+                }
+            }
+
 
             //adds the buttons to choose the visible lines
             document.getElementById("giveButton-" + chartYear).onclick = function () {
