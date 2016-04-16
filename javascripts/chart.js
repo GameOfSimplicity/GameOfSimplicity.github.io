@@ -5,13 +5,7 @@ var graphs;
 
 
 var svgContainers = {};
-/*
-map[key1] = value1;
-// or remove it
-delete map[key1];
-// or determine whether a key exists
-key1 in map;
-*/
+var averages = {};
 
 
 function addGraphPlaceholders(years) {
@@ -72,7 +66,7 @@ function drawCluster(chartYear) {
     var countriesData;
     var scoresData;
 
-    if(!(chartYear in svgContainers)){
+    if (!(chartYear in svgContainers)) {
         var tempSvg = d3.select(chartId)
             .append("svg")
             .attr("width", width)
@@ -90,9 +84,33 @@ function drawCluster(chartYear) {
         .defer(d3.json, 'data/scores.json')
         .await(makeGraph);
 
+    function calcGivenAverage(scoresData) {
+        var total = 0;
+        var amount = 0;
+        scoresData.scores.forEach(function (generalScoreInfo) {
+            generalScoreInfo.scores.forEach(function (arrayWithScores) {
+                arrayWithScores.forEach(function (score) {
+                   // if (score != 0) {
+                        total += parseInt(score);
+                        amount += 1;
+                    //}
+                })
+            })
+            averages[chartYear] = total / amount;
+            console.log(chartYear + ": " + total / amount)
+            total = 0;
+            amount = 0;
+        })
+
+    }
 
     function makeGraph(error, countriesData, scoresData) {
         if (error) throw error;
+
+        if (typeof averages !== 'undefined') {
+            calcGivenAverage(scoresData);
+        }
+
 
         //Get the results for the given year
         var yearResult = scoresData.scores.find(function (s) {
@@ -216,8 +234,15 @@ function drawCluster(chartYear) {
                                 {X: item.innerLinkX, Y: item.innerLinkY},
                                 {X: item.outerLinkX, Y: item.outerLinkY}
                             ]))
-                            .attr("stroke", giveColour)
-                            .attr("stroke-width", 2)
+                            .attr("stroke", function () {
+                                var avg = averages[chartYear];
+                                if (parseFloat(item.scoreGiven) < averages[chartYear]) {
+                                    return "#C05746";
+                                } else {
+                                    return "#69995D";
+                                }
+                            })
+                            .attr("stroke-width", 3)
                             .attr("fill", "none")
                             .attr("marker-end", "url(#giveArrowHead)");
                     });
@@ -232,7 +257,7 @@ function drawCluster(chartYear) {
                                 {X: item.innerLinkX, Y: item.innerLinkY}
                             ]))
                             .attr("stroke", receiveColour)
-                            .attr("stroke-width", 2)
+                            .attr("stroke-width", 3)
                             .attr("fill", "none")
                             .attr("marker-end", "url(#receiveArrowHead)");
                     });
@@ -248,7 +273,7 @@ function drawCluster(chartYear) {
                                 {X: item.centerLinkX, Y: item.centerLinkY}
                             ]))
                             .attr("stroke", giveColour)
-                            .attr("stroke-width", 2)
+                            .attr("stroke-width", 3)
                             .attr("fill", "none")
                             .attr("marker-end", "url(#giveArrowHead)");
                         //receive
@@ -259,7 +284,7 @@ function drawCluster(chartYear) {
                                 {X: item.centerLinkX, Y: item.centerLinkY}
                             ]))
                             .attr("stroke", receiveColour)
-                            .attr("stroke-width", 2)
+                            .attr("stroke-width", 3)
                             .attr("fill", "none")
                             .attr("marker-end", "url(#receiveArrowHead)");
                     });
