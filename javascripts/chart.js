@@ -4,6 +4,16 @@
 var graphs;
 
 
+var svgContainers = {};
+/*
+map[key1] = value1;
+// or remove it
+delete map[key1];
+// or determine whether a key exists
+key1 in map;
+*/
+
+
 function addGraphPlaceholders(years) {
     for (var i = 0; i < years.length; i++) {
         var year = years[i];
@@ -62,10 +72,15 @@ function drawCluster(chartYear) {
     var countriesData;
     var scoresData;
 
-    var svgContainer = d3.select(chartId)
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height);
+    if(!(chartYear in svgContainers)){
+        var tempSvg = d3.select(chartId)
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+        svgContainers[chartYear] = tempSvg;
+    }
+
+    var svgContainer = svgContainers[chartYear];
 
     var sortMethod = 1; //0 = none; 1 = neighbours ; 2 = score
 
