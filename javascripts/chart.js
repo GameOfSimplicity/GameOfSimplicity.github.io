@@ -243,7 +243,7 @@ function drawCluster(chartYear) {
                                     return "#69995D";
                                 }
                             })
-                            .attr("stroke-width", 3)
+                            .attr("stroke-width", 4)
                             .attr("fill", "none")
                             .attr("marker-end", "url(#giveArrowHead)")
                             .on("mouseover", function () {
@@ -268,7 +268,7 @@ function drawCluster(chartYear) {
                                     return "#69995D";
                                 }
                             })
-                            .attr("stroke-width", 3)
+                            .attr("stroke-width", 4)
                             .attr("fill", "none")
                             .attr("marker-end", "url(#receiveArrowHead)")
                             .on("mouseover", function () {
@@ -287,7 +287,7 @@ function drawCluster(chartYear) {
                                 {X: item.centerLinkX, Y: item.centerLinkY}
                             ]))
                             .attr("stroke", giveColour)
-                            .attr("stroke-width", 3)
+                            .attr("stroke-width", 4)
                             .attr("fill", "none")
                             .attr("marker-end", "url(#giveArrowHead)");
                         //receive
@@ -298,7 +298,7 @@ function drawCluster(chartYear) {
                                 {X: item.centerLinkX, Y: item.centerLinkY}
                             ]))
                             .attr("stroke", receiveColour)
-                            .attr("stroke-width", 3)
+                            .attr("stroke-width", 4)
                             .attr("fill", "none")
                             .attr("marker-end", "url(#receiveArrowHead)");
                     });
