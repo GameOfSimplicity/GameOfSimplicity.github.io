@@ -182,6 +182,7 @@ function drawCluster(chartYear) {
                                 .attr("stroke-width", 2)
                                 .attr("fill", "none")
                                 .attr("marker-end", "url(#giveArrowHead)");
+
                             //receive
                             layer1.append("path")
                                 .attr("id", "receive-" + chartYear)
