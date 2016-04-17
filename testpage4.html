@@ -17,36 +17,32 @@
             background-color: darkslategray;
         }
 
+        .page-title {
+            color: #fff;
+        }
+
         .example {
-            height: 300px;
+            height: 350px;
             font-size: x-large;
-            background-color: #cccccc;
-        }
-
-        .odd {
-            background-color: #aaaaaa;
-        }
-
-        .yearline {
-            height: 600px;
-            background-color: #cccccc;
-        }
-
-
-        .yearline-odd {
-            height: 600px;
-            background-color: #aaaaaa;
+            background-color: #fff;
         }
 
         .yeartext {
-            /*position: absolute;*/
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             margin: 0 0 0 50px;
+        }
+
+        .smallButton {
+            font-size: 10px;
         }
 
         .chart {
             /*height: inherit;*/
-            height: 80%;
-            width: 80%;
+            height: 100%;
+            width: 100%;
             overflow: hidden;
         }
 
@@ -66,45 +62,11 @@
 
     <script type="text/javascript" src="javascripts/d3.v3.min.js"></script>
     <script type="text/javascript" src="javascripts/queue/d3-queue.min.js"></script>
-
-
 </head>
 <body>
-<div class="container" id="container">
-
-</div>
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="col-md-4 example">#jaar</div>
-        <div class="col-md-4 example odd">#jaar</div>
-        <div class="col-md-4 example">#jaar</div>
+    <div class="container-fluid" id="container">
+        <h1 class="page-title">Eurovision song contest</h1>
     </div>
-    <div class="row-fluid">
-        <div class="col-md-4 example odd">#jaar</div>
-        <div class="col-md-4 example">#jaar</div>
-        <div class="col-md-4 example odd">#jaar</div>
-    </div>
-    <div class="row-fluid">
-        <div class="col-md-4 example">#jaar</div>
-        <div class="col-md-4 example odd">#jaar</div>
-        <div class="col-md-4 example">#jaar</div>
-    </div>
-    <div class="row-fluid">
-        <div class="col-md-4 example odd">#jaar</div>
-        <div class="col-md-4 example">#jaar</div>
-        <div class="col-md-4 example odd">#jaar</div>
-    </div>
-    <div class="row-fluid">
-        <div class="col-md-4 example">#jaar</div>
-        <div class="col-md-4 example odd">#jaar</div>
-        <div class="col-md-4 example">#jaar</div>
-    </div>
-    <div class="row-fluid">
-        <div class="col-md-4 example odd">#jaar</div>
-        <div class="col-md-4 example">#jaar</div>
-        <div class="col-md-4 example odd">#jaar</div>
-    </div>
-</div>
 </body>
 
 <script type="text/javascript" src="javascripts/chart.js"></script>
