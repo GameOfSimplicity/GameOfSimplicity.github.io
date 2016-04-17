@@ -28,16 +28,6 @@
             background-color: #aaaaaa;
         }
 
-        .example {
-            height: 300px;
-            font-size: x-large;
-            background-color: #cccccc;
-        }
-
-        .odd {
-            background-color: #aaaaaa;
-        }
-
         .yeartext {
             /*position: absolute;*/
             margin: 0 0 0 50px;
@@ -54,6 +44,11 @@
             stroke: black;
         }
 
+        .score {
+            font-size: large;
+
+        }
+
         circle {
             /**stroke: 10px solid black;*/
         }
@@ -61,66 +56,14 @@
 
     <script type="text/javascript" src="javascripts/d3.v3.min.js"></script>
     <script type="text/javascript" src="javascripts/queue/d3-queue.min.js"></script>
-    <script type="text/javascript" src="javascripts/chart.js"></script>
+
 
 </head>
 <body>
 <div class="container" id="container">
 
 </div>
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="col-md-4 example">#jaar</div>
-        <div class="col-md-4 example odd">#jaar</div>
-        <div class="col-md-4 example">#jaar</div>
-    </div>
-    <div class="row-fluid">
-        <div class="col-md-4 example odd">#jaar</div>
-        <div class="col-md-4 example">#jaar</div>
-        <div class="col-md-4 example odd">#jaar</div>
-    </div>
-    <div class="row-fluid">
-        <div class="col-md-4 example">#jaar</div>
-        <div class="col-md-4 example odd">#jaar</div>
-        <div class="col-md-4 example">#jaar</div>
-    </div>
-    <div class="row-fluid">
-        <div class="col-md-4 example odd">#jaar</div>
-        <div class="col-md-4 example">#jaar</div>
-        <div class="col-md-4 example odd">#jaar</div>
-    </div>
-    <div class="row-fluid">
-        <div class="col-md-4 example">#jaar</div>
-        <div class="col-md-4 example odd">#jaar</div>
-        <div class="col-md-4 example">#jaar</div>
-    </div>
-    <div class="row-fluid">
-        <div class="col-md-4 example odd">#jaar</div>
-        <div class="col-md-4 example">#jaar</div>
-        <div class="col-md-4 example odd">#jaar</div>
-    </div>
-</div>
-<script>
-    function addGraphPlaceholders(years) {
-        for (var i = 0; i < years.length; i++) {
-            var year = years[i];
-            document.getElementById('container').innerHTML += '<div class="yearline' + (i % 2 == 0 ? '"' : '-odd"') + ' id="graph-' + year + '"></div>';
-            document.getElementById('graph-' + year).innerHTML += '<div class="caption yeartext"><h1>' + year + '</h1></div>';
-            document.getElementById('graph-' + year).innerHTML += '<button type="button" id="giveButton-' + year + '">Show points given</button>';
-            document.getElementById('graph-' + year).innerHTML += '<button type="button" id="receiveButton-' + year + '">Show points received</button>';
-            document.getElementById('graph-' + year).innerHTML += '<button type="button" id="bothButton-' + year + '">Show both</button>';
-            document.getElementById('graph-' + year).innerHTML += '<div class="chart" id="draw-' + year + '"></div>';
-        }
-    }
-
-    var years = [1957, 1960];
-
-    addGraphPlaceholders(years);
-
-    years.forEach(function (d) {
-        drawCluster(d);
-    });
-
-</script>
 </body>
+
+<script type="text/javascript" src="javascripts/chart.js"></script>
 </html>
