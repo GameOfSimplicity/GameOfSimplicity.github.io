@@ -9,19 +9,30 @@ var averages = {};
 
 
 function addGraphPlaceholders(years) {
-    for (var i = 0; i < years.length; i++) {
-        var year = years[i];
-        document.getElementById('container').innerHTML += '<div class="yearline' + (i % 2 == 0 ? '"' : '-odd"') + ' id="graph-' + year + '"></div>';
-        document.getElementById('graph-' + year).innerHTML += '<div class="caption yeartext"><h1>' + year + '</h1></div>';
-        document.getElementById('graph-' + year).innerHTML += '<button type="button" id="giveButton-' + year + '">Show points given</button>';
-        document.getElementById('graph-' + year).innerHTML += '<button type="button" id="receiveButton-' + year + '">Show points received</button>';
-        document.getElementById('graph-' + year).innerHTML += '<button type="button" id="bothButton-' + year + '">Show both</button>';
-        document.getElementById('graph-' + year).innerHTML += '<p class="score">Score: <span id="scoreText-' + year + '"></span> </p> ';
-        document.getElementById('graph-' + year).innerHTML += '<div class="chart" id="draw-' + year + '"></div>';
+    var container = document.getElementById('container');
+   for (var i = 0; i < years.length; i++) {
+       var year = years[i];
+       if(i%3 === 0) {
+           var newRow = document.createElement('div');
+           newRow.className = 'row-fluid';
+           container.appendChild(newRow);
+       }
+       container.lastChild.innerHTML += '<div class="col-md-4 example" id="graph-' + year + '"></div>';
+       document.getElementById('graph-' + year).innerHTML += '<div class="yeartext">' +
+           year +
+           ' Score: <span id="scoreText-' + year + '"></span>' +
+           '<button type="button" class="smallButton" id="giveButton-' + year + '">given</button>' +
+           '<button type="button" class="smallButton" id="receiveButton-' + year + '">received</button>' +
+           '<button type="button" class="smallButton" id="bothButton-' + year + '">both</button>' +
+           '</div>';
+       document.getElementById('graph-' + year).innerHTML += '<div class="chart" id="draw-' + year + '"></div>';
+       if(i%3 == 0 || i == 0) {
+           document.getElementById('container').innerHTML += '</div>'
+       }
     }
 }
 
-var years = [1957, 1960];
+var years = [1957, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968];
 var selectedCountryIndex = 0;
 
 addGraphPlaceholders(years);
@@ -46,7 +57,7 @@ function drawCluster(chartYear) {
     //var width = $(document).width();
     var width = d3.select(chartId).node().getBoundingClientRect().width;
     //var height = $(document).height();
-    var height = d3.select(chartId).node().getBoundingClientRect().height - 4;
+    var height = d3.select(chartId).node().getBoundingClientRect().height;
     console.log("Row - Width: " + width + " height: " + height);
     var middlePoint = {X: width / 2, Y: height / 2};
 
@@ -98,7 +109,7 @@ function drawCluster(chartYear) {
                 })
             })
             averages[chartYear] = total / amount;
-            console.log(chartYear + ": " + total / amount)
+            //console.log(chartYear + ": " + total / amount)
             total = 0;
             amount = 0;
         })
