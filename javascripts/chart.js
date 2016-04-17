@@ -9,7 +9,8 @@ var averages = {};
 
 
 function addGraphPlaceholders(years) {
-    const noOfColumns = 3;
+    const noOfColumns = 4;
+    const columnWidth = 12 / noOfColumns;
     var container = document.getElementById('container');
     for (var i = 0; i < years.length; i++) {
         var year = years[i];
@@ -18,7 +19,7 @@ function addGraphPlaceholders(years) {
             newRow.className = 'row-fluid';
             container.appendChild(newRow);
         }
-        container.lastChild.innerHTML += '<div class="col-md-4 example" id="graph-' + year + '"></div>';
+        container.lastChild.innerHTML += '<div class="col-md-' + columnWidth + ' example" id="graph-' + year + '"></div>';
         document.getElementById('graph-' + year).innerHTML += '<div class="yeartext">' +
             year +
             ' Score: <span id="scoreText-' + year + '"></span>' +
