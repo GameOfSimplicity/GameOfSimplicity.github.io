@@ -132,11 +132,8 @@ function drawCluster(chartYear) {
         });
 
         //Get the countries that participate this year
-        countries = [];
-        countriesData.countries.forEach(function (c) {
-            var index = yearResult.participants.indexOf(c.countryCode);
-            if (index > -1)
-                countries[index] = c;
+        countries = countriesData.countries.filter(function (c) {
+            return yearResult.participants.indexOf(c.countryCode) > -1;
         });
 
         scores = yearResult.scores;
