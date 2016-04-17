@@ -113,6 +113,7 @@ function drawCluster(chartYear) {
         }
 
 
+
         //Get the results for the given year
         var yearResult = scoresData.scores.find(function (s) {
             return s.year == chartYear;
