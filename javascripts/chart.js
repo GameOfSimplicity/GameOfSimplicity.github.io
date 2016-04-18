@@ -34,13 +34,17 @@ function addGraphPlaceholders(years) {
     }
 }
 
-var years = [1957, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967];
+var years = [];
+for (yearCounter = 1957; yearCounter < 2016; yearCounter++) {
+    years.push(yearCounter);
+}
+
 var selectedCountryIndex = 0;
 
 addGraphPlaceholders(years);
 
 years.forEach(function (d) {
-    drawCluster(d);
+    drawCluster(d, 0);
 });
 
 function removeEverything() {
@@ -54,7 +58,27 @@ function removeEverything() {
     d3.selectAll(".node").remove();
 }
 
-function drawCluster(chartYear) {
+
+document.getElementById("allReceived").addEventListener("click", selectAllReceived);
+function selectAllReceived() {
+
+    removeEverything();
+    years.forEach(function (d) {
+        drawCluster(d, 1);
+    });
+}
+
+
+document.getElementById("allGiven").addEventListener("click", selectAllGiven);
+function selectAllGiven() {
+    removeEverything();
+    years.forEach(function (d) {
+        drawCluster(d, 0);
+    });
+}
+
+
+function drawCluster(chartYear, visibility2) {
     var chartId = "#draw-" + chartYear;
     //var width = $(document).width();
     var width = d3.select(chartId).node().getBoundingClientRect().width;
@@ -251,32 +275,44 @@ function drawCluster(chartYear) {
                 //give
                 case 0:
                     links.forEach(function (item, index) {
-                        layer1.append("path")
-                            .attr("id", "give-" + chartYear)
-                            .attr("d", lineFunction([
-                                {X: item.innerLinkX, Y: item.innerLinkY},
-                                {X: item.outerLinkX, Y: item.outerLinkY}
-                            ]))
-                            .attr("stroke", function () {
-                                var avg = averages[chartYear];
-                                if (parseFloat(item.scoreGiven) < averages[chartYear]) {
-                                    //rood
-                                    return "#C05746";
-                                } else {
-                                    return "#69995D";
-                                }
-                            })
-                            .attr("stroke-width", 4)
-                            .attr("fill", "none")
-                            .attr("marker-end", "url(#giveArrowHead)")
-                            .on("mouseover", function () {
-                                document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreGiven;
-                            })
+                        if (item.scoreGiven != 0) {
+                            layer1.append("path")
+                                .attr("id", "give-" + chartYear)
+                                .attr("d", lineFunction([
+                                    {X: item.innerLinkX, Y: item.innerLinkY},
+                                    {X: item.outerLinkX, Y: item.outerLinkY}
+                                ]))
+                                .attr("stroke", function () {
+                                    var avg = averages[chartYear];
+                                    if (parseFloat(item.scoreGiven) < averages[chartYear]) {
+                                        //rood
+                                        return "#C05746";
+                                    } else {
+                                        return "#69995D";
+                                    }
+                                })
+                                .attr("stroke-width", 4)
+                                .attr("fill", "none")
+                                .attr("marker-end", function () {
+                                    var avg = averages[chartYear];
+                                    if (parseFloat(item.scoreGiven) < averages[chartYear]) {
+                                        //rood
+                                        return "url(#giveArrowHeadRed)";
+                                    } else {
+                                        return "url(#giveArrowHeadGreen)";
+                                    }
+                                })
+                                .on("mouseover", function () {
+                                    document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreGiven;
+                                })
+                        }
                     });
+
                     break;
                 //receive
                 case 1:
                     links.forEach(function (item, index) {
+                        if (item.scoreReceived != 0) {
                         layer1.append("path")
                             .attr("id", "receive-" + chartYear)
                             .attr("d", lineFunction([
@@ -294,10 +330,19 @@ function drawCluster(chartYear) {
                             })
                             .attr("stroke-width", 4)
                             .attr("fill", "none")
-                            .attr("marker-end", "url(#receiveArrowHead)")
+                            .attr("marker-end", function () {
+                                var avg = averages[chartYear];
+                                if (parseFloat(item.scoreReceived) < averages[chartYear]) {
+                                    //rood
+                                    return "url(#receiveArrowHeadRed)";
+                                } else {
+                                    return "url(#receiveArrowHeadGreen)";
+                                }
+                            })
                             .on("mouseover", function () {
                                 document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreGiven;
                             });
+                        }
                     });
                     break;
                 //both
@@ -332,7 +377,7 @@ function drawCluster(chartYear) {
 
         }
 
-        drawLinks(0);//draws the links; default is given
+        drawLinks(visibility2);//draws the links; default is given
 
         var nodes = svgContainer.selectAll("node")
             .data(nodesData);
@@ -356,29 +401,29 @@ function drawCluster(chartYear) {
             .attr("preserveAspectRatio", "xMinYMin slice");
 
 
-        defs.append("marker")
-            .attr("id", "giveArrowHead")
-            .attr("refX", 4) /*must be smarter way to calculate shift*/
-            .attr("refY", 0)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 4)
-            .attr("orient", "auto")
-            .attr("viewBox", "-5 -5 10 10")
-            .append("path")
-            .attr("d", "M 0,0 m -5,-5 L 5,0 L -5,5 Z")
-            .attr("fill", giveColour);
+        //rood
+        createMaker("#C05746", "giveArrowHeadRed")
+        //groen
+        createMaker("#69995D", "giveArrowHeadGreen")
+        //rood
+        createMaker("#C05746", "receiveArrowHeadRed")
+        //groen
+        createMaker("#69995D", "receiveArrowHeadGreen")
 
-        defs.append("marker")
-            .attr("id", "receiveArrowHead")
-            .attr("refX", 4) /*must be smarter way to calculate shift*/
-            .attr("refY", 0)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 4)
-            .attr("orient", "auto")
-            .attr("viewBox", "-5 -5 10 10")
-            .append("path")
-            .attr("d", "M 0,0 m -5,-5 L 5,0 L -5,5 Z")
-            .attr("fill", receiveColour);
+
+        function createMaker(color, id) {
+            defs.append("marker")
+                .attr("id", id)
+                .attr("refX", 4) /*must be smarter way to calculate shift*/
+                .attr("refY", 0)
+                .attr("markerWidth", 6)
+                .attr("markerHeight", 4)
+                .attr("orient", "auto")
+                .attr("viewBox", "-5 -5 10 10")
+                .append("path")
+                .attr("d", "M 0,0 m -5,-5 L 5,0 L -5,5 Z")
+                .attr("fill", color);
+        }
 
 
         nodes.enter().append("circle")
@@ -407,11 +452,13 @@ function drawCluster(chartYear) {
              country = Object {countryCode: "IT", name: "Italië", neighbours: Array[6], image: "Italy.png"}
              */
             selectedCountryIndex = getCountryIndex(flag.country.countryCode);
+            console.log(selectedCountryIndex);
             removeEverything();
             years.forEach(function (d) {
-                drawCluster(d);
+                drawCluster(d, 0);
             });
         }
+
 
         var getCountryIndex = function (countryCode) {
             for (var intIndex = 0; intIndex < countries.length; intIndex++) {
@@ -419,6 +466,7 @@ function drawCluster(chartYear) {
                     return intIndex;
                 }
             }
+            return 5000;
         }
 
         //adds the buttons to choose the visible lines

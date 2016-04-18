@@ -12,7 +12,7 @@
     {
       "countryCode": "AL",
       "image": "Albania.png",
-      "name": "Albanië",
+      "name": "Albani�",
       "neighbours": [
         "GR",
         "MK",
@@ -23,7 +23,7 @@
     {
       "countryCode": "AM",
       "image": "Armenia.png",
-      "name": "Armenië",
+      "name": "Armeni�",
       "neighbours": [
         "AZ",
         "GE",
@@ -48,7 +48,7 @@
     {
       "countryCode": "AU",
       "image": "Australia.png",
-      "name": "Australië",
+      "name": "Australi�",
       "neighbours": []
     },
     {
@@ -66,7 +66,7 @@
     {
       "countryCode": "BA",
       "image": "Bosnia and Herzegovina.png",
-      "name": "Bosnië en Herzegovina",
+      "name": "Bosni� en Herzegovina",
       "neighbours": [
         "HR",
         "ME",
@@ -76,7 +76,7 @@
     {
       "countryCode": "BE",
       "image": "Belgium.png",
-      "name": "België",
+      "name": "Belgi�",
       "neighbours": [
         "FR",
         "DE",
@@ -122,7 +122,7 @@
     {
       "countryCode": "CS",
       "image": "serbia and montenegro.png",
-      "name": "Servië en Montenegro",
+      "name": "Servi� en Montenegro",
       "neighbours": [
         "BA",
         "HU",
@@ -141,7 +141,7 @@
     {
       "countryCode": "CZ",
       "image": "Czech Republic.png",
-      "name": "Tsjechië",
+      "name": "Tsjechi�",
       "neighbours": [
         "AT",
         "DE",
@@ -221,7 +221,7 @@
     {
       "countryCode": "GE",
       "image": "Georgia.png",
-      "name": "Georgië",
+      "name": "Georgi�",
       "neighbours": [
         "AM",
         "AZ",
@@ -243,7 +243,7 @@
     {
       "countryCode": "HR",
       "image": "Croatia.png",
-      "name": "Kroatië",
+      "name": "Kroati�",
       "neighbours": [
         "BA",
         "HU",
@@ -267,9 +267,17 @@
       ]
     },
     {
+      "countryCode": "IE",
+      "image": "Ireland.png",
+      "name": "Ierland",
+      "neighbours": [
+        "UK"
+      ]
+    },
+    {
       "countryCode": "IL",
       "image": "Israel.png",
-      "name": "Israël",
+      "name": "Isra�l",
       "neighbours": []
     },
     {
@@ -287,7 +295,7 @@
     {
       "countryCode": "IT",
       "image": "Italy.png",
-      "name": "Italië",
+      "name": "Itali�",
       "neighbours": [
         "AT",
         "FR",
@@ -347,7 +355,7 @@
     {
       "countryCode": "MD",
       "image": "Moldova.png",
-      "name": "Moldavië",
+      "name": "Moldavi�",
       "neighbours": [
         "RO",
         "UA"
@@ -367,7 +375,7 @@
     {
       "countryCode": "MK",
       "image": "Macedonia.png",
-      "name": "Macedonië",
+      "name": "Macedoni�",
       "neighbours": [
         "AL",
         "BG",
@@ -425,7 +433,7 @@
     {
       "countryCode": "RO",
       "image": "Romania.png",
-      "name": "Roemenië",
+      "name": "Roemeni�",
       "neighbours": [
         "BG",
         "HU",
@@ -437,7 +445,7 @@
     {
       "countryCode": "RS",
       "image": "Serbia.png",
-      "name": "Servië",
+      "name": "Servi�",
       "neighbours": [
         "AL",
         "BA",
@@ -478,7 +486,7 @@
     {
       "countryCode": "SI",
       "image": "Slovenia.png",
-      "name": "Slovenië",
+      "name": "Sloveni�",
       "neighbours": [
         "AT",
         "HR",
@@ -522,7 +530,7 @@
     {
       "countryCode": "UA",
       "image": "Ukraine.png",
-      "name": "Oekraïne",
+      "name": "Oekra�ne",
       "neighbours": [
         "BY",
         "HU",
@@ -537,12 +545,14 @@
       "countryCode": "UK",
       "image": "United Kingdom.png",
       "name": "Verenigd Koninkrijk",
-      "neighbours": []
+      "neighbours": [
+        "IE"
+      ]
     },
     {
       "countryCode": "YO",
       "image": "Yugoslavia.png",
-      "name": "Joegoslavië",
+      "name": "Joegoslavi�",
       "neighbours": [
         "IT",
         "AU",
