@@ -40,6 +40,7 @@ for (yearCounter = 1957; yearCounter < 2016; yearCounter++) {
 }
 
 var selectedCountryIndex = 0;
+var selectedCountryCode = "BE";
 
 addGraphPlaceholders(years);
 
@@ -133,7 +134,7 @@ function drawCluster(chartYear, visibility2) {
                     amount += 1;
                     //}
                 })
-            })
+            });
             averages[chartYear] = total / amount;
             //console.log(chartYear + ": " + total / amount)
             total = 0;
@@ -145,10 +146,7 @@ function drawCluster(chartYear, visibility2) {
     function makeGraph(error, countriesData, scoresData) {
         if (error) throw error;
 
-        if (typeof averages !== 'undefined') {
-            calcGivenAverage(scoresData);
-        }
-
+        var makeGraph = false;
 
         //Get the results for the given year
         var yearResult = scoresData.scores.find(function (s) {
@@ -156,329 +154,342 @@ function drawCluster(chartYear, visibility2) {
         });
 
         //Get the countries that participate this year
-        countries = countriesData.countries.filter(function (c) {
-            return yearResult.participants.indexOf(c.countryCode) > -1;
+        countries = [];
+        countriesData.countries.forEach(function (c) {
+            var index = yearResult.participants.indexOf(c.countryCode);
+            if (index > -1) {
+                countries[index] = c;
+                if (c.countryCode == selectedCountryCode) {
+                    selectedCountryIndex = index;
+                    makeGraph = true;
+                }
+            }
         });
 
-        scores = yearResult.scores;
-
-        //aantal gegeven punten
-        var pointsCount = countries.length - 1;
-
-        // hoek tussen landen
-        var slice = 2 * Math.PI / pointsCount;
-
-        //dynamically changes the radius
-        var temp = pointsCount * (buffer1 + radiusOuter * 2);
-        while (radius * Math.PI * 2 < temp) {
-            radius += 20;
-        }
-
-        var links = [];
-
-
-        //function sortCountries() {
-        //    if (sortMethod == 0)
-        //        countries.sort();
-        //    else
-        //        countries.sort(function (c1, c2) {
-        //            if (sortMethod == 1) {
-        //                //neighbours
-        //                return selectedCountry.country.neighbours.indexOf(c1.countryCode) > -1 ? -1 : 1
-        //            } else {
-        //                //score
-        //                //TODO
-        //            }
-        //        });
-        //}
-        //
-        //sortCountries();
-
-        selectedCountry = {
-            country: countries[selectedCountryIndex],
-            X: middlePoint.X,
-            Y: middlePoint.Y,
-            R: radiusCenter
-        };
-
-        nodesData.push(selectedCountry);
-
-        var i = 0, j = 0;
-
-        var temp = countries.slice();
-        temp.splice(selectedCountryIndex, 1);
-
-        temp.sort(function (c) {
-            //sorteren op neighbors
-            if (selectedCountry.country.neighbours.indexOf(c.countryCode) > -1) {
-                return -1;
+        if (makeGraph) {
+            if (typeof averages !== 'undefined') {
+                calcGivenAverage(scoresData);
             }
-            return 1;
-        }).forEach(
-            function (c) {
-                if (i == selectedCountryIndex)
+
+            scores = yearResult.scores;
+
+            //aantal gegeven punten
+            var pointsCount = countries.length - 1;
+
+            // hoek tussen landen
+            var slice = 2 * Math.PI / pointsCount;
+
+            //dynamically changes the radius
+            var temp = pointsCount * (buffer1 + radiusOuter * 2);
+            while (radius * Math.PI * 2 < temp) {
+                radius += 20;
+            }
+
+            var links = [];
+
+
+            //function sortCountries() {
+            //    if (sortMethod == 0)
+            //        countries.sort();
+            //    else
+            //        countries.sort(function (c1, c2) {
+            //            if (sortMethod == 1) {
+            //                //neighbours
+            //                return selectedCountry.country.neighbours.indexOf(c1.countryCode) > -1 ? -1 : 1
+            //            } else {
+            //                //score
+            //                //TODO
+            //            }
+            //        });
+            //}
+            //
+            //sortCountries();
+
+            selectedCountry = {
+                index: selectedCountryIndex,
+                country: countries[selectedCountryIndex],
+                X: middlePoint.X,
+                Y: middlePoint.Y,
+                R: radiusCenter
+            };
+
+            nodesData.push(selectedCountry);
+
+            var i = 0, j = 0;
+
+            var temp = countries.slice();
+            temp.splice(selectedCountryIndex, 1);
+
+            temp.sort(function (c) {
+                //sorteren op neighbors
+                if (selectedCountry.country.neighbours.indexOf(c.countryCode) > -1) {
+                    return -1;
+                }
+                return 1;
+            }).forEach(
+                function (c) {
+                    if (i == selectedCountryIndex)
+                        i++;
+
+                    var angle = slice * (j);
+                    var isNeighour = selectedCountry.country.neighbours.indexOf(c.countryCode) > -1;
+
+                    var outerCenterX = middlePoint.X + (isNeighour ? radius * .6 : radius) * Math.cos(angle);
+                    var outerCenterY = middlePoint.Y + (isNeighour ? radius * .6 : radius) * Math.sin(angle);
+
+                    var outerLinkX = middlePoint.X + ((isNeighour ? radius * .6 : radius) - radiusOuter) * Math.cos(angle);
+                    var outerLinkY = middlePoint.Y + ((isNeighour ? radius * .6 : radius) - radiusOuter) * Math.sin(angle);
+
+                    var innerLinkX = middlePoint.X + radiusCenter * Math.cos(angle);
+                    var innerLinkY = middlePoint.Y + radiusCenter * Math.sin(angle);
+
+                    // center between 2 links; x = (x1+x2)/2; y = (y1+y2)/2
+                    var centerLinkX = (innerLinkX + outerLinkX) / 2;
+                    var centerLinkY = (innerLinkY + outerLinkY) / 2;
+
+                    nodesData.push({index: i, country: countries[i], X: outerCenterX, Y: outerCenterY, R: radiusOuter});
+
+                    links.push({
+                        innerLinkX: innerLinkX,
+                        innerLinkY: innerLinkY,
+                        outerLinkX: outerLinkX,
+                        outerLinkY: outerLinkY,
+                        centerLinkX: centerLinkX,
+                        centerLinkY: centerLinkY,
+                        scoreGiven: scores[j][selectedCountryIndex],
+                        scoreReceived: scores[selectedCountryIndex][j],
+                        isNeighbor: isNeighour
+                    });
+
+                    j++;
                     i++;
-
-                var angle = slice * (j);
-                var isNeighour = selectedCountry.country.neighbours.indexOf(c.countryCode) > -1;
-
-                var outerCenterX = middlePoint.X + (isNeighour ? radius * .6 : radius) * Math.cos(angle);
-                var outerCenterY = middlePoint.Y + (isNeighour ? radius * .6 : radius) * Math.sin(angle);
-
-                var outerLinkX = middlePoint.X + ((isNeighour ? radius * .6 : radius) - radiusOuter) * Math.cos(angle);
-                var outerLinkY = middlePoint.Y + ((isNeighour ? radius * .6 : radius) - radiusOuter) * Math.sin(angle);
-
-                var innerLinkX = middlePoint.X + radiusCenter * Math.cos(angle);
-                var innerLinkY = middlePoint.Y + radiusCenter * Math.sin(angle);
-
-                // center between 2 links; x = (x1+x2)/2; y = (y1+y2)/2
-                var centerLinkX = (innerLinkX + outerLinkX) / 2;
-                var centerLinkY = (innerLinkY + outerLinkY) / 2;
-
-                nodesData.push({country: countries[i], X: outerCenterX, Y: outerCenterY, R: radiusOuter});
-
-                links.push({
-                    innerLinkX: innerLinkX,
-                    innerLinkY: innerLinkY,
-                    outerLinkX: outerLinkX,
-                    outerLinkY: outerLinkY,
-                    centerLinkX: centerLinkX,
-                    centerLinkY: centerLinkY,
-                    scoreGiven: scores[j][selectedCountryIndex],
-                    scoreReceived: scores[selectedCountryIndex][j],
-                    isNeighbor: isNeighour
                 });
 
-                j++;
-                i++;
-            });
 
+            var lineFunction = d3.svg.line()
+                .x(function (d) {
+                    return d.X;
+                })
+                .y(function (d) {
+                    return d.Y;
+                });
 
-        var lineFunction = d3.svg.line()
-            .x(function (d) {
-                return d.X;
-            })
-            .y(function (d) {
-                return d.Y;
-            });
+            var layer1 = svgContainer.append('g');
 
-        var layer1 = svgContainer.append('g');
+            function drawLinks(visibility) {
+                //remove the current lines
+                d3.selectAll("#receiveMid-" + chartYear).remove();
+                d3.selectAll("#receive-" + chartYear).remove();
+                d3.selectAll("#giveMid-" + chartYear).remove();
+                d3.selectAll("#give-" + chartYear).remove();
 
-        function drawLinks(visibility) {
-            //remove the current lines
-            d3.selectAll("#receiveMid-" + chartYear).remove();
-            d3.selectAll("#receive-" + chartYear).remove();
-            d3.selectAll("#giveMid-" + chartYear).remove();
-            d3.selectAll("#give-" + chartYear).remove();
+                switch (visibility) {
+                    //give
+                    case 0:
+                        links.forEach(function (item, index) {
+                            if (item.scoreGiven != 0) {
+                                layer1.append("path")
+                                    .attr("id", "give-" + chartYear)
+                                    .attr("d", lineFunction([
+                                        {X: item.innerLinkX, Y: item.innerLinkY},
+                                        {X: item.outerLinkX, Y: item.outerLinkY}
+                                    ]))
+                                    .attr("stroke", function () {
+                                        var avg = averages[chartYear];
+                                        if (parseFloat(item.scoreGiven) < averages[chartYear]) {
+                                            //rood
+                                            return "#C05746";
+                                        } else {
+                                            return "#69995D";
+                                        }
+                                    })
+                                    .attr("stroke-width", 4)
+                                    .attr("fill", "none")
+                                    .attr("marker-end", function () {
+                                        var avg = averages[chartYear];
+                                        if (parseFloat(item.scoreGiven) < averages[chartYear]) {
+                                            //rood
+                                            return "url(#giveArrowHeadRed)";
+                                        } else {
+                                            return "url(#giveArrowHeadGreen)";
+                                        }
+                                    })
+                                    .on("mouseover", function () {
+                                        document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreGiven;
+                                    })
+                            }
+                        });
 
-            switch (visibility) {
-                //give
-                case 0:
-                    links.forEach(function (item, index) {
-                        if (item.scoreGiven != 0) {
+                        break;
+                    //receive
+                    case 1:
+                        links.forEach(function (item, index) {
+                            if (item.scoreReceived != 0) {
+                                layer1.append("path")
+                                    .attr("id", "receive-" + chartYear)
+                                    .attr("d", lineFunction([
+                                        {X: item.outerLinkX, Y: item.outerLinkY},
+                                        {X: item.innerLinkX, Y: item.innerLinkY}
+                                    ]))
+                                    .attr("stroke", function () {
+                                        var avg = averages[chartYear];
+                                        if (parseFloat(item.scoreReceived) < averages[chartYear]) {
+                                            //rood
+                                            return "#C05746";
+                                        } else {
+                                            return "#69995D";
+                                        }
+                                    })
+                                    .attr("stroke-width", 4)
+                                    .attr("fill", "none")
+                                    .attr("marker-end", function () {
+                                        var avg = averages[chartYear];
+                                        if (parseFloat(item.scoreReceived) < averages[chartYear]) {
+                                            //rood
+                                            return "url(#receiveArrowHeadRed)";
+                                        } else {
+                                            return "url(#receiveArrowHeadGreen)";
+                                        }
+                                    })
+                                    .on("mouseover", function () {
+                                        document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreGiven;
+                                    });
+                            }
+                        });
+                        break;
+                    //both
+                    case  2:
+                        links.forEach(function (item, index) {
+                            //give
                             layer1.append("path")
                                 .attr("id", "give-" + chartYear)
                                 .attr("d", lineFunction([
                                     {X: item.innerLinkX, Y: item.innerLinkY},
-                                    {X: item.outerLinkX, Y: item.outerLinkY}
+                                    {X: item.centerLinkX, Y: item.centerLinkY}
                                 ]))
-                                .attr("stroke", function () {
-                                    var avg = averages[chartYear];
-                                    if (parseFloat(item.scoreGiven) < averages[chartYear]) {
-                                        //rood
-                                        return "#C05746";
-                                    } else {
-                                        return "#69995D";
-                                    }
-                                })
+                                .attr("stroke", giveColour)
                                 .attr("stroke-width", 4)
                                 .attr("fill", "none")
-                                .attr("marker-end", function () {
-                                    var avg = averages[chartYear];
-                                    if (parseFloat(item.scoreGiven) < averages[chartYear]) {
-                                        //rood
-                                        return "url(#giveArrowHeadRed)";
-                                    } else {
-                                        return "url(#giveArrowHeadGreen)";
-                                    }
-                                })
-                                .on("mouseover", function () {
-                                    document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreGiven;
-                                })
-                        }
-                    });
-
-                    break;
-                //receive
-                case 1:
-                    links.forEach(function (item, index) {
-                        if (item.scoreReceived != 0) {
-                        layer1.append("path")
-                            .attr("id", "receive-" + chartYear)
-                            .attr("d", lineFunction([
-                                {X: item.outerLinkX, Y: item.outerLinkY},
-                                {X: item.innerLinkX, Y: item.innerLinkY}
-                            ]))
-                            .attr("stroke", function () {
-                                var avg = averages[chartYear];
-                                if (parseFloat(item.scoreReceived) < averages[chartYear]) {
-                                    //rood
-                                    return "#C05746";
-                                } else {
-                                    return "#69995D";
-                                }
-                            })
-                            .attr("stroke-width", 4)
-                            .attr("fill", "none")
-                            .attr("marker-end", function () {
-                                var avg = averages[chartYear];
-                                if (parseFloat(item.scoreReceived) < averages[chartYear]) {
-                                    //rood
-                                    return "url(#receiveArrowHeadRed)";
-                                } else {
-                                    return "url(#receiveArrowHeadGreen)";
-                                }
-                            })
-                            .on("mouseover", function () {
-                                document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreGiven;
-                            });
-                        }
-                    });
-                    break;
-                //both
-                case  2:
-                    links.forEach(function (item, index) {
-                        //give
-                        layer1.append("path")
-                            .attr("id", "give-" + chartYear)
-                            .attr("d", lineFunction([
-                                {X: item.innerLinkX, Y: item.innerLinkY},
-                                {X: item.centerLinkX, Y: item.centerLinkY}
-                            ]))
-                            .attr("stroke", giveColour)
-                            .attr("stroke-width", 4)
-                            .attr("fill", "none")
-                            .attr("marker-end", "url(#giveArrowHead)");
-                        //receive
-                        layer1.append("path")
-                            .attr("id", "receive-" + chartYear)
-                            .attr("d", lineFunction([
-                                {X: item.outerLinkX, Y: item.outerLinkY},
-                                {X: item.centerLinkX, Y: item.centerLinkY}
-                            ]))
-                            .attr("stroke", receiveColour)
-                            .attr("stroke-width", 4)
-                            .attr("fill", "none")
-                            .attr("marker-end", "url(#receiveArrowHead)");
-                    });
-                    break;
-            }
-
-
-        }
-
-        drawLinks(visibility2);//draws the links; default is given
-
-        var nodes = svgContainer.selectAll("node")
-            .data(nodesData);
-
-        var defs = nodes.enter().append('defs');
-
-        defs.append('pattern')
-            .attr('id', function (d) {
-                return (d.country.countryCode + "-icon");
-            })
-            .attr('class', "countryNodes")
-            .attr('width', 1)
-            .attr('height', 1)
-            .attr('patternContentUnits', 'objectBoundingBox')
-            .append("image")
-            .attr("xlink:xlink:href", function (d) {
-                return ("./images/flags/" + d.country.image);
-            })
-            .attr("height", 1)
-            .attr("width", 1)
-            .attr("preserveAspectRatio", "xMinYMin slice");
-
-
-        //rood
-        createMaker("#C05746", "giveArrowHeadRed")
-        //groen
-        createMaker("#69995D", "giveArrowHeadGreen")
-        //rood
-        createMaker("#C05746", "receiveArrowHeadRed")
-        //groen
-        createMaker("#69995D", "receiveArrowHeadGreen")
-
-
-        function createMaker(color, id) {
-            defs.append("marker")
-                .attr("id", id)
-                .attr("refX", 4) /*must be smarter way to calculate shift*/
-                .attr("refY", 0)
-                .attr("markerWidth", 6)
-                .attr("markerHeight", 4)
-                .attr("orient", "auto")
-                .attr("viewBox", "-5 -5 10 10")
-                .append("path")
-                .attr("d", "M 0,0 m -5,-5 L 5,0 L -5,5 Z")
-                .attr("fill", color);
-        }
-
-
-        nodes.enter().append("circle")
-            .attr("class", "node")
-            .attr("cx", function (d) {
-                return d.X
-            })
-            .on("click", switchSelectedOnClick)
-            .attr("cy", function (d) {
-                return d.Y
-            })
-            .attr("r", function (d) {
-                return d.R + 3.5
-            })
-            .style("fill", function (d) {
-                return ("url(#" + d.country.countryCode + "-icon)");
-            })
-            .style("stroke", "10px solid black");
-
-
-        //calcAndDraw(selectedCountryIndex);
-
-        function switchSelectedOnClick(flag) {
-            var country = flag.country;
-            /* VB:
-             country = Object {countryCode: "IT", name: "Italië", neighbours: Array[6], image: "Italy.png"}
-             */
-            selectedCountryIndex = getCountryIndex(flag.country.countryCode);
-            console.log(selectedCountryIndex);
-            removeEverything();
-            years.forEach(function (d) {
-                drawCluster(d, 0);
-            });
-        }
-
-
-        var getCountryIndex = function (countryCode) {
-            for (var intIndex = 0; intIndex < countries.length; intIndex++) {
-                if (countries[intIndex].countryCode == countryCode) {
-                    return intIndex;
+                                .attr("marker-end", "url(#giveArrowHead)");
+                            //receive
+                            layer1.append("path")
+                                .attr("id", "receive-" + chartYear)
+                                .attr("d", lineFunction([
+                                    {X: item.outerLinkX, Y: item.outerLinkY},
+                                    {X: item.centerLinkX, Y: item.centerLinkY}
+                                ]))
+                                .attr("stroke", receiveColour)
+                                .attr("stroke-width", 4)
+                                .attr("fill", "none")
+                                .attr("marker-end", "url(#receiveArrowHead)");
+                        });
+                        break;
                 }
-            }
-            return 5000;
-        }
 
-        //adds the buttons to choose the visible lines
-        document.getElementById("giveButton-" + chartYear).onclick = function () {
-            drawLinks(0);
-        };
-        document.getElementById("receiveButton-" + chartYear).onclick = function () {
-            drawLinks(1);
-        };
-        document.getElementById("bothButton-" + chartYear).onclick = function () {
-            drawLinks(2);
-        };
+
+            }
+
+            drawLinks(visibility2);//draws the links; default is given
+
+            var nodes = svgContainer.selectAll("node")
+                .data(nodesData);
+
+            var defs = nodes.enter().append('defs');
+
+            defs.append('pattern')
+                .attr('id', function (d) {
+                    return (d.country.countryCode + "-icon");
+                })
+                .attr('class', "countryNodes")
+                .attr('width', 1)
+                .attr('height', 1)
+                .attr('patternContentUnits', 'objectBoundingBox')
+                .append("image")
+                .attr("xlink:xlink:href", function (d) {
+                    return ("./images/flags/" + d.country.image);
+                })
+                .attr("height", 1)
+                .attr("width", 1)
+                .attr("preserveAspectRatio", "xMinYMin slice");
+
+
+            //rood
+            createMaker("#C05746", "giveArrowHeadRed")
+            //groen
+            createMaker("#69995D", "giveArrowHeadGreen")
+            //rood
+            createMaker("#C05746", "receiveArrowHeadRed")
+            //groen
+            createMaker("#69995D", "receiveArrowHeadGreen")
+
+
+            function createMaker(color, id) {
+                defs.append("marker")
+                    .attr("id", id)
+                    .attr("refX", 4) /*must be smarter way to calculate shift*/
+                    .attr("refY", 0)
+                    .attr("markerWidth", 6)
+                    .attr("markerHeight", 4)
+                    .attr("orient", "auto")
+                    .attr("viewBox", "-5 -5 10 10")
+                    .append("path")
+                    .attr("d", "M 0,0 m -5,-5 L 5,0 L -5,5 Z")
+                    .attr("fill", color);
+            }
+
+
+            nodes.enter().append("circle")
+                .attr("class", "node")
+                .attr("cx", function (d) {
+                    return d.X
+                })
+                .on("click", switchSelectedOnClick)
+                .attr("cy", function (d) {
+                    return d.Y
+                })
+                .attr("r", function (d) {
+                    return d.R + 3.5
+                })
+                .style("fill", function (d) {
+                    return ("url(#" + d.country.countryCode + "-icon)");
+                })
+                .style("stroke", "10px solid black");
+
+
+            //calcAndDraw(selectedCountryIndex);
+
+            function switchSelectedOnClick(flag) {
+                /* VB:
+                 country = Object {countryCode: "IT", name: "Italië", neighbours: Array[6], image: "Italy.png"}
+                 */
+                selectedCountryCode = flag.country.countryCode;
+                removeEverything();
+                years.forEach(function (d) {
+                    drawCluster(d, 0);
+                });
+            }
+
+
+            var getCountryIndex = function (countryCode) {
+                for (var intIndex = 0; intIndex < countries.length; intIndex++) {
+                    if (countries[intIndex].countryCode == countryCode) {
+                        return intIndex;
+                    }
+                }
+                return 5000;
+            };
+
+            //adds the buttons to choose the visible lines
+            document.getElementById("giveButton-" + chartYear).onclick = function () {
+                drawLinks(0);
+            };
+            document.getElementById("receiveButton-" + chartYear).onclick = function () {
+                drawLinks(1);
+            };
+            document.getElementById("bothButton-" + chartYear).onclick = function () {
+                drawLinks(2);
+            };
+        }
     }
 
 }
