@@ -1,269 +1,201 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xml:lang="en-US"
-      lang="en-US">
+<!DOCTYPE html>
+<html lang="en">
 <head profile="http://www.w3.org/2005/10/profile">
-    <title>My Force Directed Graph</title>
+    <title>Eurovision Song Contest visualisation</title>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
-    <meta name="Description" content="This page tries to mix charts with html formatting and layout constructs."/>
-    <meta http-equiv="pragma" content="no-cache"/>
-    <meta http-equiv="cache-control" content="no-cache"/>
-    <meta http-equiv="expires" content="-l"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="Description" content="Demo page for Eurovision Song Contest visualisation"/>
 
-    <STYLE type="text/css">
-        body {
+    <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.css">
+    <!-- Replace when publishing:
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    -->
+
+    <style type="text/css">
+        html, body {
+            overflow: auto;
+            background-color: darkslategray;
+        }
+
+        .page-title {
+            color: #fff;
+        }
+
+        .example {
+            height: 475px;
+            font-size: x-large;
+            background-color: #fff;
+        }
+
+        .yeartext {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 100%;
+            margin: 0 0 0 50px;
+        }
+
+        .smallButton {
+            font-size: 10px;
         }
 
         .chart {
-            width: 850px;
-            height: 850px;
-            background-color: gray;
+            /*height: inherit;*/
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
         }
 
-        svg {
-            font: 10px sans-serif;
-            display: block;
+        line {
+            stroke: black;
+        }
+
+        .score {
+            font-size: large;
+
         }
 
         circle {
-            stroke: 10px solid black;
+            /**stroke: 10px solid black;*/
         }
-    </STYLE>
 
-    <script type="text/javascript" src="javascripts/d3.v3.min.js"></script>
-
-    <script type="text/javascript">
-
-
-        var nodeSet = [
-            {
-                id: "N1",
-                name: "Belgie",
-                fixed: true,
-                neighbour: false
-            },
-            {
-                id: "N2",
-                name: "Nederland",
-                fixed: false,
-                neighbour: true
-            },
-            {
-                id: "N3",
-                name: "Duitsland",
-                fixed: false,
-                neighbour: true
-            },
-            {
-                id: "N4",
-                name: "Denemarken",
-                fixed: false,
-                neighbour: false
-            },
-            {
-                id: "N5",
-                name: "Oostenrijk",
-                fixed: false,
-                neighbour: false
-            },
-            {
-                id: "N6",
-                name: "Zwitserland",
-                fixed: false,
-                neighbour: false
-            },
-            {
-                id: "N7",
-                name: "Luxemburg",
-                fixed: false,
-                neighbour: true
-            },
-            {
-                id: "N8",
-                name: "Italie",
-                fixed: false,
-                neighbour: false
-            },
-            {
-                id: "N9",
-                name: "Frankrijk",
-                fixed: false,
-                neighbour: true
-            },
-            {
-                id: "N10",
-                name: "GB",
-                fixed: false,
-                neighbour: false
-            }
-        ];
-
-
-        function drawCluster() {
-
-            var width = 850;
-            var height = 850;
-
-            var middlePoint = {X: width / 2, Y: height / 2};
-            var points = nodeSet.filter(function (dp) {
-                return !dp.fixed
-            }).length; //# of NB
-            var radiusCenter = 50;
-            var radiusOuter = 20;
-            var buffer1 = 5; // buffer between outer nodes
-            var buffer2 = 25; // buffer between mid circle and outer circles
-            var radius = radiusOuter + radiusCenter + buffer2; // radius of circle on which outer nodes should be drawn
-
-            var dataPoints = [];
-
-            {
-                var slice = 2 * Math.PI / points;
-
-                //dynamically changes the radius
-                var temp = points * (buffer1 + radiusOuter * 2);
-                while (radius * Math.PI * 2 < temp) {
-                    radius += 20;
-                }
-
-                var i = 0;
-                nodeSet.forEach(function (node) {
-                    if (!node.fixed) {
-                        angle = slice * i;
-                        X = middlePoint.X + (node.neighbour ? radius : radius * 2) * Math.cos(angle);
-                        Y = middlePoint.Y + (node.neighbour ? radius : radius * 2) * Math.sin(angle);
-                        dataPoints.push({"X": X, "Y": Y, "fixed": node.fixed});
-                        i++;
-                    }
-                });
-            }
-
-            var svgContainer = d3.select(".chart").append("svg")
-                    .attr("width", width)
-                    .attr("height", height);
-
-            var defs = svgContainer.append('svg:defs');
-
-            defs.append("svg:pattern")
-                    .attr("id", "grump_avatar")
-                    .attr("width", 1)
-                    .attr("height", 1)
-                    .attr('patternContentUnits', 'objectBoundingBox')
-                    .append("svg:image")
-                        .attr("xlink:href", "./images/flags/France.png")
-                        .attr("width", 1)
-                        .attr("height", 1)
-                        .attr("preserveAspectRatio", "xMinYMin slice");
-
-
-            var jsonCircles = function () {
-                var circles = [];
-
-                dataPoints.forEach(function (p) {
-                    circles.push({"x_axis": p.X, "y_axis": p.Y, "radius": radiusOuter, "color": "darkgreen"});
-                });
-
-                //center circle
-                circles.push({
-                    "x_axis": middlePoint.X,
-                    "y_axis": middlePoint.Y,
-                    "radius": radiusCenter,
-                    "color": "blue"
-                });
-
-                return circles;
-            };
-
-            //Lines between center and datapoint
-            var jsonLines = function () {
-                var lines = [];
-
-                dataPoints.forEach(function (p) {
-                    lines.push({"x1": middlePoint.X, "x2": p.X, "y1": middlePoint.Y, "y2": p.Y});
-                });
-
-                return lines;
-            };
-
-
-            var lines = svgContainer.selectAll("line")
-                    .data(jsonLines)
-                    .enter()
-                    .append("line");
-
-            var lineAttributes = lines
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 1)
-                    .attr("x1", function (d) {
-                        return d.x1;
-                    })
-                    .attr("x2", function (d) {
-                        return d.x2;
-                    })
-                    .attr("y1", function (d) {
-                        return d.y1;
-                    })
-                    .attr("y2", function (d) {
-                        return d.y2;
-                    });
-
-            var helpCircles = [{"x_axis": middlePoint.X, "y_axis": middlePoint.Y, "radius": radius, "color": "blue"},
-                {"x_axis": width / 2, "y_axis": height / 2, "radius": radius * 2, "color": "blue"}
-            ];
-
-            var hcircles = svgContainer.selectAll(".helpcircle")
-                    .data(helpCircles)
-                    .enter()
-                    .append("circle")
-                    .style("stroke", "black")
-                    .style("stroke-dasharray", "10 5")
-                    .style("fill", "none");
-
-            var hcircleAttributes = hcircles
-                    .attr("cx", function (d) {
-                        return d.x_axis;
-                    })
-                    .attr("cy", function (d) {
-                        return d.y_axis;
-                    })
-                    .attr("r", function (d) {
-                        return d.radius;
-                    })
-                    ;
-
-            var circles = svgContainer.selectAll(".circle")
-                    .data(jsonCircles)
-                    .enter()
-                    .append("circle")
-                    //.style("stroke", "black")
-                    .style("fill", "url(#grump_avatar)");
-
-            var circleAttributes = circles
-                    .attr("cx", function (d) {
-                        return d.x_axis;
-                    })
-                    .attr("cy", function (d) {
-                        return d.y_axis;
-                    })
-                    .attr("r", function (d) {
-                        return d.radius;
-                    });
+        .header {
+            background-color: darkslategray;
+            height: 120px;
         }
-    </script>
+
+
+        #wrapper {
+            padding-left: 0;
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+        }
+
+        #wrapper.toggled {
+            padding-left: 150px;
+        }
+
+        #sidebar-wrapper {
+            margin-top: 120px;
+            z-index: 1000;
+            position: fixed;
+            left: 150px;
+            width: 0;
+            height: 100%;
+            margin-left: -150px;
+            overflow-y: auto;
+            background: darkslategray;
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+        }
+
+        #wrapper.toggled #sidebar-wrapper {
+            width: 150px;
+        }
+
+        #page-content-wrapper {
+            width: 100%;
+            position: absolute;
+            padding: 15px;
+        }
+
+        #wrapper.toggled #page-content-wrapper {
+            position: absolute;
+            margin-right: -150px;
+        }
+
+        /* Sidebar Styles */
+
+        .sidebar-nav {
+            position: absolute;
+            top: 0;
+            width: 150px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            text-indent: 20px;
+            line-height: 40px;
+            padding-bottom: 50px;
+        }
+
+        .sidebar-nav li a {
+            display: block;
+            text-decoration: none;
+            color: #999999;
+        }
+
+        .sidebar-nav li a:hover {
+            text-decoration: none;
+            color: #fff;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .sidebar-nav li a:active,
+        .sidebar-nav li a:focus {
+            text-decoration: none;
+        }
+
+        .sidebar-nav{
+            height: 65px;
+            font-size: 18px;
+            line-height: 60px;
+        }
+
+        .sidebar-nav > .sidebar-brand a {
+            color: #999999;
+        }
+
+        .sidebar-nav > .sidebar-brand a:hover {
+            color: #fff;
+            background: none;
+        }
+
+    </style>
+
+    <script type="text/javascript" src="js/d3.v3.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.12.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/queue/d3-queue.min.js"></script>
 </head>
 <body>
+<div id="wrapper">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li>
+                <button id="allGiven">All given</button>
+            </li>
+            <li>
+                <button id="allReceived">All received</button>
+            </li>
+        </ul>
+    </div>
 
-<div class="container" id="container">
-    <div class="chart"></div>
+    <div class="container-fluid navbar-fixed-top header" id="header">-->
+        <h1 class="page-title">Eurovision song contest</h1>
+        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">click me plox</a>
+
+    </div>
+    <div id="page-content-wrapper">
+
+        <div class="container-fluid" id="container">
+        </div>
+    </div>
+
 </div>
-
-<script type="text/javascript">
-    drawCluster();
-</script>
-
 </body>
 
+<script type="text/javascript" src="js/chart.js"></script>
+<script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
 </html>
