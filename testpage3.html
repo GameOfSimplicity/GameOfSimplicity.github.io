@@ -55,15 +55,14 @@
 
         }
 
-        circle {
-            /**stroke: 10px solid black;*/
+        circle:hover {
+            opacity: 0.5;
         }
 
         .header {
             background-color: darkslategray;
             height: 120px;
         }
-
 
         #wrapper {
             padding-left: 0;
@@ -94,12 +93,11 @@
         }
 
         #wrapper.toggled #sidebar-wrapper {
-            width: 150px;
+            width: 200px;
         }
 
         #page-content-wrapper {
             width: 100%;
-            position: absolute;
             padding: 15px;
         }
 
@@ -111,41 +109,41 @@
         /* Sidebar Styles */
 
         .sidebar-nav {
-            position: absolute;
             top: 0;
             width: 150px;
-            margin: 0;
+            margin: 30px 0px 0px 0px;
             padding: 0;
-            list-style: none;
+            height: 65px;
+            font-size: 18px;
         }
 
         .sidebar-nav li {
-            text-indent: 20px;
-            line-height: 40px;
-            padding-bottom: 50px;
+            list-style: none;
         }
 
-        .sidebar-nav li a {
-            display: block;
+        .sidebar-nav .countries-list {
             text-decoration: none;
             color: #999999;
+        }
+
+        .sidebar-nav .all-buttons {
+            text-decoration: none;
+        }
+
+        .sidebar-nav .all-buttons button {
+            width: 110px;
+            height: 50px;
         }
 
         .sidebar-nav li a:hover {
             text-decoration: none;
             color: #fff;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .sidebar-nav li a:active,
         .sidebar-nav li a:focus {
             text-decoration: none;
-        }
-
-        .sidebar-nav{
-            height: 65px;
-            font-size: 18px;
-            line-height: 60px;
         }
 
         .sidebar-nav > .sidebar-brand a {
@@ -167,20 +165,183 @@
 <body>
 <div id="wrapper">
     <div id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li>
-                <button id="allGiven">All given</button>
-            </li>
-            <li>
-                <button id="allReceived">All received</button>
-            </li>
-        </ul>
+        <div class="sidebar-nav">
+            <ul class="all-buttons">
+                <li>
+                    <button id="allGiven">All given</button>
+                </li>
+                <li>
+                    <button id="allReceived">All received</button>
+                </li>
+            </ul>
+
+            <div>
+                <ul class="countries-list">
+                    <li>
+                        <div class="country-list" id="Albania">Albania</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Andorra">Andorra</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Armenia">Armenia</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Australia">Australia</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Austria">Austria</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Azerbaijan">Azerbaijan</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Belarus">Belarus</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Belgium">Belgium</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Bosnia-Herzegovina">Bosnia-Herzegovina</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Bulgaria">Bulgaria</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Croatia">Croatia</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Cyprus">Cyprus</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Czech Republic">Czech Republic</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Denmark">Denmark</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Estonia">Estonia</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Finland">Finland</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="France">France</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="FYROM">FYROM</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Georgia">Georgia</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Germany">Germany</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Greece">Greece</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Hungary">Hungary</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Iceland">Iceland</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Ireland">Ireland</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Israel">Israel</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Italy">Italy</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Latvia">Latvia</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Lithuania">Lithuania</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Luxembourg">Luxembourg</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Malta">Malta</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Moldova">Moldova</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Monaco">Monaco</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Montenegro">Montenegro</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Morocco">Morocco</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Netherlands">Netherlands</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Norway">Norway</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Poland">Poland</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Portugal">Portugal</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Romania">Romania</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Russia">Russia</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="San Marino">San Marino</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Serbia">Serbia</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Serbia and Montenegro">Serbia and Montenegro</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Slovakia">Slovakia</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Slovenia">Slovenia</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Spain">Spain</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Sweden">Sweden</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Switzerland">Switzerland</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Turkey">Turkey</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Ukraine">Ukraine</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="United Kingdom">United Kingdom</div>
+                    </li>
+                    <li>
+                        <div class="country-list" id="Yugoslavia">Yugoslavia</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
 
     <div class="container-fluid navbar-fixed-top header" id="header">-->
         <h1 class="page-title">Eurovision song contest</h1>
         <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">click me plox</a>
-
     </div>
     <div id="page-content-wrapper">
 
@@ -193,7 +354,7 @@
 
 <script type="text/javascript" src="js/chart.js"></script>
 <script>
-    $("#menu-toggle").click(function(e) {
+    $("#menu-toggle").click(function (e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
