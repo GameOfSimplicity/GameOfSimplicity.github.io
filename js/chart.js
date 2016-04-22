@@ -8,6 +8,12 @@ var svgContainers = {};
 var averages = {};
 
 
+jQuery("country-list").click(function () {
+    var contentPanelId = jQuery(this).attr("id");
+    alert(contentPanelId);
+});
+
+
 function addGraphPlaceholders(years) {
     const noOfColumns = 4;
     const columnWidth = 12 / noOfColumns;
@@ -412,7 +418,6 @@ function drawCluster(chartYear, visibility2) {
                 .attr("width", 1)
                 .attr("preserveAspectRatio", "xMinYMin slice");
 
-
             //rood
             createMaker("#C05746", "giveArrowHeadRed")
             //groen
@@ -453,7 +458,10 @@ function drawCluster(chartYear, visibility2) {
                 .style("fill", function (d) {
                     return ("url(#" + d.country.countryCode + "-icon)");
                 })
-                .style("stroke", "10px solid black");
+                .attr("box-shadow", "0px 0px 50px green")
+                .attr("border-style", "solid")
+                .attr("border-width", "20px")
+            ;
 
 
             //calcAndDraw(selectedCountryIndex);
