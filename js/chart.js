@@ -15,7 +15,7 @@ $(".country-list").click(function () {
     removeEverything();
     years.forEach(function (d) {
         drawCluster(d, 0);
-    });
+    }); 
 });
 
 
