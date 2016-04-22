@@ -3,7 +3,6 @@
  */
 var graphs;
 
-alert(test)
 
 var svgContainers = {};
 var averages = {};
