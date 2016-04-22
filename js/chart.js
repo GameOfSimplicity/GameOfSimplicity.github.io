@@ -8,9 +8,14 @@ var svgContainers = {};
 var averages = {};
 
 
-jQuery("country-list").click(function () {
-    var contentPanelId = jQuery(this).attr("id");
-    alert(contentPanelId);
+$(".country-list").click(function () {
+    var countrycode = $(this).attr("id");
+    console.log(countrycode);
+    selectedCountryCode = countrycode;
+    removeEverything();
+    years.forEach(function (d) {
+        drawCluster(d, 0);
+    });
 });
 
 
