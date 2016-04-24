@@ -8,6 +8,8 @@ var averages = {};
 
 $(".country-list").click(function () {
     var countrycode = $(this).attr("id");
+    $("#"+selectedCountryCode).toggleClass("selected-country");
+    $("#"+countrycode).toggleClass("selected-country");
     selectedCountryCode = countrycode;
     removeEverything();
     years.forEach(function (d) {
@@ -461,9 +463,8 @@ function drawCluster(chartYear, visibility2) {
                 .style("fill", function (d) {
                     return ("url(#" + d.country.countryCode + "-icon)");
                 })
-                .attr("box-shadow", "0px 0px 50px green")
-                .attr("border-style", "solid")
-                .attr("border-width", "20px")
+                //.style("stroke", "red")
+                //.style("stroke-width", "2px")
             ;
 
             function switchSelectedOnClick(flag) {

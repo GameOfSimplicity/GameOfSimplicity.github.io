@@ -16,10 +16,10 @@
             overflow: auto;
             background-color: darkslategray;
 
-            -webkit-user-select: none;  /* Chrome all / Safari all */
-            -moz-user-select: none;     /* Firefox all */
-            -ms-user-select: none;      /* IE 10+ */
-            user-select: none;          /* Likely future */
+            -webkit-user-select: none; /* Chrome all / Safari all */
+            -moz-user-select: none; /* Firefox all */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none; /* Likely future */
 
         }
 
@@ -67,7 +67,7 @@
 
         .header {
             background-color: darkslategray;
-            height: 120px;
+            height: 100px;
             margin: 0;
             padding: 0 0 0 30px;
         }
@@ -85,7 +85,7 @@
         }
 
         #sidebar-wrapper {
-            margin-top: 120px;
+            margin-top: 100px;
             z-index: 1000;
             position: fixed;
             left: 150px;
@@ -107,6 +107,7 @@
         #page-content-wrapper {
             width: 100%;
             padding: 15px;
+            /*margin-top: 120px;*/
         }
 
         #wrapper.toggled #page-content-wrapper {
@@ -118,10 +119,10 @@
 
         .sidebar-nav {
             top: 0;
-            width: 150px;
-            margin: 30px 0px 0px 0px;
+            /*width: 150px;*/
+            margin: 0px 0px 0px 0px;
             padding: 0;
-            height: 65px;
+            /*height: 65px;*/
             font-size: 18px;
         }
 
@@ -130,22 +131,30 @@
             cursor: pointer;
         }
 
+        .selected-country {
+            color: #fff;
+        }
+
         .sidebar-nav .countries-list {
             text-decoration: none;
             color: #999999;
             margin-bottom: 200px;
         }
 
+        .countries-list{
+            font-size: medium;
+        }
+
         .sidebar-nav .all-buttons {
             text-decoration: none;
+            margin: 0;
         }
 
         .sidebar-nav .all-buttons button {
-            width: 110px;
-            height: 50px;
+            margin-bottom: 10px;
         }
 
-        .sidebar-nav li a:hover {
+        .sidebar-nav li div:hover {
             text-decoration: none;
             color: #fff;
             background: rgba(255, 255, 255, 0.2);
@@ -163,6 +172,11 @@
         .sidebar-nav > .sidebar-brand a:hover {
             color: #fff;
             background: none;
+        }
+
+        .horizontal-separator {
+            width: 100%;
+            border-bottom: solid 1px #999999;
         }
 
     </style>
@@ -185,173 +199,174 @@
                 </li>
             </ul>
 
-            <div>
-                <ul class="countries-list">
-                    <li>
-                        <div class="country-list" id="AL">Albania</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="AD">Andorra</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="AM">Armenia</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="AU">Australia</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="AT">Austria</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="AZ">Azerbaijan</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="BY">Belarus</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="BE">Belgium</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="BA">Bosnia-Herzegovina</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="BG">Bulgaria</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="HR">Croatia</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="CY">Cyprus</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="CZ">Czech Republic</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="DK">Denmark</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="EE">Estonia</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="FI">Finland</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="FR">France</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="MK">FYROM</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="GE">Georgia</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="DE">Germany</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="GR">Greece</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="HU">Hungary</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="IS">Iceland</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="IE">Ireland</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="IL">Israel</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="IT">Italy</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="LV">Latvia</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="LT">Lithuania</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="LU">Luxembourg</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="MT">Malta</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="MD">Moldova</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="MC">Monaco</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="ME">Montenegro</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="MA">Morocco</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="NL">Netherlands</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="NO">Norway</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="PL">Poland</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="PT">Portugal</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="RO">Romania</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="RU">Russia</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="SM">San Marino</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="RS">Serbia</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="CS">Serbia and Montenegro</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="SK">Slovakia</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="SI">Slovenia</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="ES">Spain</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="SE">Sweden</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="CH">Switzerland</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="TR">Turkey</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="UA">Ukraine</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="GB">United Kingdom</div>
-                    </li>
-                    <li>
-                        <div class="country-list" id="YO">Yugoslavia</div>
-                    </li>
-                </ul>
-            </div>
+            <div class="horizontal-separator"></div>
+
+            <ul class="countries-list">
+                <li>
+                    <div class="country-list" id="AL">Albania</div>
+                </li>
+                <li>
+                    <div class="country-list" id="AD">Andorra</div>
+                </li>
+                <li>
+                    <div class="country-list" id="AM">Armenia</div>
+                </li>
+                <li>
+                    <div class="country-list" id="AU">Australia</div>
+                </li>
+                <li>
+                    <div class="country-list" id="AT">Austria</div>
+                </li>
+                <li>
+                    <div class="country-list" id="AZ">Azerbaijan</div>
+                </li>
+                <li>
+                    <div class="country-list" id="BY">Belarus</div>
+                </li>
+                <li>
+                    <div class="country-list selected-country" id="BE">Belgium</div>
+                </li>
+                <li>
+                    <div class="country-list" id="BA">Bosnia-Herzegovina</div>
+                </li>
+                <li>
+                    <div class="country-list" id="BG">Bulgaria</div>
+                </li>
+                <li>
+                    <div class="country-list" id="HR">Croatia</div>
+                </li>
+                <li>
+                    <div class="country-list" id="CY">Cyprus</div>
+                </li>
+                <li>
+                    <div class="country-list" id="CZ">Czech Republic</div>
+                </li>
+                <li>
+                    <div class="country-list" id="DK">Denmark</div>
+                </li>
+                <li>
+                    <div class="country-list" id="EE">Estonia</div>
+                </li>
+                <li>
+                    <div class="country-list" id="FI">Finland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="FR">France</div>
+                </li>
+                <li>
+                    <div class="country-list" id="MK">FYROM</div>
+                </li>
+                <li>
+                    <div class="country-list" id="GE">Georgia</div>
+                </li>
+                <li>
+                    <div class="country-list" id="DE">Germany</div>
+                </li>
+                <li>
+                    <div class="country-list" id="GR">Greece</div>
+                </li>
+                <li>
+                    <div class="country-list" id="HU">Hungary</div>
+                </li>
+                <li>
+                    <div class="country-list" id="IS">Iceland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="IE">Ireland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="IL">Israel</div>
+                </li>
+                <li>
+                    <div class="country-list" id="IT">Italy</div>
+                </li>
+                <li>
+                    <div class="country-list" id="LV">Latvia</div>
+                </li>
+                <li>
+                    <div class="country-list" id="LT">Lithuania</div>
+                </li>
+                <li>
+                    <div class="country-list" id="LU">Luxembourg</div>
+                </li>
+                <li>
+                    <div class="country-list" id="MT">Malta</div>
+                </li>
+                <li>
+                    <div class="country-list" id="MD">Moldova</div>
+                </li>
+                <li>
+                    <div class="country-list" id="MC">Monaco</div>
+                </li>
+                <li>
+                    <div class="country-list" id="ME">Montenegro</div>
+                </li>
+                <li>
+                    <div class="country-list" id="MA">Morocco</div>
+                </li>
+                <li>
+                    <div class="country-list" id="NL">Netherlands</div>
+                </li>
+                <li>
+                    <div class="country-list" id="NO">Norway</div>
+                </li>
+                <li>
+                    <div class="country-list" id="PL">Poland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="PT">Portugal</div>
+                </li>
+                <li>
+                    <div class="country-list" id="RO">Romania</div>
+                </li>
+                <li>
+                    <div class="country-list" id="RU">Russia</div>
+                </li>
+                <li>
+                    <div class="country-list" id="SM">San Marino</div>
+                </li>
+                <li>
+                    <div class="country-list" id="RS">Serbia</div>
+                </li>
+                <li>
+                    <div class="country-list" id="CS">Serbia and Montenegro</div>
+                </li>
+                <li>
+                    <div class="country-list" id="SK">Slovakia</div>
+                </li>
+                <li>
+                    <div class="country-list" id="SI">Slovenia</div>
+                </li>
+                <li>
+                    <div class="country-list" id="ES">Spain</div>
+                </li>
+                <li>
+                    <div class="country-list" id="SE">Sweden</div>
+                </li>
+                <li>
+                    <div class="country-list" id="CH">Switzerland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="TR">Turkey</div>
+                </li>
+                <li>
+                    <div class="country-list" id="UA">Ukraine</div>
+                </li>
+                <li>
+                    <div class="country-list" id="GB">United Kingdom</div>
+                </li>
+                <li>
+                    <div class="country-list" id="YO">Yugoslavia</div>
+                </li>
+            </ul>
+
         </div>
 
     </div>
 
     <div class="container-fluid navbar-fixed-top header" id="header">
-        <h1 class="page-title">Eurovision song contest</h1>
-        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">click me plox</a>
+        <h1 class="page-title">Eurovision song contest         <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">click me plox</a>
+        </h1>
     </div>
     <div id="page-content-wrapper">
 
