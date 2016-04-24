@@ -15,44 +15,16 @@
         html, body {
             overflow: auto;
             background-color: darkslategray;
+
+            -webkit-user-select: none;  /* Chrome all / Safari all */
+            -moz-user-select: none;     /* Firefox all */
+            -ms-user-select: none;      /* IE 10+ */
+            user-select: none;          /* Likely future */
+
         }
 
         .page-title {
             color: #fff;
-        }
-
-        .example {
-            height: 475px;
-            font-size: x-large;
-            background-color: #fff;
-        }
-
-        .yeartext {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            margin: 0 0 0 50px;
-        }
-
-        .smallButton {
-            font-size: 10px;
-        }
-
-        .chart {
-            /*height: inherit;*/
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        line {
-            stroke: black;
-        }
-
-        .score {
-            font-size: large;
-
         }
 
         circle:hover {
@@ -62,6 +34,8 @@
         .header {
             background-color: darkslategray;
             height: 120px;
+            margin: 0;
+            padding: 0 0 0 30px;
         }
 
         #wrapper {
@@ -119,6 +93,7 @@
 
         .sidebar-nav li {
             list-style: none;
+            cursor: pointer;
         }
 
         .sidebar-nav .countries-list {
@@ -169,10 +144,10 @@
         <div class="sidebar-nav">
             <ul class="all-buttons">
                 <li>
-                    <button id="allGiven">All given</button>
+                    <button id="allGiven" class="btn btn-default">All given</button>
                 </li>
                 <li>
-                    <button id="allReceived">All received</button>
+                    <button id="allReceived" class="btn btn-default">All received</button>
                 </li>
             </ul>
 
@@ -340,7 +315,7 @@
 
     </div>
 
-    <div class="container-fluid navbar-fixed-top header" id="header">-->
+    <div class="container-fluid navbar-fixed-top header" id="header">
         <h1 class="page-title">Eurovision song contest</h1>
         <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">click me plox</a>
     </div>

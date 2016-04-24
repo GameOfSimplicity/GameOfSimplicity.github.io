@@ -101,9 +101,12 @@ function drawCluster(chartYear, visibility2) {
     var selectedCountry;
     var scores = [[]];
 
-
     const giveColour = "#082f6d";
     const receiveColour = "#cd0027";
+    const goldColour = "#ffd700";
+    const silverColour ="#c0c0c0";
+    const bronzeColour = "#cd7f32";
+
     const radiusCenter = 15;
     const radiusOuter = 10;
     const buffer1 = 25; // buffer between outer nodes
