@@ -1,8 +1,6 @@
 /**
  * Created by Michael on 13/04/2016.
  */
-var graphs;
-
 
 var svgContainers = {};
 var averages = {};
@@ -10,7 +8,6 @@ var averages = {};
 
 $(".country-list").click(function () {
     var countrycode = $(this).attr("id");
-    console.log(countrycode);
     selectedCountryCode = countrycode;
     removeEverything();
     years.forEach(function (d) {
@@ -96,7 +93,7 @@ function drawCluster(chartYear, visibility2) {
     var width = d3.select(chartId).node().getBoundingClientRect().width;
     //var height = $(document).height();
     var height = d3.select(chartId).node().getBoundingClientRect().height;
-    console.log("Row - Width: " + width + " height: " + height);
+    //console.log("Row - Width: " + width + " height: " + height);
     var middlePoint = {X: width / 2, Y: height / 2};
 
     var countries = [];
@@ -112,9 +109,6 @@ function drawCluster(chartYear, visibility2) {
     const buffer1 = 25; // buffer between outer nodes
     const buffer2 = 25; // buffer between mid circle and outer circles
     var radius = radiusOuter + radiusCenter + buffer2; // radius of circle on which outer nodes should be drawn
-
-    var countriesData;
-    var scoresData;
 
     if (!(chartYear in svgContainers)) {
         var tempSvg = d3.select(chartId)
@@ -147,7 +141,7 @@ function drawCluster(chartYear, visibility2) {
                 })
             });
             averages[chartYear] = total / amount;
-            //console.log(chartYear + ": " + total / amount)
+
             total = 0;
             amount = 0;
         })
@@ -231,13 +225,14 @@ function drawCluster(chartYear, visibility2) {
             var temp = countries.slice();
             temp.splice(selectedCountryIndex, 1);
 
-            temp.sort(function (c) {
-                //sorteren op neighbors
-                if (selectedCountry.country.neighbours.indexOf(c.countryCode) > -1) {
-                    return -1;
-                }
-                return 1;
-            }).forEach(
+            //temp.sort(function (c) {
+            //    //sorteren op neighbors
+            //    if (selectedCountry.country.neighbours.indexOf(c.countryCode) > -1) {
+            //        return -1;
+            //    }
+            //    return 1;
+            //})
+            temp.forEach(
                 function (c) {
                     if (i == selectedCountryIndex)
                         i++;
@@ -468,9 +463,6 @@ function drawCluster(chartYear, visibility2) {
                 .attr("border-width", "20px")
             ;
 
-
-            //calcAndDraw(selectedCountryIndex);
-
             function switchSelectedOnClick(flag) {
                 /* VB:
                  country = Object {countryCode: "IT", name: "Italië", neighbours: Array[6], image: "Italy.png"}
@@ -481,16 +473,6 @@ function drawCluster(chartYear, visibility2) {
                     drawCluster(d, 0);
                 });
             }
-
-
-            var getCountryIndex = function (countryCode) {
-                for (var intIndex = 0; intIndex < countries.length; intIndex++) {
-                    if (countries[intIndex].countryCode == countryCode) {
-                        return intIndex;
-                    }
-                }
-                return 5000;
-            };
 
             //adds the buttons to choose the visible lines
             document.getElementById("giveButton-" + chartYear).onclick = function () {
