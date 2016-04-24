@@ -24,12 +24,12 @@ function addGraphPlaceholders(years) {
     var container = document.getElementById('container');
     for (var i = 0; i < years.length; i++) {
         var year = years[i];
-        if (i % noOfColumns === 0) {
+        /*if (i % noOfColumns === 0) {
             var newRow = document.createElement('div');
             newRow.className = 'row-fluid';
             container.appendChild(newRow);
-        }
-        container.lastChild.innerHTML += '<div class="col-md-' + columnWidth + ' example" id="graph-' + year + '"></div>';
+        }*/
+        //container.lastChild.innerHTML += '<div class="col-md-' + columnWidth + ' example" id="graph-' + year + '"></div>';
         document.getElementById('graph-' + year).innerHTML += '<div class="yeartext">' +
             year +
             ' Score: <span id="scoreText-' + year + '"></span>' +
@@ -38,9 +38,9 @@ function addGraphPlaceholders(years) {
             '<button type="button" class="smallButton" id="bothButton-' + year + '">both</button>' +
             '</div>';
         document.getElementById('graph-' + year).innerHTML += '<div class="chart" id="draw-' + year + '"></div>';
-        if (i % noOfColumns == 0 || i == 0) {
+        /*if (i % noOfColumns == 0 || i == 0) {
             document.getElementById('container').innerHTML += '</div>'
-        }
+        }*/
     }
 }
 
