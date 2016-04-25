@@ -25,11 +25,11 @@ function addGraphPlaceholders(years) {
     for (var i = 0; i < years.length; i++) {
         var year = years[i];
         /*if (i % noOfColumns === 0) {
-            var newRow = document.createElement('div');
-            newRow.className = 'row-fluid';
-            container.appendChild(newRow);
-        }*/
-        //container.lastChild.innerHTML += '<div class="col-md-' + columnWidth + ' example" id="graph-' + year + '"></div>';
+         var newRow = document.createElement('div');
+         newRow.className = 'row-fluid';
+         container.appendChild(newRow);
+         }*/
+        container.innerHTML += '<div class="col-md-' + columnWidth + ' example" id="graph-' + year + '"></div>';
         document.getElementById('graph-' + year).innerHTML += '<div class="yeartext">' +
             year +
             ' Score: <span id="scoreText-' + year + '"></span>' +
@@ -39,9 +39,10 @@ function addGraphPlaceholders(years) {
             '</div>';
         document.getElementById('graph-' + year).innerHTML += '<div class="chart" id="draw-' + year + '"></div>';
         /*if (i % noOfColumns == 0 || i == 0) {
-            document.getElementById('container').innerHTML += '</div>'
-        }*/
+         document.getElementById('container').innerHTML += '</div>'
+         }*/
     }
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://emojipedia-us.s3.amazonaws.com/cache/bc/6f/bc6f71bfca5a45797cea82ac6f6b9864.png" alt="Crying Face">'
 }
 
 var years = [];

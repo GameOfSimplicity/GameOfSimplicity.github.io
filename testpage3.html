@@ -81,7 +81,7 @@
         }
 
         #wrapper.toggled {
-            padding-left: 150px;
+            padding-left: 200px;
         }
 
         #sidebar-wrapper {
@@ -106,13 +106,12 @@
 
         #page-content-wrapper {
             width: 100%;
-            padding: 15px;
-            /*margin-top: 120px;*/
+            padding-top: 100px;
         }
 
         #wrapper.toggled #page-content-wrapper {
             position: absolute;
-            margin-right: -150px;
+            margin-right: -200px;
         }
 
         /* Sidebar Styles */
@@ -141,7 +140,7 @@
             margin-bottom: 200px;
         }
 
-        .countries-list{
+        .countries-list {
             font-size: medium;
         }
 
@@ -174,10 +173,30 @@
             background: none;
         }
 
+        .sidebar-toggle {
+            padding: 0;
+            margin: 0;
+            position: fixed;
+            height: 100%;
+            background-color: white;
+        }
+
+        .sidebar-toggle {
+            padding: 0;
+            margin: 0;
+            position: fixed;
+            height: 100%;
+            background-color: white;
+            color: darkslategray;
+
+        }
+
+        .sidebar-toggleOn
         .horizontal-separator {
             width: 100%;
             border-bottom: solid 1px #999999;
         }
+
 
     </style>
 
@@ -365,10 +384,14 @@
     </div>
 
     <div class="container-fluid navbar-fixed-top header" id="header">
-        <h1 class="page-title">Eurovision song contest         <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">click me plox</a>
+        <h1 class="page-title">Eurovision song contest
         </h1>
     </div>
     <div id="page-content-wrapper">
+
+        <a href="#menu-toggle" class="sidebar-toggle" id="menu-toggle">
+            <span id="sidebar-toggle-icon" class="glyphicon glyphicon-menu-right"></span>
+        </a>
 
         <div class="container-fluid" id="container">
         </div>
@@ -382,6 +405,7 @@
     $("#menu-toggle").click(function (e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
+        $("#sidebar-toggle-icon").toggleClass("glyphicon-menu-right glyphicon-menu-left");
     });
 </script>
 </html>
