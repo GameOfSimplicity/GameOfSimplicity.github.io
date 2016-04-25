@@ -8,13 +8,13 @@ var averages = {};
 
 $(".country-list").click(function () {
     var countrycode = $(this).attr("id");
-    $("#"+selectedCountryCode).toggleClass("selected-country");
-    $("#"+countrycode).toggleClass("selected-country");
+    $("#" + selectedCountryCode).toggleClass("selected-country");
+    $("#" + countrycode).toggleClass("selected-country");
     selectedCountryCode = countrycode;
     removeEverything();
     years.forEach(function (d) {
         drawCluster(d, 0);
-    }); 
+    });
 });
 
 
@@ -68,6 +68,7 @@ function removeEverything() {
 
     });
     d3.selectAll(".node").remove();
+    d3.selectAll("#no-data-text").remove();
 }
 
 
@@ -91,6 +92,7 @@ function selectAllGiven() {
 
 
 function drawCluster(chartYear, visibility2) {
+
     var chartId = "#draw-" + chartYear;
     //var width = $(document).width();
     var width = d3.select(chartId).node().getBoundingClientRect().width;
@@ -107,7 +109,7 @@ function drawCluster(chartYear, visibility2) {
     const giveColour = "#082f6d";
     const receiveColour = "#cd0027";
     const goldColour = "#ffd700";
-    const silverColour ="#c0c0c0";
+    const silverColour = "#c0c0c0";
     const bronzeColour = "#cd7f32";
 
     const radiusCenter = 15;
@@ -177,6 +179,8 @@ function drawCluster(chartYear, visibility2) {
             }
         });
 
+        var links = [];
+
         if (makeGraph) {
             if (typeof averages !== 'undefined') {
                 calcGivenAverage(scoresData);
@@ -195,8 +199,6 @@ function drawCluster(chartYear, visibility2) {
             while (radius * Math.PI * 2 < temp) {
                 radius += 20;
             }
-
-            var links = [];
 
 
             //function sortCountries() {
@@ -464,8 +466,8 @@ function drawCluster(chartYear, visibility2) {
                 .style("fill", function (d) {
                     return ("url(#" + d.country.countryCode + "-icon)");
                 })
-                //.style("stroke", "red")
-                //.style("stroke-width", "2px")
+            //.style("stroke", "red")
+            //.style("stroke-width", "2px")
             ;
 
             function switchSelectedOnClick(flag) {
@@ -492,6 +494,15 @@ function drawCluster(chartYear, visibility2) {
                 drawLinks(2);
             };
         }
-    }
 
+        if (!makeGraph) {
+            svgContainer.append('g').append("text").text("Didn't participate")
+                .attr("id", "no-data-text")
+                .attr("x", middlePoint.X - 80)
+                .attr("y", middlePoint.Y)
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "20px")
+                .attr("fill", "#ff6961");
+        }
+    }
 }
