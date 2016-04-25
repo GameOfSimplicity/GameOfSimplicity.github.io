@@ -80,7 +80,7 @@
         }
 
         #sidebar-wrapper {
-            padding-top: 10px;
+            padding: 10px 0;
             z-index: 1000;
             position: fixed;
             left: 150px;
@@ -107,15 +107,6 @@
 
         /* Sidebar Styles */
 
-        .sidebar-nav {
-            top: 0;
-            /*width: 150px;*/
-            margin: 0px 0px 0px 0px;
-            padding: 0;
-            /*height: 65px;*/
-            font-size: 18px;
-        }
-
         .sidebar-nav li {
             list-style: none;
             cursor: pointer;
@@ -128,20 +119,23 @@
         .sidebar-nav .countries-list {
             text-decoration: none;
             color: #999999;
-            margin-bottom: 200px;
+            font-size: small;
+            padding: 0;
         }
 
-        .countries-list {
-            font-size: medium;
+        .sidebar-nav .country-list {
+            padding: 1px 0 1px 25px;
         }
 
         .sidebar-nav .all-buttons {
+            padding: 0;
             text-decoration: none;
             margin: 0;
+            text-align: center;
         }
 
         .sidebar-nav .all-buttons button {
-            margin-bottom: 10px;
+            margin-top: 20px;
         }
 
         .sidebar-nav li div:hover {
@@ -164,27 +158,11 @@
             background: none;
         }
 
-        .sidebar-toggle {
-            padding: 0;
-            margin: 0;
-            position: fixed;
-            height: 100%;
-            background-color: white;
-        }
-
-        .sidebar-toggle {
-            padding: 0;
-            margin: 0;
-            position: fixed;
-            height: 100%;
-            background-color: white;
-            color: darkslategray;
-
-        }
-
         .horizontal-separator {
             width: 100%;
             border-bottom: solid 1px #999999;
+            height: 0;
+            margin: 20px 0;
         }
 
 
