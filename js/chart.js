@@ -30,13 +30,14 @@ function addGraphPlaceholders(years) {
          container.appendChild(newRow);
          }*/
         container.innerHTML += '<div class="col-md-' + columnWidth + ' example" id="graph-' + year + '"></div>';
-        document.getElementById('graph-' + year).innerHTML += '<div class="yeartext">' +
+        document.getElementById('graph-' + year).innerHTML += '<div class="yeartext" >' +
             year +
+            '<span id="yeartext-' + year + '"> ' +
             ' Score: <span id="scoreText-' + year + '"></span>' +
             '<button type="button" class="smallButton" id="giveButton-' + year + '">given</button>' +
             '<button type="button" class="smallButton" id="receiveButton-' + year + '">received</button>' +
             '<button type="button" class="smallButton" id="bothButton-' + year + '">both</button>' +
-            '</div>';
+            '</span></div>';
         document.getElementById('graph-' + year).innerHTML += '<div class="chart" id="draw-' + year + '"></div>';
         /*if (i % noOfColumns == 0 || i == 0) {
          document.getElementById('container').innerHTML += '</div>'
@@ -149,12 +150,13 @@ function drawCluster(chartYear, visibility2) {
         scoresData.scores.forEach(function (generalScoreInfo) {
             generalScoreInfo.scores.forEach(function (arrayWithScores) {
                 arrayWithScores.forEach(function (score) {
-                    // if (score != 0) {
-                    total += parseInt(score);
-                    amount += 1;
-                    //}
+                    if (score != 0) {
+                        total += parseInt(score);
+                        amount += 1;
+                    }
                 })
             });
+            console.log(total / amount + "?");
             averages[chartYear] = total / amount;
 
             total = 0;
@@ -189,6 +191,7 @@ function drawCluster(chartYear, visibility2) {
         var links = [];
 
         if (makeGraph) {
+            $('#yeartext-' + chartYear).show();
             if (typeof averages !== 'undefined') {
                 calcGivenAverage(scoresData);
             }
@@ -448,8 +451,8 @@ function drawCluster(chartYear, visibility2) {
                     .attr("id", id)
                     .attr("refX", 4) /*must be smarter way to calculate shift*/
                     .attr("refY", 0)
-                    .attr("markerWidth", 6)
-                    .attr("markerHeight", 4)
+                    .attr("markerWidth", 3)
+                    .attr("markerHeight", 3)
                     .attr("orient", "auto")
                     .attr("viewBox", "-5 -5 10 10")
                     .append("path")
@@ -468,7 +471,7 @@ function drawCluster(chartYear, visibility2) {
                     return d.Y
                 })
                 .attr("r", function (d) {
-                    return d.R + 3.5
+                    return d.R + 3
                 })
                 .style("fill", function (d) {
                     return ("url(#" + d.country.countryCode + "-icon)");
@@ -481,9 +484,9 @@ function drawCluster(chartYear, visibility2) {
                 /* VB:
                  country = Object {countryCode: "IT", name: "Italië", neighbours: Array[6], image: "Italy.png"}
                  */
-                $("#"+selectedCountryCode).toggleClass("selected-country");
+                $("#" + selectedCountryCode).toggleClass("selected-country");
                 selectedCountryCode = flag.country.countryCode;
-                $("#"+selectedCountryCode).toggleClass("selected-country");
+                $("#" + selectedCountryCode).toggleClass("selected-country");
                 removeEverything();
                 years.forEach(function (d) {
                     drawCluster(d, 0);
@@ -510,6 +513,8 @@ function drawCluster(chartYear, visibility2) {
                 .attr("font-family", "sans-serif")
                 .attr("font-size", "20px")
                 .attr("fill", "#ff6961");
+
+            $('#yeartext-' + chartYear).hide();
         }
     }
 }
