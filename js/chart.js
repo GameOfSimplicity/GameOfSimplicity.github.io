@@ -43,6 +43,10 @@ function addGraphPlaceholders(years) {
          }*/
     }
     container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://emojipedia-us.s3.amazonaws.com/cache/bc/6f/bc6f71bfca5a45797cea82ac6f6b9864.png" alt="Crying Face">'
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/IbcZ287.gif" alt="Crying Face">'
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/oIsKpXd.gif" alt="Crying Face">'
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/vNkZPcv.gif" alt="Crying Face">'
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/31EeQ.gif" alt="Crying Face">'
 }
 
 var years = [];
