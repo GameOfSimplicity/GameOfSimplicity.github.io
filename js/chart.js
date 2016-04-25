@@ -43,14 +43,6 @@ function addGraphPlaceholders(years) {
          document.getElementById('container').innerHTML += '</div>'
          }*/
     }
-    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://emojipedia-us.s3.amazonaws.com/cache/bc/6f/bc6f71bfca5a45797cea82ac6f6b9864.png" alt="Crying Face">'
-    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/IbcZ287.gif" alt="Crying Face">'
-    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/oIsKpXd.gif" alt="Crying Face">'
-    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/vNkZPcv.gif" alt="Crying Face">'
-    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/31EeQ.gif" alt="Crying Face">'
-    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://4.bp.blogspot.com/--Pv2hgHkt04/Unu6gbAmNxI/AAAAAAAAOwA/f7US0hXBL98/s1600/paperboy-fall.gif" alt="Crying Face">'
-    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/obZWiNr.gif" alt="Crying Face">'
-    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i749.photobucket.com/albums/xx132/LUKE_79/faceplant.gif" alt="Crying Face">'
 }
 
 var years = [];
