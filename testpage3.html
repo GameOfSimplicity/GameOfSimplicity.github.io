@@ -27,10 +27,13 @@
             color: #fff;
         }
 
-        .example {
-            height: 475px;
+        .year-block {
+            position: relative;
+            width: 370px;
+            height: 370px;
             font-size: x-large;
             background-color: #fff;
+            float:left;
         }
 
         .yeartext {
@@ -65,27 +68,19 @@
             opacity: 0.5;
         }
 
-        .header {
+        /*.header {
             background-color: darkslategray;
             height: 100px;
             margin: 0;
             padding: 0 0 0 30px;
-        }
+        }*/
 
         #wrapper {
-            padding-left: 0;
-            -webkit-transition: all 0.5s ease;
-            -moz-transition: all 0.5s ease;
-            -o-transition: all 0.5s ease;
-            transition: all 0.5s ease;
-        }
-
-        #wrapper.toggled {
             padding-left: 200px;
         }
 
         #sidebar-wrapper {
-            margin-top: 100px;
+            padding-top: 10px;
             z-index: 1000;
             position: fixed;
             left: 150px;
@@ -94,13 +89,9 @@
             margin-left: -150px;
             overflow-y: auto;
             background: darkslategray;
-            -webkit-transition: all 0.5s ease;
-            -moz-transition: all 0.5s ease;
-            -o-transition: all 0.5s ease;
-            transition: all 0.5s ease;
         }
 
-        #wrapper.toggled #sidebar-wrapper {
+        #wrapper #sidebar-wrapper {
             width: 200px;
         }
 
@@ -109,8 +100,8 @@
             padding-top: 100px;
         }
 
-        #wrapper.toggled #page-content-wrapper {
-            position: absolute;
+        #wrapper #page-content-wrapper {
+            position: relative;
             margin-right: -200px;
         }
 
@@ -379,19 +370,13 @@
             </ul>
 
         </div>
-
     </div>
 
-    <div class="container-fluid navbar-fixed-top header" id="header">
+    <div class="container-fluid navbar-header header" id="header">
         <h1 class="page-title">Eurovision song contest
         </h1>
     </div>
     <div id="page-content-wrapper">
-
-        <a href="#menu-toggle" class="sidebar-toggle" id="menu-toggle">
-            <span id="sidebar-toggle-icon" class="glyphicon glyphicon-menu-right"></span>
-        </a>
-
         <div class="container-fluid" id="container">
         </div>
     </div>
@@ -400,11 +385,4 @@
 </body>
 
 <script type="text/javascript" src="js/chart.js"></script>
-<script>
-    $("#menu-toggle").click(function (e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-        $("#sidebar-toggle-icon").toggleClass("glyphicon-menu-right glyphicon-menu-left");
-    });
-</script>
 </html>

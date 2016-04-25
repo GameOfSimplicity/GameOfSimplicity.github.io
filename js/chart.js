@@ -29,7 +29,7 @@ function addGraphPlaceholders(years) {
          newRow.className = 'row-fluid';
          container.appendChild(newRow);
          }*/
-        container.innerHTML += '<div class="col-md-' + columnWidth + ' example" id="graph-' + year + '"></div>';
+        container.innerHTML += '<div class="year-block" id="graph-' + year + '"></div>';
         document.getElementById('graph-' + year).innerHTML += '<div class="yeartext" >' +
             year +
             '<span id="yeartext-' + year + '"> ' +
