@@ -43,6 +43,15 @@ function addGraphPlaceholders(years) {
          document.getElementById('container').innerHTML += '</div>'
          }*/
     }
+
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://emojipedia-us.s3.amazonaws.com/cache/bc/6f/bc6f71bfca5a45797cea82ac6f6b9864.png" alt="Crying Face">'
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/IbcZ287.gif" alt="Crying Face">'
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/oIsKpXd.gif" alt="Crying Face">'
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/vNkZPcv.gif" alt="Crying Face">'
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/31EeQ.gif" alt="Crying Face">'
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://4.bp.blogspot.com/--Pv2hgHkt04/Unu6gbAmNxI/AAAAAAAAOwA/f7US0hXBL98/s1600/paperboy-fall.gif" alt="Crying Face">'
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i.imgur.com/obZWiNr.gif" alt="Crying Face">'
+    container.innerHTML += '<img style="width: 300px; height: 300px;" src="http://i749.photobucket.com/albums/xx132/LUKE_79/faceplant.gif" alt="Crying Face">'
 }
 
 var years = [];
@@ -148,8 +157,9 @@ function drawCluster(chartYear, visibility2) {
                     }
                 })
             });
-            console.log(total / amount + "?");
-            averages[chartYear] = total / amount;
+            //TODO: sta tijdelijk gwn op de helft
+            //averages[chartYear] = total / amount;
+            averages[chartYear] = 6;
 
             total = 0;
             amount = 0;
@@ -160,7 +170,7 @@ function drawCluster(chartYear, visibility2) {
     function makeGraph(error, countriesData, scoresData) {
         if (error) throw error;
 
-        var makeGraph = false;
+        var countryInYear = false;
 
         //Get the results for the given year
         var yearResult = scoresData.scores.find(function (s) {
@@ -175,14 +185,14 @@ function drawCluster(chartYear, visibility2) {
                 countries[index] = c;
                 if (c.countryCode == selectedCountryCode) {
                     selectedCountryIndex = index;
-                    makeGraph = true;
+                    countryInYear = true;
                 }
             }
         });
 
         var links = [];
 
-        if (makeGraph) {
+        if (countryInYear) {
             $('#yeartext-' + chartYear).show();
             if (typeof averages !== 'undefined') {
                 calcGivenAverage(scoresData);
@@ -497,7 +507,7 @@ function drawCluster(chartYear, visibility2) {
             };
         }
 
-        if (!makeGraph) {
+        if (!countryInYear) {
             svgContainer.append('g').append("text").text("Didn't participate")
                 .attr("id", "no-data-text")
                 .attr("x", middlePoint.X - 80)
