@@ -472,7 +472,9 @@ function drawCluster(chartYear, visibility2) {
                 /* VB:
                  country = Object {countryCode: "IT", name: "Italië", neighbours: Array[6], image: "Italy.png"}
                  */
+                $("#"+selectedCountryCode).toggleClass("selected-country");
                 selectedCountryCode = flag.country.countryCode;
+                $("#"+selectedCountryCode).toggleClass("selected-country");
                 removeEverything();
                 years.forEach(function (d) {
                     drawCluster(d, 0);
