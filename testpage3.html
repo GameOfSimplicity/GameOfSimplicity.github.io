@@ -20,7 +20,6 @@
             -moz-user-select: none; /* Firefox all */
             -ms-user-select: none; /* IE 10+ */
             user-select: none; /* Likely future */
-
         }
 
         .page-title {
@@ -34,6 +33,12 @@
             font-size: x-large;
             background-color: #fff;
             display: inline-block;
+        }
+
+        .combinedYears {
+            width: 100%;
+            height: 750px;
+            background-color: #fff;
         }
 
         .yeartext {
@@ -179,6 +184,9 @@
     <div id="sidebar-wrapper">
         <div class="sidebar-nav">
             <ul class="all-buttons">
+                <li>
+                    <button id="showYearsCombined" class="btn btn-default">Toggle View</button>
+                </li>
                 <li>
                     <button id="allGiven" class="btn btn-default">All given</button>
                 </li>
@@ -347,7 +355,6 @@
                     <div class="country-list" id="YO">Yugoslavia</div>
                 </li>
             </ul>
-
         </div>
     </div>
 
@@ -357,6 +364,13 @@
     </div>
     <div id="page-content-wrapper">
         <div class="container-fluid" id="container">
+            <div id="separateYears"></div>
+            <div id="combinedYears" class="combinedYears">
+                <button type="button" class="smallButton" id="giveCombinedButton-' + year + '">given</button>
+                <button type="button" class="smallButton" id="receiveCombinedButton-' + year + '">received</button>
+                <button type="button" class="smallButton" id="bothCombinedButton-' + year + '">both</button>
+                Test
+            </div>
         </div>
     </div>
 

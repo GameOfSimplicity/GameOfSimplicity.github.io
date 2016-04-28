@@ -21,7 +21,7 @@ $(".country-list").click(function () {
 function addGraphPlaceholders(years) {
     const noOfColumns = 4;
     const columnWidth = 12 / noOfColumns;
-    var container = document.getElementById('container');
+    var separateYears = document.getElementById('separateYears');
     for (var i = 0; i < years.length; i++) {
         var year = years[i];
         /*if (i % noOfColumns === 0) {
@@ -29,7 +29,7 @@ function addGraphPlaceholders(years) {
          newRow.className = 'row-fluid';
          container.appendChild(newRow);
          }*/
-        container.innerHTML += '<div class="year-block" id="graph-' + year + '"></div>';
+        separateYears.innerHTML += '<div class="year-block" id="graph-' + year + '"></div>';
         document.getElementById('graph-' + year).innerHTML += '<div class="yeartext" >' +
             year +
             '<span id="yeartext-' + year + '"> ' +
@@ -43,7 +43,7 @@ function addGraphPlaceholders(years) {
          document.getElementById('container').innerHTML += '</div>'
          }*/
     }
-
+    $('#combinedYears').hide();
 }
 
 var years = [];
@@ -90,6 +90,11 @@ function selectAllGiven() {
         drawCluster(d, 0);
     });
 }
+
+document.getElementById("showYearsCombined").addEventListener("click", function () {
+    $('#combinedYears').toggle();
+    $('#separateYears').toggle();
+});
 
 
 function drawCluster(chartYear, visibility2) {
