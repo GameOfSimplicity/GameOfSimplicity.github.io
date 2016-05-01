@@ -134,7 +134,7 @@ function drawCluster(chartYear, visibility2) {
 
     var svgContainer = svgContainers[chartYear];
 
-    var sortMethod = 1; //0 = none; 1 = neighbours ; 2 = score
+    var sortMethod = 1; //0 = none; 1 = neighbours ; 2 = scoreGivenToSelected
 
     //load data from multiple json files async
     d3_queue.queue()
@@ -176,15 +176,20 @@ function drawCluster(chartYear, visibility2) {
 
         //Get the countries that participate this year
         countries = [];
-        countriesData.countries.forEach(function (c) {
-            var index = yearResult.participants.indexOf(c.countryCode);
-            if (index > -1) {
-                countries[index] = c;
-                if (c.countryCode == selectedCountryCode) {
-                    selectedCountryIndex = index;
-                    countryInYear = true;
-                }
+        yearResult.participants.forEach(function (c) {//Format:[ index, countryCode, scoreReceived]
+            var countryCode = c[1];
+            var countryData = countriesData.countries.find(function (c2) {
+                return c2.countryCode == countryCode;
+            });
+            var totalScoreReceived = c[2];
+            var index = c[0]; // index to calculate the score in the matrix
+
+            if (countryCode == selectedCountryCode) {
+                selectedCountryIndex = index;
+                countryInYear = true;
             }
+
+            countries[index] = ({countryData: countryData, index: index, totalScoreReceived: totalScoreReceived});
         });
 
         var links = [];
@@ -209,26 +214,7 @@ function drawCluster(chartYear, visibility2) {
                 radius += 20;
             }
 
-
-            //function sortCountries() {
-            //    if (sortMethod == 0)
-            //        countries.sort();
-            //    else
-            //        countries.sort(function (c1, c2) {
-            //            if (sortMethod == 1) {
-            //                //neighbours
-            //                return selectedCountry.country.neighbours.indexOf(c1.countryCode) > -1 ? -1 : 1
-            //            } else {
-            //                //score
-            //                //TODO
-            //            }
-            //        });
-            //}
-            //
-            //sortCountries();
-
             selectedCountry = {
-                index: selectedCountryIndex,
                 country: countries[selectedCountryIndex],
                 X: middlePoint.X,
                 Y: middlePoint.Y,
@@ -242,20 +228,29 @@ function drawCluster(chartYear, visibility2) {
             var temp = countries.slice();
             temp.splice(selectedCountryIndex, 1);
 
-            //temp.sort(function (c) {
-            //    //sorteren op neighbors
-            //    if (selectedCountry.country.neighbours.indexOf(c.countryCode) > -1) {
-            //        return -1;
-            //    }
-            //    return 1;
-            //})
+            if (sortMethod != 0) {
+                temp = temp.sort(function (c1, c2) {
+                    if (sortMethod == 1) {
+                        //sorteren op neighbors
+                        return selectedCountry.country.countryData.neighbours.indexOf(c1.countryData.countryCode) > -1 ? -1 : 1;
+                    }
+                    else {
+                        //TODO sortere op scoreGiven
+                        return scores[c1.index][selectedCountryIndex] < scores[c2.index][selectedCountryIndex]
+                    }
+                });
+
+            }
+
             temp.forEach(
                 function (c) {
                     if (i == selectedCountryIndex)
                         i++;
 
+                    var country = countries[c.index];
+
                     var angle = slice * (j);
-                    var isNeighour = selectedCountry.country.neighbours.indexOf(c.countryCode) > -1;
+                    var isNeighour = selectedCountry.country.countryData.neighbours.indexOf(country.countryData.countryCode) > -1;
 
                     var outerCenterX = middlePoint.X + (isNeighour ? radius * .6 : radius) * Math.cos(angle);
                     var outerCenterY = middlePoint.Y + (isNeighour ? radius * .6 : radius) * Math.sin(angle);
@@ -270,7 +265,7 @@ function drawCluster(chartYear, visibility2) {
                     var centerLinkX = (innerLinkX + outerLinkX) / 2;
                     var centerLinkY = (innerLinkY + outerLinkY) / 2;
 
-                    nodesData.push({index: i, country: countries[i], X: outerCenterX, Y: outerCenterY, R: radiusOuter});
+                    nodesData.push({country: countries[c.index], X: outerCenterX, Y: outerCenterY, R: radiusOuter});
 
                     links.push({
                         innerLinkX: innerLinkX,
@@ -279,8 +274,8 @@ function drawCluster(chartYear, visibility2) {
                         outerLinkY: outerLinkY,
                         centerLinkX: centerLinkX,
                         centerLinkY: centerLinkY,
-                        scoreGiven: scores[j][selectedCountryIndex],
-                        scoreReceived: scores[selectedCountryIndex][j],
+                        scoreGiven: scores[c.index][selectedCountryIndex],
+                        scoreReceived: scores[selectedCountryIndex][c.index],
                         isNeighbor: isNeighour
                     });
 
@@ -375,7 +370,7 @@ function drawCluster(chartYear, visibility2) {
                                         }
                                     })
                                     .on("mouseover", function () {
-                                        document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreGiven;
+                                        document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreReceived;
                                     });
                             }
                         });
@@ -421,7 +416,7 @@ function drawCluster(chartYear, visibility2) {
 
             defs.append('pattern')
                 .attr('id', function (d) {
-                    return (d.country.countryCode + "-icon");
+                    return (d.country.countryData.countryCode + "-icon");
                 })
                 .attr('class', "countryNodes")
                 .attr('width', 1)
@@ -429,7 +424,7 @@ function drawCluster(chartYear, visibility2) {
                 .attr('patternContentUnits', 'objectBoundingBox')
                 .append("image")
                 .attr("xlink:xlink:href", function (d) {
-                    return ("./images/flags/" + d.country.image);
+                    return ("./images/flags/" + d.country.countryData.image);
                 })
                 .attr("height", 1)
                 .attr("width", 1)
@@ -473,10 +468,10 @@ function drawCluster(chartYear, visibility2) {
                     return d.R + 3
                 })
                 .style("fill", function (d) {
-                    return ("url(#" + d.country.countryCode + "-icon)");
+                    return ("url(#" + d.country.countryData.countryCode + "-icon)");
                 })
-            //.style("stroke", "red")
-            //.style("stroke-width", "2px")
+                //.style("stroke", "red")
+                //.style("stroke-width", "2px")
             ;
 
             function switchSelectedOnClick(flag) {
