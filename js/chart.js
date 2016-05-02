@@ -194,7 +194,12 @@ function drawCluster(chartYear, visibility2) {
                 countryInYear = true;
             }
 
-            countries[index] = ({countryData: countryData, index: index, totalScoreReceived: totalScoreReceived, position: position});
+            countries[index] = ({
+                countryData: countryData,
+                index: index,
+                totalScoreReceived: totalScoreReceived,
+                position: position
+            });
             position++;
         });
 
@@ -460,14 +465,17 @@ function drawCluster(chartYear, visibility2) {
             }
 
 
-            var tooltip = d3.select("body")
-                .append("div")
+            var div = d3.select("body").append("div")
                 .style("position", "absolute")
                 .style("z-index", "10")
-                .style("visibility", "hidden")
-                .html(function (d) {
-                    return "<strong>Frequency:</strong> <span style='color:red'>" + d + "</span>";
-                });
+                .style("min-width", "200px")
+                .style("min-height", "50px")
+                .style("background-color", "red")
+                .style("border-radius","10px")
+                .style("padding", "5px")
+                .style("color", "white")
+                ;
+
 
             nodes.enter().append("circle")
                 .attr("class", "node")
@@ -484,19 +492,35 @@ function drawCluster(chartYear, visibility2) {
                 .style("fill", function (d) {
                     return ("url(#" + d.country.countryData.countryCode + "-icon)");
                 })
-                .style("stroke", function (d){
-                    switch (d.country.position){
-                        case 1: return goldColour;
-                        case 2: return silverColour;
-                        case 3: return bronzeColour;
-                        default: return "none";
+                .style("stroke", function (d) {
+                    switch (d.country.position) {
+                        case 1:
+                            return goldColour;
+                        case 2:
+                            return silverColour;
+                        case 3:
+                            return bronzeColour;
+                        default:
+                            return "none";
                     }
                 })
                 .style("stroke-width", "3px")
-            ;
-            //.on("mouseover", function(){return tooltip.style("visibility", "visible");})
-            //.on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-            //.on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+                .on("mouseenter", function (d) {
+                    div.transition()
+                        .duration(200)
+                        .style("opacity", .8);
+                    div.html("Insert a fancy tooltip here :)" + "<br/>")
+                        .style("top", event.pageY - 10 + "px")
+                        .style("left", event.pageX + 10 + "px");
+                })
+                .on("mouseout", function (d) {
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
+            //.on("mouseover", function(d){return tooltip.style("visibility", "visible");})
+            //.on("mousemove", function(d){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+            //.on("mouseout", function(d){return tooltip.style("visibility", "hidden");});
             //;
 
             function switchSelectedOnClick(flag) {
