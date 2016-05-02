@@ -24,7 +24,17 @@
 
         .page-title {
             color: #fff;
+            display: inline;
         }
+
+        .tooltip-img {
+            margin-left: 10px;
+            margin-top: -10px;
+            width: 40px;
+            height: 40px;
+
+        }
+
 
         .year-block {
             position: relative;
@@ -106,10 +116,12 @@
             text-align: center;
         }
 
+        /*
         #wrapper #page-content-wrapper {
             position: relative;
             margin-right: -200px;
         }
+        */
 
         /* Sidebar Styles */
 
@@ -178,6 +190,7 @@
     <script type="text/javascript" src="js/jquery-1.12.2.js"></script>
     <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/queue/d3-queue.min.js"></script>
+
 </head>
 <body>
 <div id="wrapper">
@@ -359,8 +372,9 @@
     </div>
 
     <div class="container-fluid navbar-header header" id="header">
-        <h1 class="page-title">Eurovision song contest
-        </h1>
+        <h1 class="page-title">Eurovision Song Contest</h1>
+        <img class="tooltip-img" src="images/info.svg" alt="info" data-toggle="tooltip" data-placement="right"
+             title="Jeej hier moet tekst komen!">
     </div>
     <div id="page-content-wrapper">
         <div class="container-fluid" id="container">
@@ -373,7 +387,6 @@
             </div>
         </div>
     </div>
-
 </div>
 </body>
 
