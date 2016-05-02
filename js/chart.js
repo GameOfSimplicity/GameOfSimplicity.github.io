@@ -407,8 +407,6 @@ function drawCluster(chartYear, visibility2) {
                         });
                         break;
                 }
-
-
             }
 
             drawLinks(visibility2);//draws the links; default is given
@@ -417,6 +415,7 @@ function drawCluster(chartYear, visibility2) {
                 .data(nodesData);
 
             var defs = nodes.enter().append('defs');
+
 
             defs.append('pattern')
                 .attr('id', function (d) {
@@ -459,6 +458,15 @@ function drawCluster(chartYear, visibility2) {
             }
 
 
+            var tooltip = d3.select("body")
+                .append("div")
+                .style("position", "absolute")
+                .style("z-index", "10")
+                .style("visibility", "hidden")
+                .html(function (d) {
+                    return "<strong>Frequency:</strong> <span style='color:red'>" + d + "</span>";
+                });
+
             nodes.enter().append("circle")
                 .attr("class", "node")
                 .attr("cx", function (d) {
@@ -473,9 +481,12 @@ function drawCluster(chartYear, visibility2) {
                 })
                 .style("fill", function (d) {
                     return ("url(#" + d.country.countryData.countryCode + "-icon)");
-                })
-                //.style("stroke", "red")
-                //.style("stroke-width", "2px")
+                });
+            //.on("mouseover", function(){return tooltip.style("visibility", "visible");})
+            //.on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+            //.on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+            //.style("stroke", "red")
+            //.style("stroke-width", "2px")
             ;
 
             function switchSelectedOnClick(flag) {
