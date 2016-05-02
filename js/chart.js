@@ -180,6 +180,7 @@ function drawCluster(chartYear, visibility2) {
 
         //Get the countries that participate this year
         countries = [];
+        var position = 1;
         yearResult.participants.forEach(function (c) {//Format:[ index, countryCode, scoreReceived]
             var countryCode = c[1];
             var countryData = countriesData.countries.find(function (c2) {
@@ -193,7 +194,8 @@ function drawCluster(chartYear, visibility2) {
                 countryInYear = true;
             }
 
-            countries[index] = ({countryData: countryData, index: index, totalScoreReceived: totalScoreReceived});
+            countries[index] = ({countryData: countryData, index: index, totalScoreReceived: totalScoreReceived, position: position});
+            position++;
         });
 
         var links = [];
@@ -481,20 +483,28 @@ function drawCluster(chartYear, visibility2) {
                 })
                 .style("fill", function (d) {
                     return ("url(#" + d.country.countryData.countryCode + "-icon)");
-                });
+                })
+                .style("stroke", function (d){
+                    switch (d.country.position){
+                        case 1: return goldColour;
+                        case 2: return silverColour;
+                        case 3: return bronzeColour;
+                        default: return "none";
+                    }
+                })
+                .style("stroke-width", "3px")
+            ;
             //.on("mouseover", function(){return tooltip.style("visibility", "visible");})
             //.on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
             //.on("mouseout", function(){return tooltip.style("visibility", "hidden");});
-            //.style("stroke", "red")
-            //.style("stroke-width", "2px")
-            ;
+            //;
 
             function switchSelectedOnClick(flag) {
                 /* VB:
                  country = Object {countryCode: "IT", name: "Italië", neighbours: Array[6], image: "Italy.png"}
                  */
                 $("#" + selectedCountryCode).toggleClass("selected-country");
-                selectedCountryCode = flag.country.countryCode;
+                selectedCountryCode = flag.country.countryData.countryCode;
                 $("#" + selectedCountryCode).toggleClass("selected-country");
                 removeEverything();
                 years.forEach(function (d) {
