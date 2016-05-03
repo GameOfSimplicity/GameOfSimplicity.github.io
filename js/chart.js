@@ -110,7 +110,7 @@ function drawCluster(chartYear, visibility2) {
     const silverColour = "#c0c0c0";
     const bronzeColour = "#cd7f32";
 
-    const radiusCenter = 15;
+    const radiusCenter = 25;
     const radiusOuter = 10;
     const radius = 160; // radius of circle on which outer nodes should be drawn
 
@@ -471,7 +471,9 @@ function drawCluster(chartYear, visibility2) {
                             return "none";
                     }
                 })
-                .style("stroke-width", "3px")
+                .style("stroke-width", function (d) {
+                    return d.country.countryData.countryCode == selectedCountryCode ? "5px" : "3px";
+                })
                 .on("mousemove", function (d) {
                     div.transition()
                         .duration(200)
