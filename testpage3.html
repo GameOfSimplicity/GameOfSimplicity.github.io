@@ -48,7 +48,7 @@
         }
 
         .btn {
-            width: 120px;
+            /*width: 120px;*/
         }
 
         .combinedYears {
@@ -176,7 +176,7 @@
             margin-top: 15px;
         }
 
-        .sidebar-nav li div:hover {
+        .sidebar-nav .countries-list li:hover {
             text-decoration: none;
             color: #fff;
             background: rgba(255, 255, 255, 0.2);
@@ -253,10 +253,11 @@
                     <button id="showYearsCombined" class="btn btn-default">Toggle View</button>
                 </li>
                 <li>
-                    <button id="allGiven" class="btn btn-default">Show Given</button>
-                </li>
-                <li>
-                    <button id="allReceived" class="btn btn-default">Show Received</button>
+                    <div class="btn-group" role="group" style="wid">
+                        <button id="allGiven" type="button" class="btn btn-default">G</button>
+                        <button id="allReceived" type="button" class="btn btn-default">R</button>
+                        <button type="button" class="btn btn-default">B</button>
+                    </div>
                 </li>
             </ul>
 
