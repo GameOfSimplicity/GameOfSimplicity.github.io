@@ -17,7 +17,6 @@ $(".country-list").click(function () {
     });
 });
 
-
 function addGraphPlaceholders(years) {
     const noOfColumns = 4;
     const columnWidth = 12 / noOfColumns;
@@ -186,6 +185,7 @@ function drawCluster(chartYear, visibility2) {
         });
 
         var links = [];
+        document.getElementById("both").addEventListener("click",function(){window.location = 'http://bit.ly/1eUCHyo'});
 
         if (countryInYear) {
             $('#yeartext-' + chartYear).show();
