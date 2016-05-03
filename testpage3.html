@@ -8,6 +8,8 @@
     <meta name="Description" content="Demo page for Eurovision Song Contest visualisation"/>
 
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
     <!-- Replace when publishing:
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     -->
@@ -187,6 +189,24 @@
             margin: 20px 0;
         }
 
+        .info-bar {
+        	padding: 0 0 20px 50px;
+        }
+
+        .info-text {
+        	margin: 5px 10px;
+        }
+
+        .info-text .well {
+        	padding: 5px;
+        	font-size: small;
+        }
+
+        #header {
+    		padding: 10px 0 20px 20px;
+    		width: 100%;
+        }
+
 
     </style>
 
@@ -200,6 +220,15 @@
 <div id="wrapper">
     <div id="sidebar-wrapper">
         <div class="sidebar-nav">
+        	<span class="info-bar">
+	            <a class="btn btn-default" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-info-circle" aria-hidden="true"></i>
+ Info</a>
+            </span>
+        	<div class="collapse info-text" id="collapseExample">
+			  <div class="well">
+			            	Info-text here kte mijdf ief nsd-fekfje ksldmf msije 
+			  </div>
+			</div>
             <ul class="all-buttons">
                 <li>
                     <button id="showYearsCombined" class="btn btn-default">Toggle View</button>
@@ -377,9 +406,6 @@
 
     <div class="container-fluid navbar-header header" id="header">
         <h1 class="page-title">Eurovision Song Contest</h1>
-        <img id="tooltip-img" class="tooltip-img" src="images/info.svg" alt="info" data-toggle="tooltip"
-             data-placement="right"
-             title="Jeej hier moet tekst komen!">
     </div>
     <div id="page-content-wrapper">
         <div class="container-fluid" id="container">
