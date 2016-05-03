@@ -501,7 +501,7 @@ function drawCluster(chartYear, visibility2) {
                         .duration(200)
                         .style("opacity", .8);
                     //d.country.totalScoreReceived
-                    div.html("<b>" + d.country.countryData.name + "</b> (" + d.country.position + "e plaats)<br/>")
+                    div.html("<b>" + d.country.countryData.name + "</b> (#" + d.country.position + ")<br/>")
                         .style("top", event.pageY - 10 + "px")
                         .style("left", event.pageX + 10 + "px");
                 })
