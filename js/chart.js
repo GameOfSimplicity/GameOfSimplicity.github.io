@@ -466,7 +466,7 @@ function drawCluster(chartYear, visibility2) {
             }
 
 
-            var div = d3.select("body").append("div").attr("class", "tooltip");
+            var div = d3.select("body").append("div").attr("class", "tooltip-flag");
 
             nodes.enter().append("circle")
                 .attr("class", "node")
