@@ -465,17 +465,7 @@ function drawCluster(chartYear, visibility2) {
             }
 
 
-            var div = d3.select("body").append("div")
-                .style("position", "absolute")
-                .style("z-index", "10")
-                .style("min-width", "200px")
-                .style("min-height", "50px")
-                .style("background-color", "red")
-                .style("border-radius","10px")
-                .style("padding", "5px")
-                .style("color", "white")
-                ;
-
+            var div = d3.select("body").append("div").attr("class", "tooltip");
 
             nodes.enter().append("circle")
                 .attr("class", "node")
@@ -505,11 +495,12 @@ function drawCluster(chartYear, visibility2) {
                     }
                 })
                 .style("stroke-width", "3px")
-                .on("mouseenter", function (d) {
+                .on("mousemove", function (d) {
                     div.transition()
                         .duration(200)
                         .style("opacity", .8);
-                    div.html("Insert a fancy tooltip here :)" + "<br/>")
+                    //d.country.totalScoreReceived
+                    div.html("<b>" + d.country.countryData.name + "</b> (" + d.country.position + "e plaats)<br/>")
                         .style("top", event.pageY - 10 + "px")
                         .style("left", event.pageX + 10 + "px");
                 })

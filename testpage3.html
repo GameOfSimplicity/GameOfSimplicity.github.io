@@ -30,7 +30,7 @@
         .tooltip-img {
             margin-left: 10px;
             margin-top: -10px;
-            width: 40px;
+            width: auto;
             height: 40px;
 
         }
@@ -78,19 +78,25 @@
 
         }
 
+        .tooltip {
+            position: absolute;
+            width: 140px;
+            color: white;
+            background: darkslategray;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            border-radius: 6px;
+            box-shadow: 0px 0px 5px black;
+            z-index: 10;
+        }
+
         circle:hover {
             opacity: 0.5;
-            /*laten staan anders werkt da handje ni*/
+            /*laten staan anders werkt da handje ni - ok*/
             cursor: pointer;
             cursor: hand;
         }
-
-        /*.header {
-            background-color: darkslategray;
-            height: 100px;
-            margin: 0;
-            padding: 0 0 0 30px;
-        }*/
 
         #wrapper {
             padding-left: 200px;
@@ -117,13 +123,6 @@
             padding-top: 100px;
             text-align: center;
         }
-
-        /*
-        #wrapper #page-content-wrapper {
-            position: relative;
-            margin-right: -200px;
-        }
-        */
 
         /* Sidebar Styles */
 
@@ -375,7 +374,8 @@
 
     <div class="container-fluid navbar-header header" id="header">
         <h1 class="page-title">Eurovision Song Contest</h1>
-        <img class="tooltip-img" src="images/info.svg" alt="info" data-toggle="tooltip" data-placement="right"
+        <img id="tooltip-img" class="tooltip-img" src="images/info.svg" alt="info" data-toggle="tooltip"
+             data-placement="right"
              title="Jeej hier moet tekst komen!">
     </div>
     <div id="page-content-wrapper">
@@ -392,5 +392,7 @@
 </div>
 </body>
 
+<script type="text/javascript" src="js/jk.js"></script>
 <script type="text/javascript" src="js/chart.js"></script>
+
 </html>
