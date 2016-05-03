@@ -159,7 +159,6 @@ function drawCluster(chartYear, visibility2) {
 
         var countryInYear = false;
 
-        console.log(countriesData.countries.length);
         //Get the results for the given year
         var yearResult = scoresData.scores.find(function (s) {
             return s.year == chartYear;
@@ -503,17 +502,6 @@ function drawCluster(chartYear, visibility2) {
                     .duration(500)
                     .style("opacity", 0);
             }
-
-            //adds the buttons to choose the visible lines
-            document.getElementById("giveButton-" + chartYear).onclick = function () {
-                drawLinks(0);
-            };
-            document.getElementById("receiveButton-" + chartYear).onclick = function () {
-                drawLinks(1);
-            };
-            document.getElementById("bothButton-" + chartYear).onclick = function () {
-                drawLinks(2);
-            };
         }
 
         if (!countryInYear) {
