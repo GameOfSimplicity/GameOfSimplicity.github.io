@@ -37,7 +37,6 @@ function addGraphPlaceholders(years) {
         document.getElementById('graph-' + year).innerHTML += '<div class="yeartext" >' +
             year +
             '<span id="yeartext-' + year + '"> ' +
-            ' Score: <span id="scoreText-' + year + '"></span>' +
             '<button type="button" class="smallButton" id="giveButton-' + year + '">given</button>' +
             '<button type="button" class="smallButton" id="receiveButton-' + year + '">received</button>' +
             '<button type="button" class="smallButton" id="bothButton-' + year + '">both</button>' +
@@ -343,9 +342,6 @@ function drawCluster(chartYear, visibility2) {
                                         } else {
                                             return "url(#giveArrowHeadGreen)";
                                         }
-                                    })
-                                    .on("mouseover", function () {
-                                        document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreGiven;
                                     })
                             }
                         });
