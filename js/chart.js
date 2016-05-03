@@ -28,23 +28,12 @@ function addGraphPlaceholders(years) {
     var separateYears = document.getElementById('separateYears');
     for (var i = 0; i < years.length; i++) {
         var year = years[i];
-        /*if (i % noOfColumns === 0) {
-         var newRow = document.createElement('div');
-         newRow.className = 'row-fluid';
-         container.appendChild(newRow);
-         }*/
         separateYears.innerHTML += '<div class="year-block" id="graph-' + year + '"></div>';
         document.getElementById('graph-' + year).innerHTML += '<div class="yeartext" >' +
             year +
             '<span id="yeartext-' + year + '"> ' +
-            '<button type="button" class="smallButton" id="giveButton-' + year + '">given</button>' +
-            '<button type="button" class="smallButton" id="receiveButton-' + year + '">received</button>' +
-            '<button type="button" class="smallButton" id="bothButton-' + year + '">both</button>' +
             '</span></div>';
         document.getElementById('graph-' + year).innerHTML += '<div class="chart" id="draw-' + year + '"></div>';
-        /*if (i % noOfColumns == 0 || i == 0) {
-         document.getElementById('container').innerHTML += '</div>'
-         }*/
     }
     $('#combinedYears').hide();
 }
@@ -123,9 +112,7 @@ function drawCluster(chartYear, visibility2) {
 
     const radiusCenter = 15;
     const radiusOuter = 10;
-    const buffer1 = 25; // buffer between outer nodes
-    const buffer2 = 25; // buffer between mid circle and outer circles
-    var radius = radiusOuter + radiusCenter + buffer2; // radius of circle on which outer nodes should be drawn
+    const radius = 160; // radius of circle on which outer nodes should be drawn
 
     if (!(chartYear in svgContainers)) {
         var tempSvg = d3.select(chartId)
@@ -219,12 +206,6 @@ function drawCluster(chartYear, visibility2) {
             // hoek tussen landen
             var slice = 2 * Math.PI / pointsCount;
 
-            //dynamically changes the radius
-            var temp = pointsCount * (buffer1 + radiusOuter * 2);
-            while (radius * Math.PI * 2 < temp) {
-                radius += 20;
-            }
-
             selectedCountry = {
                 country: countries[selectedCountryIndex],
                 X: middlePoint.X,
@@ -263,11 +244,11 @@ function drawCluster(chartYear, visibility2) {
                     var angle = slice * (j);
                     var isNeighour = selectedCountry.country.countryData.neighbours.indexOf(country.countryData.countryCode) > -1;
 
-                    var outerCenterX = middlePoint.X + (isNeighour ? radius * .6 : radius) * Math.cos(angle);
-                    var outerCenterY = middlePoint.Y + (isNeighour ? radius * .6 : radius) * Math.sin(angle);
+                    var outerCenterX = middlePoint.X + (isNeighour ? radius * .65 : radius) * Math.cos(angle);
+                    var outerCenterY = middlePoint.Y + (isNeighour ? radius * .65 : radius) * Math.sin(angle);
 
-                    var outerLinkX = middlePoint.X + ((isNeighour ? radius * .6 : radius) - radiusOuter) * Math.cos(angle);
-                    var outerLinkY = middlePoint.Y + ((isNeighour ? radius * .6 : radius) - radiusOuter) * Math.sin(angle);
+                    var outerLinkX = middlePoint.X + ((isNeighour ? radius * .65 : radius) - radiusOuter) * Math.cos(angle);
+                    var outerLinkY = middlePoint.Y + ((isNeighour ? radius * .65 : radius) - radiusOuter) * Math.sin(angle);
 
                     var innerLinkX = middlePoint.X + radiusCenter * Math.cos(angle);
                     var innerLinkY = middlePoint.Y + radiusCenter * Math.sin(angle);
