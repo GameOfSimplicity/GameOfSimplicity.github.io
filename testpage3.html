@@ -159,17 +159,28 @@
             color: #999999;
             font-size: small;
             padding: 0;
+            margin-top: 160px;
         }
 
         .sidebar-nav .country-list {
             padding: 1px 0 1px 25px;
         }
 
+        .sidebar-nav .button-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 195px;
+            padding: 10px 0;
+            text-align: center;
+            border-bottom: solid 1px #666666;
+            background-color: darkslategray;
+        }
+
         .sidebar-nav .all-buttons {
+            margin: 0;
             padding: 0;
             text-decoration: none;
-            margin: 0;
-            text-align: center;
         }
 
         .sidebar-nav .all-buttons button {
@@ -196,17 +207,6 @@
             background: none;
         }
 
-        .horizontal-separator {
-            width: 100%;
-            border-bottom: solid 1px #666666;
-            height: 0;
-            margin: 20px 0;
-        }
-
-        .info-bar {
-
-        }
-
         .info-text {
             margin: 5px 10px;
         }
@@ -222,6 +222,7 @@
         }
 
 
+
     </style>
 
     <script type="text/javascript" src="js/d3.v3.min.js"></script>
@@ -234,34 +235,29 @@
 <div id="wrapper">
     <div id="sidebar-wrapper">
         <div class="sidebar-nav">
-            <ul class="all-buttons">
-                <li>
-        	<span class="info-bar">
-	            <a class="btn btn-default" role="button" data-toggle="collapse" href="#collapseExample"
-                   aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-info-circle"
-                                                                            aria-hidden="true"></i>
- Info</a>
-            </span>
-                    <div class="collapse info-text" id="collapseExample">
-                        <div class="well">
-                            Info-text here bla blie blo blalala
+            <div class="button-wrapper">
+                <ul class="all-buttons">
+                    <li>
+                    <a class="btn btn-default" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-info-circle" aria-hidden="true"></i>Info</a>
+                        <div class="collapse info-text" id="collapseExample">
+                            <div class="well">
+                                Info-text here bla blie blo blalala
+                            </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
 
-                <li>
-                    <button id="showYearsCombined" class="btn btn-default">Toggle View</button>
-                </li>
-                <li>
-                    <div class="btn-group" role="group">
-                        <button id="allGiven" type="button" class="btn btn-default">G</button>
-                        <button id="allReceived" type="button" class="btn btn-default">R</button>
-                        <button id="both" type="button" class="btn btn-default">B</button>
-                    </div>
-                </li>
-            </ul>
-
-            <div class="horizontal-separator"></div>
+                    <li>
+                        <button id="showYearsCombined" class="btn btn-default">Toggle View</button>
+                    </li>
+                    <li>
+                        <div class="btn-group" role="group">
+                            <button id="allGiven" type="button" class="btn btn-default">G</button>
+                            <button id="allReceived" type="button" class="btn btn-default">R</button>
+                            <button id="both" type="button" class="btn btn-default">B</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
 
             <ul class="countries-list">
                 <li>
