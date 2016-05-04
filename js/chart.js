@@ -298,8 +298,8 @@ function drawCluster(chartYear, visibility2) {
                     //give
                     case 0:
                         links.forEach(function (item, index) {
-                            var temp = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreGiven);
-                            var linkColor = gradientArray[-1 + temp < 1 ? 0 : temp];
+                            var temp = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreGiven) - 1;
+                            var linkColor = gradientArray[temp];
                             if (item.scoreGiven != 0) {
                                 layer1.append("path")
                                     .attr("id", "give-" + chartYear)
@@ -310,7 +310,7 @@ function drawCluster(chartYear, visibility2) {
                                     .attr("stroke", linkColor)
                                     .attr("stroke-width", 4)
                                     .attr("fill", "none")
-                                    .attr("marker-end", "url(#arrow"+temp+")")
+                                    .attr("marker-end", "url(#arrow" + temp + ")")
                             }
                         });
 
@@ -318,8 +318,8 @@ function drawCluster(chartYear, visibility2) {
                     //receive
                     case 1:
                         links.forEach(function (item, index) {
-                            var temp = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreReceived);
-                            var linkColor = gradientArray[-1 + temp < 1 ? 0 : temp];
+                            var temp = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreReceived) - 1;
+                            var linkColor = gradientArray[temp];
                             if (item.scoreReceived != 0) {
                                 layer1.append("path")
                                     .attr("id", "receive-" + chartYear)
@@ -330,17 +330,17 @@ function drawCluster(chartYear, visibility2) {
                                     .attr("stroke", linkColor)
                                     .attr("stroke-width", 4)
                                     .attr("fill", "none")
-                                    .attr("marker-end", "url(#arrow"+temp+")")
+                                    .attr("marker-end", "url(#arrow" + temp + ")")
                             }
                         });
                         break;
                     //both
                     case  2:
                         links.forEach(function (item, index) {
-                            var temp1 = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreGiven);
-                            var linkColor1 = gradientArray[-1 + temp < 1 ? 0 : temp1];
-                            var temp2 = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreReceived);
-                            var linkColor2 = gradientArray[-1 + temp < 1 ? 0 : temp2];
+                            var temp1 = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreGiven) - 1;
+                            var linkColor1 = gradientArray[temp1];
+                            var temp2 = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreReceived) - 1;
+                            var linkColor2 = gradientArray[temp2];
                             //give
                             layer1.append("path")
                                 .attr("id", "give-" + chartYear)
@@ -351,7 +351,7 @@ function drawCluster(chartYear, visibility2) {
                                 .attr("stroke", linkColor1)
                                 .attr("stroke-width", 4)
                                 .attr("fill", "none")
-                                .attr("marker-end", "url(#arrow"+temp1+")");
+                                .attr("marker-end", "url(#arrow" + temp1 + ")");
                             //receive
                             layer1.append("path")
                                 .attr("id", "receive-" + chartYear)
@@ -362,7 +362,7 @@ function drawCluster(chartYear, visibility2) {
                                 .attr("stroke", linkColor2)
                                 .attr("stroke-width", 4)
                                 .attr("fill", "none")
-                                .attr("marker-end", "url(#arrow"+temp2+")")
+                                .attr("marker-end", "url(#arrow" + temp2 + ")")
                         });
                         break;
                 }
@@ -392,8 +392,8 @@ function drawCluster(chartYear, visibility2) {
                 .attr("width", 1)
                 .attr("preserveAspectRatio", "xMinYMin slice");
 
-            for(i=0; i<6; i++)
-            createMaker(gradientArray[i], "arrow"+i);
+            for (i = 0; i < 6; i++)
+                createMaker(gradientArray[i], "arrow" + i);
 
 
             function createMaker(color, id) {
