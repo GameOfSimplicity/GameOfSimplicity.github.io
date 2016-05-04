@@ -60,23 +60,28 @@ function removeEverything() {
 }
 
 
-document.getElementById("allReceived").addEventListener("click", selectAllReceived);
-function selectAllReceived() {
-
+function removeAndDraw(visibility) {
     removeEverything();
     years.forEach(function (d) {
-        drawCluster(d, 1);
+        drawCluster(d, visibility);
     });
+}
+
+document.getElementById("allReceived").addEventListener("click", selectAllReceived);
+function selectAllReceived() {
+    removeAndDraw(1);
 }
 
 
 document.getElementById("allGiven").addEventListener("click", selectAllGiven);
 function selectAllGiven() {
-    removeEverything();
-    years.forEach(function (d) {
-        drawCluster(d, 0);
-    });
+    removeAndDraw(0);
 }
+
+document.getElementById("both").addEventListener("click", function () {
+    removeAndDraw(2);
+});
+
 
 document.getElementById("showYearsCombined").addEventListener("click", function () {
     $('#combinedYears').toggle();
@@ -185,7 +190,6 @@ function drawCluster(chartYear, visibility2) {
         });
 
         var links = [];
-        document.getElementById("both").addEventListener("click",function(){window.location = 'http://google.com'});
 
         if (countryInYear) {
             $('#yeartext-' + chartYear).show();
