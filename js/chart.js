@@ -110,9 +110,12 @@ function drawCluster(chartYear, visibility2) {
     const silverColour = "#c0c0c0";
     const bronzeColour = "#cd7f32";
 
+    const gradientArray = ['#edf8fb', '#ccece6', '#99d8c9', '#66c2a4', '#2ca25f', '#006d2c'];
+
     const radiusCenter = 25;
     const radiusOuter = 10;
     const radius = 160; // radius of circle on which outer nodes should be drawn
+
 
     if (!(chartYear in svgContainers)) {
         var tempSvg = d3.select(chartId)
@@ -303,15 +306,7 @@ function drawCluster(chartYear, visibility2) {
                                         {X: item.innerLinkX, Y: item.innerLinkY},
                                         {X: item.outerLinkX, Y: item.outerLinkY}
                                     ]))
-                                    .attr("stroke", function () {
-                                        var avg = averages[chartYear];
-                                        if (parseFloat(item.scoreGiven) < averages[chartYear]) {
-                                            //rood
-                                            return "#C05746";
-                                        } else {
-                                            return "#69995D";
-                                        }
-                                    })
+                                    .attr("stroke", gradientArray[parseInt(gradientArray.length / yearResult.maxScore * item.scoreGiven, 10)])
                                     .attr("stroke-width", 4)
                                     .attr("fill", "none")
                                     .attr("marker-end", function () {
