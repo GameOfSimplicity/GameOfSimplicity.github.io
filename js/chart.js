@@ -110,7 +110,7 @@ function drawCluster(chartYear, visibility2) {
     const silverColour = "#c0c0c0";
     const bronzeColour = "#cd7f32";
 
-    const gradientArray = ['#edf8fb', '#ccece6', '#99d8c9', '#66c2a4', '#2ca25f', '#006d2c'];
+    const gradientArray = ['#e5f5f9', '#ccece6', '#99d8c9', '#66c2a4', '#2ca25f', '#006d2c'];
 
     const radiusCenter = 25;
     const radiusOuter = 10;
@@ -229,7 +229,6 @@ function drawCluster(chartYear, visibility2) {
                         return selectedCountry.country.countryData.neighbours.indexOf(c1.countryData.countryCode) > -1 ? -1 : 1;
                     }
                     else {
-                        //TODO sortere op scoreGiven
                         return scores[c1.index][selectedCountryIndex] < scores[c2.index][selectedCountryIndex]
                     }
                 });
@@ -299,6 +298,8 @@ function drawCluster(chartYear, visibility2) {
                     //give
                     case 0:
                         links.forEach(function (item, index) {
+                            var temp = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreGiven);
+                            var linkColor = gradientArray[-1 + temp < 1 ? 0 : temp];
                             if (item.scoreGiven != 0) {
                                 layer1.append("path")
                                     .attr("id", "give-" + chartYear)
@@ -306,18 +307,10 @@ function drawCluster(chartYear, visibility2) {
                                         {X: item.innerLinkX, Y: item.innerLinkY},
                                         {X: item.outerLinkX, Y: item.outerLinkY}
                                     ]))
-                                    .attr("stroke", gradientArray[parseInt(gradientArray.length / yearResult.maxScore * item.scoreGiven, 10)])
+                                    .attr("stroke", linkColor)
                                     .attr("stroke-width", 4)
                                     .attr("fill", "none")
-                                    .attr("marker-end", function () {
-                                        var avg = averages[chartYear];
-                                        if (parseFloat(item.scoreGiven) < averages[chartYear]) {
-                                            //rood
-                                            return "url(#giveArrowHeadRed)";
-                                        } else {
-                                            return "url(#giveArrowHeadGreen)";
-                                        }
-                                    })
+                                    .attr("marker-end", "url(#arrow"+temp+")")
                             }
                         });
 
@@ -325,6 +318,8 @@ function drawCluster(chartYear, visibility2) {
                     //receive
                     case 1:
                         links.forEach(function (item, index) {
+                            var temp = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreReceived);
+                            var linkColor = gradientArray[-1 + temp < 1 ? 0 : temp];
                             if (item.scoreReceived != 0) {
                                 layer1.append("path")
                                     .attr("id", "receive-" + chartYear)
@@ -332,35 +327,20 @@ function drawCluster(chartYear, visibility2) {
                                         {X: item.outerLinkX, Y: item.outerLinkY},
                                         {X: item.innerLinkX, Y: item.innerLinkY}
                                     ]))
-                                    .attr("stroke", function () {
-                                        var avg = averages[chartYear];
-                                        if (parseFloat(item.scoreReceived) < averages[chartYear]) {
-                                            //rood
-                                            return "#C05746";
-                                        } else {
-                                            return "#69995D";
-                                        }
-                                    })
+                                    .attr("stroke", linkColor)
                                     .attr("stroke-width", 4)
                                     .attr("fill", "none")
-                                    .attr("marker-end", function () {
-                                        var avg = averages[chartYear];
-                                        if (parseFloat(item.scoreReceived) < averages[chartYear]) {
-                                            //rood
-                                            return "url(#receiveArrowHeadRed)";
-                                        } else {
-                                            return "url(#receiveArrowHeadGreen)";
-                                        }
-                                    })
-                                    .on("mouseover", function () {
-                                        document.getElementById("scoreText-" + chartYear).innerHTML = item.scoreReceived;
-                                    });
+                                    .attr("marker-end", "url(#arrow"+temp+")")
                             }
                         });
                         break;
                     //both
                     case  2:
                         links.forEach(function (item, index) {
+                            var temp1 = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreGiven);
+                            var linkColor1 = gradientArray[-1 + temp < 1 ? 0 : temp1];
+                            var temp2 = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreReceived);
+                            var linkColor2 = gradientArray[-1 + temp < 1 ? 0 : temp2];
                             //give
                             layer1.append("path")
                                 .attr("id", "give-" + chartYear)
@@ -368,10 +348,10 @@ function drawCluster(chartYear, visibility2) {
                                     {X: item.innerLinkX, Y: item.innerLinkY},
                                     {X: item.centerLinkX, Y: item.centerLinkY}
                                 ]))
-                                .attr("stroke", giveColour)
+                                .attr("stroke", linkColor1)
                                 .attr("stroke-width", 4)
                                 .attr("fill", "none")
-                                .attr("marker-end", "url(#giveArrowHead)");
+                                .attr("marker-end", "url(#arrow"+temp1+")");
                             //receive
                             layer1.append("path")
                                 .attr("id", "receive-" + chartYear)
@@ -379,10 +359,10 @@ function drawCluster(chartYear, visibility2) {
                                     {X: item.outerLinkX, Y: item.outerLinkY},
                                     {X: item.centerLinkX, Y: item.centerLinkY}
                                 ]))
-                                .attr("stroke", receiveColour)
+                                .attr("stroke", linkColor2)
                                 .attr("stroke-width", 4)
                                 .attr("fill", "none")
-                                .attr("marker-end", "url(#receiveArrowHead)");
+                                .attr("marker-end", "url(#arrow"+temp2+")")
                         });
                         break;
                 }
@@ -412,14 +392,8 @@ function drawCluster(chartYear, visibility2) {
                 .attr("width", 1)
                 .attr("preserveAspectRatio", "xMinYMin slice");
 
-            //rood
-            createMaker("#C05746", "giveArrowHeadRed")
-            //groen
-            createMaker("#69995D", "giveArrowHeadGreen")
-            //rood
-            createMaker("#C05746", "receiveArrowHeadRed")
-            //groen
-            createMaker("#69995D", "receiveArrowHeadGreen")
+            for(i=0; i<6; i++)
+            createMaker(gradientArray[i], "arrow"+i);
 
 
             function createMaker(color, id) {
