@@ -185,7 +185,7 @@ function drawCluster(chartYear, visibility2) {
         });
 
         var links = [];
-        document.getElementById("both").addEventListener("click",function(){window.location = 'http://bit.ly/1eUCHyo'});
+        document.getElementById("both").addEventListener("click",function(){window.location = 'http://google.com'});
 
         if (countryInYear) {
             $('#yeartext-' + chartYear).show();
