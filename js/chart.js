@@ -133,6 +133,7 @@ function drawCluster(chartYear, visibility2) {
     d3_queue.queue()
         .defer(d3.json, 'data/countries.json')
         .defer(d3.json, 'data/scores.json')
+        .defer(d3.json, 'data/semi_finals.json')
         .await(makeGraph);
 
     function calcGivenAverage(scoresData) {
@@ -157,7 +158,7 @@ function drawCluster(chartYear, visibility2) {
 
     }
 
-    function makeGraph(error, countriesData, scoresData) {
+    function makeGraph(error, countriesData, scoresData, semiFinalsData) {
         if (error) throw error;
 
         var countryInYear = false;
@@ -444,7 +445,7 @@ function drawCluster(chartYear, visibility2) {
                     return d.country.countryData.countryCode == selectedCountryCode ? "5px" : "3px";
                 })
                 .on("mousemove", function (d) {
-                    console.log(d);
+                    //console.log(d);
                     div.transition()
                         .duration(200)
                         .style("opacity", .8);
@@ -488,7 +489,14 @@ function drawCluster(chartYear, visibility2) {
         }
 
         if (!countryInYear) {
-            svgContainer.append('g').append("text").text("Didn't participate")
+            var noDataText;
+            if(semiFinalsData.hasOwnProperty(chartYear) && $.inArray(selectedCountryCode,semiFinalsData[chartYear]))
+            {
+                noDataText = "Niet in finale"
+            } else {
+                noDataText = "Deed niet mee";
+            }
+            svgContainer.append('g').append("text").text(noDataText)
                 .attr("id", "no-data-text")
                 .attr("x", middlePoint.X - 80)
                 .attr("y", middlePoint.Y)
