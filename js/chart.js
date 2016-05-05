@@ -3,8 +3,6 @@ $(function () {
 });
 
 var svgContainers = {};
-var averages = {};
-
 
 $(".country-list").click(function () {
     var countrycode = $(this).attr("id");
@@ -38,7 +36,6 @@ for (yearCounter = 1957; yearCounter < 2016; yearCounter++) {
     years.push(yearCounter);
 }
 
-var selectedCountryIndex = 0;
 var selectedCountryCode = "BE";
 
 addGraphPlaceholders(years);
@@ -67,21 +64,17 @@ function removeAndDraw(visibility) {
     });
 }
 
-document.getElementById("allReceived").addEventListener("click", selectAllReceived);
-function selectAllReceived() {
+document.getElementById("allReceived").addEventListener("click", function () {
     removeAndDraw(1);
-}
+});
 
-
-document.getElementById("allGiven").addEventListener("click", selectAllGiven);
-function selectAllGiven() {
+document.getElementById("allGiven").addEventListener("click", function(){
     removeAndDraw(0);
-}
+});
 
 document.getElementById("both").addEventListener("click", function () {
     removeAndDraw(2);
 });
-
 
 document.getElementById("showYearsCombined").addEventListener("click", function () {
     $('#combinedYears').toggle();
@@ -90,7 +83,7 @@ document.getElementById("showYearsCombined").addEventListener("click", function 
 
 
 function drawCluster(chartYear, visibility2) {
-
+    var selectedCountryIndex = 0;
     var chartId = "#draw-" + chartYear;
     //var width = $(document).width();
     var width = d3.select(chartId).node().getBoundingClientRect().width;
@@ -134,27 +127,7 @@ function drawCluster(chartYear, visibility2) {
         .defer(d3.json, 'data/semi_finals.json')
         .await(makeGraph);
 
-    function calcGivenAverage(scoresData) {
-        var total = 0;
-        var amount = 0;
-        scoresData.scores.forEach(function (generalScoreInfo) {
-            generalScoreInfo.scores.forEach(function (arrayWithScores) {
-                arrayWithScores.forEach(function (score) {
-                    if (score != 0) {
-                        total += parseInt(score);
-                        amount += 1;
-                    }
-                })
-            });
-            //TODO: sta tijdelijk gwn op de helft
-            //averages[chartYear] = total / amount;
-            averages[chartYear] = 6;
-
-            total = 0;
-            amount = 0;
-        })
-
-    }
+    var div = d3.select("body").append("div").attr("class", "tooltip-flag");
 
     function makeGraph(error, countriesData, scoresData, semiFinalsData) {
         if (error) throw error;
@@ -195,12 +168,17 @@ function drawCluster(chartYear, visibility2) {
 
         if (countryInYear) {
             $('#yeartext-' + chartYear).show();
-            if (typeof averages !== 'undefined') {
-                calcGivenAverage(scoresData);
-            }
 
             scores = yearResult.scores;
-
+            if (chartYear == 1958) {
+                for (i = 0; i < scores.length; i++) {
+                    var line = "";
+                    for (j = 0; j < scores.length; j++) {
+                        line += " " + scores[i][j];
+                    }
+                    console.log(line)
+                }
+            }
             //aantal gegeven punten
             var pointsCount = countries.length - 1;
 
@@ -274,7 +252,6 @@ function drawCluster(chartYear, visibility2) {
                     j++;
                     i++;
                 });
-
 
             var lineFunction = d3.svg.line()
                 .x(function (d) {
@@ -440,8 +417,6 @@ function drawCluster(chartYear, visibility2) {
             }
 
 
-            var div = d3.select("body").append("div").attr("class", "tooltip-flag");
-
             nodes.enter().append("circle")
                 .attr("class", "node")
                 .attr("cx", function (d) {
@@ -472,7 +447,7 @@ function drawCluster(chartYear, visibility2) {
                 .style("stroke-width", function (d) {
                     return d.country.countryData.countryCode == selectedCountryCode ? "5px" : "3px";
                 })
-                .on("mousemove", function (d) {
+                .on("mouseenter", function (d) {
                     div.style("visibility", "visible");
                     div.transition()
                         .duration(200)
