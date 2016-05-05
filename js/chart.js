@@ -32,7 +32,8 @@ function addGraphPlaceholders(years) {
 }
 
 var years = [];
-for (yearCounter = 1957; yearCounter < 2016; yearCounter++) {
+for (yearCounter = 2015; yearCounter >= 1957; yearCounter--) {
+//for (yearCounter = 1957; yearCounter < 2016; yearCounter++) {
     years.push(yearCounter);
 }
 
