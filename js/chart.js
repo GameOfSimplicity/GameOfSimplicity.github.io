@@ -104,8 +104,6 @@ function drawCluster(chartYear, visibility2) {
     var selectedCountry;
     var scores = [[]];
 
-    const giveColour = "#082f6d";
-    const receiveColour = "#cd0027";
     const goldColour = "#ffd700";
     const silverColour = "#c0c0c0";
     const bronzeColour = "#cd7f32";
@@ -127,7 +125,7 @@ function drawCluster(chartYear, visibility2) {
 
     var svgContainer = svgContainers[chartYear];
 
-    var sortMethod = 1; //0 = none; 1 = neighbours ; 2 = scoreGivenToSelected
+    var sortMethod = 1; //0 = none; 1 = neighbours
 
     //load data from multiple json files async
     d3_queue.queue()
@@ -475,7 +473,7 @@ function drawCluster(chartYear, visibility2) {
                     return d.country.countryData.countryCode == selectedCountryCode ? "5px" : "3px";
                 })
                 .on("mousemove", function (d) {
-                    //console.log(d);
+                    div.style("visibility", "visible");
                     div.transition()
                         .duration(200)
                         .style("opacity", .8);
@@ -498,7 +496,9 @@ function drawCluster(chartYear, visibility2) {
                 .on("mouseout", function (d) {
                     div.transition()
                         .duration(500)
-                        .style("opacity", 0);
+                        .style("opacity", 0)
+                        .style("visibility", "hidden");
+
                 });
 
             function switchSelectedOnClick(flag) {
@@ -514,7 +514,8 @@ function drawCluster(chartYear, visibility2) {
                 });
                 div.transition()
                     .duration(500)
-                    .style("opacity", 0);
+                    .style("opacity", 0)
+                    .style("visibility", "hidden");
             }
         }
 
