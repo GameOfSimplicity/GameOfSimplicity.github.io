@@ -444,13 +444,25 @@ function drawCluster(chartYear, visibility2) {
                     return d.country.countryData.countryCode == selectedCountryCode ? "5px" : "3px";
                 })
                 .on("mousemove", function (d) {
+                    console.log(d);
                     div.transition()
                         .duration(200)
                         .style("opacity", .8);
-                    //d.country.totalScoreReceived
-                    div.html("<b>" + d.country.countryData.name + "</b> (#" + d.country.position + ")<br/>")
-                        .style("top", event.pageY - 10 + "px")
-                        .style("left", event.pageX + 10 + "px");
+                    if (d.country.countryData.countryCode == selectedCountryCode) {
+                        div.html("<b>" + d.country.countryData.name + "</b> (#" + d.country.position + ")" +
+                                "<br/>Totaal gekregen: " + d.country.totalScoreReceived
+                            )
+                            .style("top", event.pageY - 10 + "px")
+                            .style("left", event.pageX + 10 + "px");
+                    } else {
+                        div.html("<b>" + d.country.countryData.name + "</b> (#" + d.country.position + ")"
+                                + "<br/>Gekregen: " + scores[d.country.index][selectedCountryIndex]
+                                + "<br/>Gegeven: " + scores[selectedCountryIndex][d.country.index] //TODO tekst aanpassen -> confusing
+                            )
+                            .style("top", event.pageY - 10 + "px")
+                            .style("left", event.pageX + 10 + "px");
+                    }
+
                 })
                 .on("mouseout", function (d) {
                     div.transition()
