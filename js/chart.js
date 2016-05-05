@@ -342,28 +342,58 @@ function drawCluster(chartYear, visibility2) {
                             var linkColor1 = gradientArray[temp1];
                             var temp2 = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreReceived) - 1;
                             var linkColor2 = gradientArray[temp2];
-                            //give
-                            layer1.append("path")
-                                .attr("id", "give-" + chartYear)
-                                .attr("d", lineFunction([
-                                    {X: item.innerLinkX, Y: item.innerLinkY},
-                                    {X: item.centerLinkX, Y: item.centerLinkY}
-                                ]))
-                                .attr("stroke", linkColor1)
-                                .attr("stroke-width", 4)
-                                .attr("fill", "none")
-                                .attr("marker-end", "url(#arrow" + temp1 + ")");
-                            //receive
-                            layer1.append("path")
-                                .attr("id", "receive-" + chartYear)
-                                .attr("d", lineFunction([
-                                    {X: item.outerLinkX, Y: item.outerLinkY},
-                                    {X: item.centerLinkX, Y: item.centerLinkY}
-                                ]))
-                                .attr("stroke", linkColor2)
-                                .attr("stroke-width", 4)
-                                .attr("fill", "none")
-                                .attr("marker-end", "url(#arrow" + temp2 + ")")
+                            if (item.scoreGiven != 0 && item.scoreReceived != 0) {
+                                //give
+                                layer1.append("path")
+                                    .attr("id", "give-" + chartYear)
+                                    .attr("d", lineFunction([
+                                        {X: item.innerLinkX, Y: item.innerLinkY},
+                                        {X: item.centerLinkX, Y: item.centerLinkY}
+                                    ]))
+                                    .attr("stroke", linkColor1)
+                                    .attr("stroke-width", 4)
+                                    .attr("fill", "none")
+                                    .attr("marker-end", "url(#arrow" + temp1 + ")")
+                                ;
+                                //receive
+                                layer1.append("path")
+                                    .attr("id", "receive-" + chartYear)
+                                    .attr("d", lineFunction([
+                                        {X: item.outerLinkX, Y: item.outerLinkY},
+                                        {X: item.centerLinkX, Y: item.centerLinkY}
+                                    ]))
+                                    .attr("stroke", linkColor2)
+                                    .attr("stroke-width", 4)
+                                    .attr("fill", "none")
+                                    .attr("marker-end", "url(#arrow" + temp2 + ")")
+                                ;
+                            } else if (item.scoreGiven != 0 && item.scoreReceived == 0) {
+                                //give
+                                layer1.append("path")
+                                    .attr("id", "give-" + chartYear)
+                                    .attr("d", lineFunction([
+                                        {X: item.innerLinkX, Y: item.innerLinkY},
+                                        {X: item.outerLinkX, Y: item.outerLinkY}
+                                    ]))
+                                    .attr("stroke", linkColor1)
+                                    .attr("stroke-width", 4)
+                                    .attr("fill", "none")
+                                    .attr("marker-end", "url(#arrow" + temp1 + ")")
+                                ;
+                            } else if (item.scoreGiven == 0 && item.scoreReceived != 0) {
+                                //receive
+                                layer1.append("path")
+                                    .attr("id", "receive-" + chartYear)
+                                    .attr("d", lineFunction([
+                                        {X: item.outerLinkX, Y: item.outerLinkY},
+                                        {X: item.innerLinkX, Y: item.innerLinkY}
+                                    ]))
+                                    .attr("stroke", linkColor2)
+                                    .attr("stroke-width", 4)
+                                    .attr("fill", "none")
+                                    .attr("marker-end", "url(#arrow" + temp2 + ")")
+                                ;
+                            }
                         });
                         break;
                 }
@@ -490,8 +520,7 @@ function drawCluster(chartYear, visibility2) {
 
         if (!countryInYear) {
             var noDataText;
-            if(semiFinalsData.hasOwnProperty(chartYear) && $.inArray(selectedCountryCode,semiFinalsData[chartYear]))
-            {
+            if (semiFinalsData.hasOwnProperty(chartYear) && $.inArray(selectedCountryCode, semiFinalsData[chartYear])) {
                 noDataText = "Niet in finale"
             } else {
                 noDataText = "Deed niet mee";
