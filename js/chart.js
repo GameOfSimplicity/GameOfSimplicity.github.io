@@ -500,7 +500,7 @@ function drawCluster(chartYear, visibility2) {
             if (semiFinalsData.hasOwnProperty(chartYear) && $.inArray(selectedCountryCode, semiFinalsData[chartYear])) {
                 noDataText = "Niet in finale"
             } else {
-                noDataText = "Deed niet mee";
+                noDataText = "Geen deelname";
             }
             svgContainer.append('g').append("text").text(noDataText)
                 .attr("id", "no-data-text")
