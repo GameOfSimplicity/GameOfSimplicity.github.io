@@ -209,12 +209,13 @@
         }
 
         .info-text {
-            margin: 5px 10px;
+            margin: 0 10px;
         }
 
         .info-text .well {
             padding: 5px;
             font-size: small;
+            margin-bottom: 0;
         }
 
         #header {
@@ -222,6 +223,52 @@
             width: 100%;
         }
 
+        #color-1 {
+            border-bottom: 4px solid #e5f5f9;
+            display: inline-block;
+            width: 20px;
+            height: 21px;
+        }
+
+        #color-2 {
+            border-bottom: 4px solid #ccece6;
+            display: inline-block;
+            width: 20px;
+            height: 21px;
+        }
+
+        #color-3 {
+            border-bottom: 4px solid #99d8c9;
+            display: inline-block;
+            width: 20px;
+            height: 21px;
+        }
+
+        #color-4 {
+            border-bottom: 4px solid #66c2a4;
+            display: inline-block;
+            width: 20px;
+            height: 21px;
+        }
+
+        #color-5 {
+            border-bottom: 4px solid #2ca25f;
+            display: inline-block;
+            width: 20px;
+            height: 21px;
+        }
+
+        #color-6 {
+            border-bottom: 4px solid #006d2c;
+            display: inline-block;
+            width: 20px;
+            height: 21px;
+        }
+
+        #copyright {
+            color: white;
+            font-size: 1.3em;
+        }
 
 
     </style>
@@ -239,22 +286,25 @@
             <div class="button-wrapper">
                 <ul class="all-buttons">
                     <li>
-                    <a class="btn btn-default" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-info-circle" aria-hidden="true"></i>Info</a>
-                        <div class="collapse info-text" id="collapseExample">
+                        <div class="info-text">
                             <div class="well">
-                                Info-text here bla blie blo blalala
+                                <div>Score</div>
+                                <div id="info-color-wrapper">
+                                    <div id="color-1">Min</div>
+                                    <div id="color-2">&nbsp;</div>
+                                    <div id="color-3">&nbsp; </div>
+                                    <div id="color-4">&nbsp; </div>
+                                    <div id="color-5"> &nbsp;</div>
+                                    <div id="color-6">Max</div>
+                                </div>
                             </div>
                         </div>
                     </li>
-
                     <li>
-                        <button id="showYearsCombined" class="btn btn-default">Toggle View</button>
-                    </li>
-                    <li>
-                        <div class="btn-group" role="group">
-                            <button id="allGiven" type="button" class="btn btn-default">G</button>
-                            <button id="allReceived" type="button" class="btn btn-default">R</button>
-                            <button id="both" type="button" class="btn btn-default">B</button>
+                        <div class="btn-group-vertical" role="group">
+                            <button id="allGiven" type="button" class="btn btn-default">Gegeven</button>
+                            <button id="allReceived" type="button" class="btn btn-default">Gekregen</button>
+                            <button id="both" type="button" class="btn btn-default">Beide</button>
                         </div>
                     </li>
                 </ul>
@@ -427,14 +477,10 @@
     <div id="page-content-wrapper">
         <div class="container-fluid" id="container">
             <div id="separateYears"></div>
-            <div id="combinedYears" class="combinedYears">
-                <button type="button" class="smallButton" id="giveCombinedButton-' + year + '">given</button>
-                <button type="button" class="smallButton" id="receiveCombinedButton-' + year + '">received</button>
-                <button type="button" class="smallButton" id="bothCombinedButton-' + year + '">both</button>
-                Test
-            </div>
         </div>
+        <div id="copyright">&copy; 2016 Gert-Jan Heireman ; Micheal Greefs ; Sebastiaan Jansen</div>
     </div>
+
 </div>
 </body>
 

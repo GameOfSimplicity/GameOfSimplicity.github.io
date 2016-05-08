@@ -77,10 +77,6 @@ document.getElementById("both").addEventListener("click", function () {
     removeAndDraw(2);
 });
 
-document.getElementById("showYearsCombined").addEventListener("click", function () {
-    $('#combinedYears').toggle();
-    $('#separateYears').toggle();
-});
 
 
 function drawCluster(chartYear, visibility2) {
@@ -448,7 +444,7 @@ function drawCluster(chartYear, visibility2) {
                 .style("stroke-width", function (d) {
                     return d.country.countryData.countryCode == selectedCountryCode ? "5px" : "3px";
                 })
-                .on("mouseenter", function (d) {
+                .on("mousemove", function (d) {
                     div.style("visibility", "visible");
                     div.transition()
                         .duration(200)
