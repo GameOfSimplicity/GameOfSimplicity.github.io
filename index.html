@@ -1,42 +1,489 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>InfoVis-1516 by GameOfSimplicity</title>
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <title>Eurovision Song Contest visualisation</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="Description" content="Demo page for Eurovision Song Contest visualisation"/>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-dark.css">
-    <script src="js/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!-- Replace when publishing:
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    -->
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header class="without-description">
-        <h1>Information Visualisation</h1>
-        <p></p>
-        <p class="view"><a href="https://github.com/GameOfSimplicity">View the Project on GitHub <small>GameOfSimplicity</small></a></p>
-        <ul>
-          <li class="single"><a href="https://github.com/GameOfSimplicity/GameOfSimplicity.github.io">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h3>
-<a id="game-of-simplicity" class="anchor" href="#game-of-simplicity" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Game Of Simplicity</h3>
+    <style type="text/css">
+        html, body {
+            overflow: auto;
+            background-color: darkslategray;
 
-<p>Project page for Game of Simplicity for the course Information Visualisation.
-<a href="https://gameofsimplicity.wordpress.com/">Link to blog</a></p>
-<p><a href="testpage3.html">Bekijk de eerste visualisatie</a></p>
-      </section>
+            -webkit-user-select: none; /* Chrome all / Safari all */
+            -moz-user-select: none; /* Firefox all */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none; /* Likely future */
+        }
+
+        .page-title {
+            color: #fff;
+            display: inline;
+        }
+
+        .tooltip-img {
+            margin-left: 10px;
+            margin-top: -10px;
+            width: auto;
+            height: 40px;
+
+        }
+
+        .year-block {
+            position: relative;
+            width: 370px;
+            height: 370px;
+            font-size: x-large;
+            background-color: #fff;
+            display: inline-block;
+        }
+
+        .btn {
+            /*width: 120px;*/
+        }
+
+        .combinedYears {
+            width: 100%;
+            height: 750px;
+            background-color: #fff;
+        }
+
+        .yeartext {
+            position: absolute;
+            top: 0;
+            left: 0;
+            /*width: 100%;*/
+            margin: 0 0 0 50px;
+            text-align: left;
+        }
+
+        .smallButton {
+            font-size: 10px;
+        }
+
+        .chart {
+            /*height: inherit;*/
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        line {
+            stroke: black;
+        }
+
+        .score {
+            font-size: large;
+
+        }
+
+        .tooltip-flag {
+            position: absolute;
+            display: inline-block;
+            padding: 0 10px 0 10px;
+            color: white;
+            background: darkslategray;
+            /*height: 28px;*/
+            line-height: 28px;
+            text-align: left;
+            border-radius: 6px;
+            box-shadow: 0 0 5px black;
+            z-index: 10;
+            width: 150px;
+        }
+
+        circle:hover {
+            opacity: 0.5;
+            /*laten staan anders werkt da handje ni - ok*/
+            cursor: pointer;
+            cursor: hand;
+        }
+
+        #wrapper {
+            padding-left: 200px;
+        }
+
+        #sidebar-wrapper {
+            padding: 10px 0;
+            z-index: 1000;
+            position: fixed;
+            left: 150px;
+            width: 0;
+            height: 100%;
+            margin-left: -150px;
+            overflow-y: auto;
+            background: darkslategray;
+        }
+
+        #wrapper #sidebar-wrapper {
+            width: 200px;
+        }
+
+        #page-content-wrapper {
+            width: 100%;
+            padding-top: 50px;
+            text-align: center;
+        }
+
+        /* Sidebar Styles */
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 4px;
+            background: #ffffff;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #666666;
+        }
+
+        .sidebar-nav li {
+            list-style: none;
+            cursor: pointer;
+        }
+
+        .selected-country {
+            color: #fff;
+        }
+
+        .sidebar-nav .countries-list {
+            text-decoration: none;
+            color: #999999;
+            font-size: small;
+            padding: 0;
+            margin-top: 160px;
+        }
+
+        .sidebar-nav .country-list {
+            padding: 1px 0 1px 25px;
+        }
+
+        .sidebar-nav .button-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 195px;
+            padding: 10px 0;
+            text-align: center;
+            border-bottom: solid 1px #666666;
+            background-color: darkslategray;
+        }
+
+        .sidebar-nav .all-buttons {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .sidebar-nav .all-buttons button {
+            margin-top: 15px;
+        }
+
+        .sidebar-nav .countries-list li:hover {
+            text-decoration: none;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-nav li a:active,
+        .sidebar-nav li a:focus {
+            text-decoration: none;
+        }
+
+        .sidebar-nav > .sidebar-brand a {
+            color: #999999;
+        }
+
+        .sidebar-nav > .sidebar-brand a:hover {
+            color: #fff;
+            background: none;
+        }
+
+        .info-text {
+            margin: 0 10px;
+        }
+
+        .info-text .well {
+            padding: 5px;
+            font-size: small;
+            margin-bottom: 0;
+        }
+
+        #header {
+            padding: 10px 0 20px 20px;
+            width: 100%;
+        }
+
+        #color-1 {
+            border-bottom: 4px solid #e5f5f9;
+            display: inline-block;
+            width: 20px;
+            height: 21px;
+        }
+
+        #color-2 {
+            border-bottom: 4px solid #ccece6;
+            display: inline-block;
+            width: 20px;
+            height: 21px;
+        }
+
+        #color-3 {
+            border-bottom: 4px solid #99d8c9;
+            display: inline-block;
+            width: 20px;
+            height: 21px;
+        }
+
+        #color-4 {
+            border-bottom: 4px solid #66c2a4;
+            display: inline-block;
+            width: 20px;
+            height: 21px;
+        }
+
+        #color-5 {
+            border-bottom: 4px solid #2ca25f;
+            display: inline-block;
+            width: 20px;
+            height: 21px;
+        }
+
+        #color-6 {
+            border-bottom: 4px solid #006d2c;
+            display: inline-block;
+            width: 20px;
+            height: 21px;
+        }
+
+        #copyright {
+            color: white;
+            font-size: 1.3em;
+        }
+
+
+    </style>
+
+    <script type="text/javascript" src="js/d3.v3.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.12.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/queue/d3-queue.min.js"></script>
+
+</head>
+<body>
+<div id="wrapper">
+    <div id="sidebar-wrapper">
+        <div class="sidebar-nav">
+            <div class="button-wrapper">
+                <ul class="all-buttons">
+                    <li>
+                        <div class="info-text">
+                            <div class="well">
+                                <div>Score</div>
+                                <div id="info-color-wrapper">
+                                    <div id="color-1">Min</div>
+                                    <div id="color-2">&nbsp;</div>
+                                    <div id="color-3">&nbsp; </div>
+                                    <div id="color-4">&nbsp; </div>
+                                    <div id="color-5"> &nbsp;</div>
+                                    <div id="color-6">Max</div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn-group-vertical" role="group">
+                            <button id="allGiven" type="button" class="btn btn-default">Gegeven</button>
+                            <button id="allReceived" type="button" class="btn btn-default">Gekregen</button>
+                            <button id="both" type="button" class="btn btn-default">Beide</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <ul class="countries-list">
+                <li>
+                    <div class="country-list" id="AL">Albani&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="AD">Andorra</div>
+                </li>
+                <li>
+                    <div class="country-list" id="AM">Armeni&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="AU">Australi&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="AZ">Azerbaijan</div>
+                </li>
+                <li>
+                    <div class="country-list selected-country" id="BE">Belgi&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="BA">Bosni&euml; en Herzegovina</div>
+                </li>
+                <li>
+                    <div class="country-list" id="BG">Bulgarije</div>
+                </li>
+                <li>
+                    <div class="country-list" id="CY">Cyprus</div>
+                </li>
+                <li>
+                    <div class="country-list" id="DK">Denemarken</div>
+                </li>
+                <li>
+                    <div class="country-list" id="DE">Duitsland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="EE">Estland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="FI">Finland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="FR">Frankrijk</div>
+                </li>
+                <li>
+                    <div class="country-list" id="GE">Georgi&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="GR">Griekenland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="HU">Hongarije</div>
+                </li>
+                <li>
+                    <div class="country-list" id="IE">Ierland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="IS">Ijsland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="IL">Isra&euml;l</div>
+                </li>
+                <li>
+                    <div class="country-list" id="IT">Itali&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="YO">Joegoslavi&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="HR">Kroati&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="LV">Letland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="LT">Litouwen</div>
+                </li>
+                <li>
+                    <div class="country-list" id="LU">Luxemburg</div>
+                </li>
+                <li>
+                    <div class="country-list" id="MK">Macedoni&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="MT">Malta</div>
+                </li>
+                <li>
+                    <div class="country-list" id="MA">Marokko</div>
+                </li>
+                <li>
+                    <div class="country-list" id="MD">Moldovi&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="MC">Monaco</div>
+                </li>
+                <li>
+                    <div class="country-list" id="ME">Montenegro</div>
+                </li>
+                <li>
+                    <div class="country-list" id="NL">Nederland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="NO">Noorwegen</div>
+                </li>
+                <li>
+                    <div class="country-list" id="UA">Oekra&euml;ne</div>
+                </li>
+                <li>
+                    <div class="country-list" id="AT">Oostenrijk</div>
+                </li>
+                <li>
+                    <div class="country-list" id="PL">Polen</div>
+                </li>
+                <li>
+                    <div class="country-list" id="PT">Portugal</div>
+                </li>
+                <li>
+                    <div class="country-list" id="RO">Roemeni&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="RU">Rusland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="SM">San Marino</div>
+                </li>
+                <li>
+                    <div class="country-list" id="RS">Servi&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="CS">Servi&euml; en Montenegro</div>
+                </li>
+                <li>
+                    <div class="country-list" id="SI">Sloveni&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="SK">Slowakije</div>
+                </li>
+                <li>
+                    <div class="country-list" id="ES">Spanje</div>
+                </li>
+                <li>
+                    <div class="country-list" id="CZ">Tsjechi&euml;</div>
+                </li>
+                <li>
+                    <div class="country-list" id="TR">Turkije</div>
+                </li>
+                <li>
+                    <div class="country-list" id="UK">Verenigd Koninkrijk</div>
+                </li>
+                <li>
+                    <div class="country-list" id="BY">Wit-Rusland</div>
+                </li>
+                <li>
+                    <div class="country-list" id="SE">Zweden</div>
+                </li>
+                <li>
+                    <div class="country-list" id="CH">Zwitserland</div>
+                </li>
+            </ul>
+        </div>
     </div>
-    <footer>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
-  </body>
+
+    <div class="container-fluid navbar-header header" id="header">
+        <h1 class="page-title">Eurovision Song Contest</h1>
+    </div>
+    <div id="page-content-wrapper">
+        <div class="container-fluid" id="container">
+            <div id="separateYears"></div>
+        </div>
+        <div id="copyright">&copy; 2016 Gert-Jan Heireman ; Micheal Greefs ; Sebastiaan Jansen</div>
+    </div>
+
+</div>
+</body>
+
+<script type="text/javascript" src="js/chart.js"></script>
+
 </html>
