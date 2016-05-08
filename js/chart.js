@@ -69,14 +69,13 @@ document.getElementById("allReceived").addEventListener("click", function () {
     removeAndDraw(1);
 });
 
-document.getElementById("allGiven").addEventListener("click", function(){
+document.getElementById("allGiven").addEventListener("click", function () {
     removeAndDraw(0);
 });
 
 document.getElementById("both").addEventListener("click", function () {
     removeAndDraw(2);
 });
-
 
 
 function drawCluster(chartYear, visibility2) {
@@ -98,7 +97,8 @@ function drawCluster(chartYear, visibility2) {
     const silverColour = "#c0c0c0";
     const bronzeColour = "#cd7f32";
 
-    const gradientArray = ['#e5f5f9', '#ccece6', '#99d8c9', '#66c2a4', '#2ca25f', '#006d2c'];
+    const gradientArrayGiven = ['#e5f5f9', '#ccece6', '#99d8c9', '#66c2a4', '#2ca25f', '#006d2c'];
+    const gradientArrayReceived = ['#fef0d9', '#fdd49e', '#fdbb84', '#fc8d59', '#e34a33', '#b30000'];
 
     const radiusCenter = 25;
     const radiusOuter = 10;
@@ -271,8 +271,8 @@ function drawCluster(chartYear, visibility2) {
                     //give
                     case 0:
                         links.forEach(function (item, index) {
-                            var temp = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreGiven) - 1;
-                            var linkColor = gradientArray[temp];
+                            var temp = Math.round((gradientArrayGiven.length / yearResult.maxScore) * item.scoreGiven) - 1;
+                            var linkColor = gradientArrayGiven[temp];
                             if (item.scoreGiven != 0) {
                                 layer1.append("path")
                                     .attr("id", "give-" + chartYear)
@@ -283,7 +283,7 @@ function drawCluster(chartYear, visibility2) {
                                     .attr("stroke", linkColor)
                                     .attr("stroke-width", 4)
                                     .attr("fill", "none")
-                                    .attr("marker-end", "url(#arrow" + temp + ")")
+                                    .attr("marker-end", "url(#arrowg" + temp + ")")
                             }
                         });
 
@@ -291,8 +291,8 @@ function drawCluster(chartYear, visibility2) {
                     //receive
                     case 1:
                         links.forEach(function (item, index) {
-                            var temp = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreReceived) - 1;
-                            var linkColor = gradientArray[temp];
+                            var temp = Math.round((gradientArrayReceived.length / yearResult.maxScore) * item.scoreReceived) - 1;
+                            var linkColor = gradientArrayReceived[temp];
                             if (item.scoreReceived != 0) {
                                 layer1.append("path")
                                     .attr("id", "receive-" + chartYear)
@@ -303,17 +303,18 @@ function drawCluster(chartYear, visibility2) {
                                     .attr("stroke", linkColor)
                                     .attr("stroke-width", 4)
                                     .attr("fill", "none")
-                                    .attr("marker-end", "url(#arrow" + temp + ")")
+                                    .attr("marker-end", "url(#arrowr" + temp + ")")
                             }
                         });
                         break;
                     //both
                     case  2:
                         links.forEach(function (item, index) {
-                            var temp1 = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreGiven) - 1;
-                            var linkColor1 = gradientArray[temp1];
-                            var temp2 = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreReceived) - 1;
-                            var linkColor2 = gradientArray[temp2];
+                            var temp1 = Math.round((gradientArrayGiven.length / yearResult.maxScore) * item.scoreGiven) - 1;
+                            var linkColor1 = gradientArrayGiven[temp1];
+                            var temp2 = Math.round((gradientArrayReceived.length / yearResult.maxScore) * item.scoreReceived) - 1;
+                            var linkColor2 = gradientArrayReceived[temp2];
+
                             if (item.scoreGiven != 0 && item.scoreReceived != 0) {
                                 //give
                                 layer1.append("path")
@@ -325,7 +326,7 @@ function drawCluster(chartYear, visibility2) {
                                     .attr("stroke", linkColor1)
                                     .attr("stroke-width", 4)
                                     .attr("fill", "none")
-                                    .attr("marker-end", "url(#arrow" + temp1 + ")")
+                                    .attr("marker-end", "url(#arrowg" + temp1 + ")")
                                 ;
                                 //receive
                                 layer1.append("path")
@@ -337,7 +338,7 @@ function drawCluster(chartYear, visibility2) {
                                     .attr("stroke", linkColor2)
                                     .attr("stroke-width", 4)
                                     .attr("fill", "none")
-                                    .attr("marker-end", "url(#arrow" + temp2 + ")")
+                                    .attr("marker-end", "url(#arrowr" + temp2 + ")")
                                 ;
                             } else if (item.scoreGiven != 0 && item.scoreReceived == 0) {
                                 //give
@@ -350,7 +351,7 @@ function drawCluster(chartYear, visibility2) {
                                     .attr("stroke", linkColor1)
                                     .attr("stroke-width", 4)
                                     .attr("fill", "none")
-                                    .attr("marker-end", "url(#arrow" + temp1 + ")")
+                                    .attr("marker-end", "url(#arrowg" + temp1 + ")")
                                 ;
                             } else if (item.scoreGiven == 0 && item.scoreReceived != 0) {
                                 //receive
@@ -363,7 +364,7 @@ function drawCluster(chartYear, visibility2) {
                                     .attr("stroke", linkColor2)
                                     .attr("stroke-width", 4)
                                     .attr("fill", "none")
-                                    .attr("marker-end", "url(#arrow" + temp2 + ")")
+                                    .attr("marker-end", "url(#arrowr" + temp2 + ")")
                                 ;
                             }
                         });
@@ -396,8 +397,9 @@ function drawCluster(chartYear, visibility2) {
                 .attr("preserveAspectRatio", "xMinYMin slice");
 
             for (i = 0; i < 6; i++)
-                createMaker(gradientArray[i], "arrow" + i);
-
+                createMaker(gradientArrayGiven[i], "arrowg" + i);
+            for (i = 0; i < 6; i++)
+                createMaker(gradientArrayReceived[i], "arrowr" + i);
 
             function createMaker(color, id) {
                 defs.append("marker")
