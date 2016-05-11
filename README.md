@@ -7,5 +7,6 @@
 - [jQuery 1.12.3](https://jquery.com/)
 - Vlaggen vallen onder <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/nl/">CC BY-NC-ND 3.0</a>, gemaakt door <a href="http://kampongboy92.deviantart.com/art/World-Flags-63208143">kampongboy92 op Deviantart</a>
 - [Bron dataset - Eurosinging.com](http://eurosinging.com)
+
 ## Licentie
 Zie [LICENSE bestand](LICENSE.md) voor licentierechten en limitaties (MIT).
