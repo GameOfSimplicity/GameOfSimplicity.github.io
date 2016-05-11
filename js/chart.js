@@ -31,7 +31,6 @@ function addGraphPlaceholders(years) {
 
 var years = [];
 for (yearCounter = 2015; yearCounter >= 1957; yearCounter--) {
-//for (yearCounter = 1957; yearCounter < 2016; yearCounter++) {
     years.push(yearCounter);
 }
 
@@ -99,11 +98,10 @@ function drawCluster(chartYear, visibility2) {
 
 
     if (!(chartYear in svgContainers)) {
-        var tempSvg = d3.select(chartId)
+        svgContainers[chartYear] = d3.select(chartId)
             .append("svg")
             .attr("width", width)
             .attr("height", height);
-        svgContainers[chartYear] = tempSvg;
     }
 
     var svgContainer = svgContainers[chartYear];
@@ -112,9 +110,9 @@ function drawCluster(chartYear, visibility2) {
 
     //load data from multiple json files async
     d3_queue.queue()
-        .defer(d3.json, 'data/countries.json')
-        .defer(d3.json, 'data/scores.json')
-        .defer(d3.json, 'data/semi_finals.json')
+        .defer(d3.json, 'data/countries.min.json')
+        .defer(d3.json, 'data/scores.min.json')
+        .defer(d3.json, 'data/semi_finals.min.json')
         .await(makeGraph);
 
     var div = d3.select("body").append("div").attr("class", "tooltip-flag");
@@ -166,7 +164,6 @@ function drawCluster(chartYear, visibility2) {
                     for (j = 0; j < scores.length; j++) {
                         line += " " + scores[i][j];
                     }
-                    console.log(line)
                 }
             }
             // Point given
@@ -263,7 +260,7 @@ function drawCluster(chartYear, visibility2) {
                 switch (visibility) {
                     //give
                     case 0:
-                        links.forEach(function (item, index) {
+                        links.forEach(function (item) {
                             var temp = Math.round((gradientArray.length / yearResult.maxScore) * item.scoreGiven) - 1;
                             var linkColor = gradientArray[temp];
                             if (item.scoreGiven != 0) {
@@ -440,7 +437,7 @@ function drawCluster(chartYear, visibility2) {
                 .on("mousemove", function (d) {
                     div.style("visibility", "visible");
                     div.transition()
-                        .duration(200)
+                        .duration(100)
                         .style("opacity", .8);
                     if (d.country.countryData.countryCode == selectedCountryCode) {
                         div.html("<b>" + d.country.countryData.name + "</b> (#" + d.country.position + ")" +
@@ -451,7 +448,7 @@ function drawCluster(chartYear, visibility2) {
                     } else {
                         div.html("<b>" + d.country.countryData.name + "</b> (#" + d.country.position + ")"
                                 + "<br/>Gekregen: " + scores[d.country.index][selectedCountryIndex]
-                                + "<br/>Gegeven: " + scores[selectedCountryIndex][d.country.index] //TODO tekst aanpassen -> confusing
+                                + "<br/>Gegeven: " + scores[selectedCountryIndex][d.country.index]
                             )
                             .style("top", event.pageY - 10 + "px")
                             .style("left", event.pageX + 10 + "px");
@@ -460,7 +457,7 @@ function drawCluster(chartYear, visibility2) {
                 })
                 .on("mouseout", function (d) {
                     div.transition()
-                        .duration(500)
+                        .duration(100)
                         .style("opacity", 0)
                         .style("visibility", "hidden");
 
@@ -478,7 +475,7 @@ function drawCluster(chartYear, visibility2) {
                     drawCluster(d, 0);
                 });
                 div.transition()
-                    .duration(500)
+                    .duration(100)
                     .style("opacity", 0)
                     .style("visibility", "hidden");
             }
