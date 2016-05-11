@@ -16,8 +16,6 @@ $(".country-list").click(function () {
 });
 
 function addGraphPlaceholders(years) {
-    const noOfColumns = 4;
-    const columnWidth = 12 / noOfColumns;
     var separateYears = document.getElementById('separateYears');
     for (var i = 0; i < years.length; i++) {
         var year = years[i];
@@ -51,7 +49,6 @@ function removeEverything() {
         d3.selectAll("#receive-" + year).remove();
         d3.selectAll("#giveMid-" + year).remove();
         d3.selectAll("#give-" + year).remove();
-
     });
     d3.selectAll(".node").remove();
     d3.selectAll("#no-data-text").remove();
@@ -69,7 +66,7 @@ document.getElementById("allReceived").addEventListener("click", function () {
     removeAndDraw(1);
 });
 
-document.getElementById("allGiven").addEventListener("click", function(){
+document.getElementById("allGiven").addEventListener("click", function () {
     removeAndDraw(0);
 });
 
@@ -78,15 +75,11 @@ document.getElementById("both").addEventListener("click", function () {
 });
 
 
-
 function drawCluster(chartYear, visibility2) {
     var selectedCountryIndex = 0;
     var chartId = "#draw-" + chartYear;
-    //var width = $(document).width();
     var width = d3.select(chartId).node().getBoundingClientRect().width;
-    //var height = $(document).height();
     var height = d3.select(chartId).node().getBoundingClientRect().height;
-    //console.log("Row - Width: " + width + " height: " + height);
     var middlePoint = {X: width / 2, Y: height / 2};
 
     var countries = [];
@@ -176,10 +169,10 @@ function drawCluster(chartYear, visibility2) {
                     console.log(line)
                 }
             }
-            //aantal gegeven punten
+            // Point given
             var pointsCount = countries.length - 1;
 
-            // hoek tussen landen
+            // Angle between countries
             var slice = 2 * Math.PI / pointsCount;
 
             selectedCountry = {
